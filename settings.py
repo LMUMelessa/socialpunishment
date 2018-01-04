@@ -112,12 +112,12 @@ SESSION_CONFIG_DEFAULTS = {
 
 
 SESSION_CONFIGS = [
-    # {
-    #     'name': '...',
-    #     'display_name': '...',
-    #     'num_demo_participants': ...,
-    #     'app_sequence': ['...'],
-    # }
+    {
+        'name': 'pgvoteff',
+        'display_name': 'pg_vote_famfeud',
+        'num_demo_participants': 5,
+        'app_sequence': ['pg_vote_famfeud'],
+    }
 ]
 
 # anything you put after the below line will override
