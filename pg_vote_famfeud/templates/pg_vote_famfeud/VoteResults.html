@@ -1,0 +1,96 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    Voting Results
+{% endblock %}
+
+{% block content %}
+    <div style=" border: solid; border-color: #f6f6f6; padding-left: 0px; width: 65%">
+
+         <table class="table" style="font-size: 12px">
+                <tr>
+                    <td>You are <b>{{ player.playerlabel }}</b></td>
+                    <td>Current round is <b>Round {{ player.round_number }}</b></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+         </table>
+
+
+         <div style=" margin-left: 15px" >
+            <br>
+            You have <b>{{ player.myvotes }}</b> votes.
+            <br>
+            {% if player.plays == True %}
+                You are allowed to play the second game.
+            {% else %}
+                This is the majority vote, you are <b>not</b> allowed to play the social game.
+            {% endif %}
+            <br><br><br>
+            The following table displays the voting results
+            <table class="table" style="width: 75%">
+                <tr>
+                    <th>Player Label</th>
+                    <th>Votes</th>
+                    <th>Plays the social game</th>
+                </tr>
+                </tr>
+                <tr>
+                    {% if player.playerlabel == 'Player A' %}<td><b>You</b></td>{% else %}<td>Player A</td>{% endif %}
+                    {% if player.playerlabel == 'Player A' %}<td><b>{{ PlayerA_votes }}</b></td> {% else %}<td>{{ PlayerA_votes }}</td>{% endif %}
+                    {% if player.playerlabel == 'Player A' %}<td><b>{{ PlayerA_plays }}</b></td> {% else %}<td>{{ PlayerA_plays }}</td>{% endif %}
+                </tr>
+                <tr>
+                    {% if player.playerlabel == 'Player B' %}<td><b>You</b></td>{% else %}<td>Player B</td>{% endif %}
+                    {% if player.playerlabel == 'Player B' %}<td><b>{{ PlayerB_votes }}</b></td> {% else %}<td>{{ PlayerB_votes }}</td>{% endif %}
+                    {% if player.playerlabel == 'Player B' %}<td><b>{{ PlayerB_plays }}</b></td> {% else %}<td>{{ PlayerB_plays }}</td>{% endif %}
+                </tr>
+                <tr>
+                    {% if player.playerlabel == 'Player C' %}<td><b>You</b></td>{% else %}<td>Player C</td>{% endif %}
+                    {% if player.playerlabel == 'Player C' %}<td><b>{{ PlayerC_votes }}</b></td> {% else %}<td>{{ PlayerC_votes }}</td>{% endif %}
+                    {% if player.playerlabel == 'Player C' %}<td><b>{{ PlayerC_plays }}</b></td> {% else %}<td>{{ PlayerC_plays }}</td>{% endif %}
+                </tr>
+                <tr>
+                    {% if player.playerlabel == 'Player D' %}<td><b>You</b></td>{% else %}<td>Player D</td>{% endif %}
+                    {% if player.playerlabel == 'Player D' %}<td><b>{{ PlayerD_votes }}</b></td> {% else %}<td>{{ PlayerD_votes }}</td>{% endif %}
+                    {% if player.playerlabel == 'Player D' %}<td><b>{{ PlayerD_plays }}</b></td> {% else %}<td>{{ PlayerD_plays }}</td>{% endif %}
+                </tr>
+                <tr>
+                    {% if player.playerlabel == 'Player E' %}<td><b>You</b></td>{% else %}<td>Player E</td>{% endif %}
+                    {% if player.playerlabel == 'Player E' %}<td><b>{{ PlayerE_votes }}</b></td> {% else %}<td>{{ PlayerE_votes }}</td>{% endif %}
+                    {% if player.playerlabel == 'Player E' %}<td><b>{{ PlayerE_plays }}</b></td> {% else %}<td>{{ PlayerE_plays }}</td>{% endif %}
+                </tr>
+            </table>
+            <br>
+
+            {% if group.all_play == True %}
+                There was no majority in voting. All players will play the social game.
+            {% else %}
+                {% if player.plays == True %}
+                <b>{{ group.excluded_player }}</b> has the majority of votes. She/He will not play the second game.
+
+                {% elif player.plays == False %}
+                    You will not play the social game. You can only watch.
+                {% endif %}
+            {% endif %}
+         </div>
+
+
+    <br>
+    </div>
+    <br>
+    {% next_button %}
+{% endblock %}
+
+
+{% block scripts %}
+    <style type="text/css">
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+    </style>
+{% endblock %}
