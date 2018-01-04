@@ -22,6 +22,30 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
+
+    #TODO this is deterministic but should be fine as I group randomly?
+    def define_label(self):
+        labellist = ['Player A', 'Player B', 'Player C', 'Player D', 'Player E']
+        for group in self.get_group_matrix():
+            for player in group:
+                player.label = labellist[player.id_in_group-1]
+
+    def creating_session(self):
+        # Assign treatment
+        for player in self.get_players():
+            player.treatment = self.session.config['treatment']
+            player.city = self.session.config['city']
+        #TODO: is group randomly the desired impementation?
+        if self.round_number == 1:
+            self.group_randomly()
+        else:
+            self.group_like_round(1)
+        # Assign the labels
+        self.define_label()
+
+
+
+
     pass
 
 

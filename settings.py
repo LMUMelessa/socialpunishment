@@ -117,6 +117,8 @@ SESSION_CONFIGS = [
         'display_name': 'pg_vote_famfeud',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
+        'city': 'heidelberg',
+        'treatment': 'voting'
     }
 ]
 
