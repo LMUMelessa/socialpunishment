@@ -7,13 +7,24 @@ from .models import Constants
 class Instructions(Page):
     pass
 
+
 class Contribution(Page):
     form_model = models.Player
     form_fields = ['contribution']
 
+    #TODO delete me
+    def is_displayed(self):
+        return False
+
+
 class FirstWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.group.set_payoffs()
+
+    # TODO delete me
+    def is_displayed(self):
+        return False
+
 
 class ResultsPG(Page):
     def vars_for_template(self):
@@ -25,6 +36,10 @@ class ResultsPG(Page):
             # Also display the profit the player made
             data['gameprofit'] = Constants.endowment - self.player.contribution + self.group.indiv_share
         return data
+
+    # TODO delete me
+    def is_displayed(self):
+        return False
 
 
 class Vote(Page):
@@ -76,11 +91,8 @@ class VoteResults(Page):
        return data
 
 
-
-
-
-
-
+class FamilyFeud(Page):
+    pass
 
 page_sequence = [
     Instructions,
@@ -89,5 +101,6 @@ page_sequence = [
     ResultsPG,
     Vote,
     VoteWaitPage,
-    VoteResults
+    VoteResults,
+    FamilyFeud,
 ]
