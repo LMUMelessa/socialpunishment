@@ -5,7 +5,12 @@ from .models import Constants
 
 
 class Instructions(Page):
-    pass
+    # TODO delete me
+    def is_displayed(self):
+        if self.player.treatment == 'voting':
+            return True
+        else:
+            return False
 
 
 class Contribution(Page):
@@ -14,7 +19,10 @@ class Contribution(Page):
 
     #TODO delete me
     def is_displayed(self):
-        return False
+        if self.player.treatment == 'voting':
+            return True
+        else:
+            return False
 
 
 class FirstWaitPage(WaitPage):
@@ -23,7 +31,10 @@ class FirstWaitPage(WaitPage):
 
     # TODO delete me
     def is_displayed(self):
-        return False
+        if self.player.treatment == 'voting':
+            return True
+        else:
+            return False
 
 
 class ResultsPG(Page):
@@ -39,7 +50,10 @@ class ResultsPG(Page):
 
     # TODO delete me
     def is_displayed(self):
-        return False
+        if self.player.treatment == 'voting':
+            return True
+        else:
+            return False
 
 
 class Vote(Page):
@@ -64,6 +78,13 @@ class Vote(Page):
             data[(player.playerlabel).replace(' ', '')] = player.contribution
         return data
 
+    #TODO delete me
+    def is_displayed(self):
+        if self.player.treatment == 'voting':
+            return True
+        else:
+            return False
+
 
 class VoteWaitPage(WaitPage):
     # Only needed in voting treatment
@@ -78,6 +99,12 @@ class VoteWaitPage(WaitPage):
         # Set the excluded player label on a group variable, if there is one
         self.group.set_excluded_player()
 
+    #TODO delete me:
+    def is_displayed(self):
+        if self.player.treatment == 'voting':
+            return True
+        else:
+            return False
 
 class VoteResults(Page):
    # Only needed in voting treatment
@@ -90,12 +117,26 @@ class VoteResults(Page):
            data[(player.playerlabel).replace(' ', '') + '_plays'] = player.plays
        return data
 
+    # TODO delete me:
+   def is_displayed(self):
+       if self.player.treatment == 'voting':
+           return True
+       else:
+           return False
+
+
 
 
 class BeforeFamilyFeudWaitPage(WaitPage):
     def is_displayed(self):
         return self.player.treatment == 'voting'
 
+    # TODO delete me:
+    def is_displayed(self):
+        if self.player.treatment == 'voting':
+            return True
+        else:
+            return False
 
 
 class FamilyFeud(Page):

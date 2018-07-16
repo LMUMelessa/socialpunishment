@@ -116,11 +116,19 @@ SESSION_CONFIG_DEFAULTS = {
 SESSION_CONFIGS = [
     {
         'name': 'pgvoteff',
-        'display_name': 'pg_vote_famfeud',
+        'display_name': 'socialpunishment',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'heidelberg',
         'treatment': 'voting'
+    },
+{
+        'name': 'pgvoteff2',
+        'display_name': 'familyfeudonly',
+        'num_demo_participants': 5,
+        'app_sequence': ['pg_vote_famfeud'],
+        'city': 'heidelberg',
+        'treatment': 'ffonly'
     }
 ]
 
