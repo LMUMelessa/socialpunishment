@@ -9,7 +9,7 @@
   <script>
 
     // Stackoverflow:
-    //this prevents that pressing enter will automatically submitt the page and abort the game for a player
+    //this prevents that pressing enter will automatically submit the page and abort the game for a player
     $(document).on("keypress", 'form', function (e) {
     var code = e.keyCode || e.which;
     console.log(code);
@@ -21,7 +21,7 @@
 });
 
     //Stackoverflow:
-    // Make pressing enter to submitt the guess
+    // Make pressing enter to submit the guess
     //TODO this might be blocked from the above code?
     document.getElementById("guessfield")
     .addEventListener("keyup", function(event) {
@@ -50,6 +50,7 @@
       oTree.secsPerQuestion = {{ Constants.secs_per_question }}
       oTree.waitBetween = {{ Constants.wait_between_question }}
       oTree.questionsPerRound = {{ Constants.questions_per_round }}
+      oTree.plays = "{{ player.plays }}";
       {% if view.is_debug %}
       oTree.debug = true;
       {% else %}
@@ -59,11 +60,11 @@
 
 
 
-    // Call the handle Guess function when the submitt button is clicked
+    // Call the handle Guess function when the submit button is clicked
     var subButton = document.getElementById('subbutton');
     subButton.addEventListener('click', handleGuess);
 
-    //This function is called when the submitt button is clicked
+    //This function is called when the submit button is clicked
     // It sends the guess over the guessing Channel to otree, therefore on_guessingchannel_event is called
     function handleGuess() {
         //grap the input of the input form as a variable
@@ -93,9 +94,9 @@
 
             // reveal the correctly guessed word
             var correctguess = document.getElementById(event.detail.payload.whichword);
-            correctguess.textContent = event.detail.payload.guess
+            correctguess.textContent = event.detail.payload.guess;
             //color the background green
-            correctguess.style.background = 'linear-gradient(lightgreen, limegreen)'
+            correctguess.style.background = 'linear-gradient(lightgreen, limegreen)';
 
 
             // display message about the guess for all players on message board
@@ -147,7 +148,7 @@
             scrollme.scrollTop = scrollme.scrollHeight;
 
 
-            // if the player is the who guessed correctly, tell him try again
+            // tell player to try again
             if (oTree.idInGroup == event.detail.payload.idInGroup){
                 var message = document.getElementById('message')
                 message.textContent = 'You tried ' + event.detail.payload.guess + '. Try again!'
@@ -160,6 +161,24 @@
     // initializing the 40 + 5 seconds round of a question
     document.getElementById('questionChannel').addEventListener('event', receive_question);
     function receive_question(event){
+
+
+        // don't show the game, if the player was excluded
+        var wrapper = document.getElementById("wrapper");
+        if (oTree.plays == "True")
+        {
+            // don't show the screenshot
+            var ex = document.getElementById("excluded");
+            ex.style.display = "none";
+
+        }else{
+            // don't show the game
+            var wrapper = document.getElementById("wrapper");
+            wrapper.style.display = "none";
+            var ex = document.getElementById("excluded");
+            ex.textContent = "You are not allowed to play (Put Screenshot here)."
+        }
+
 
         // if multiple family feud subrounds (more then 1 question) are played turn the shown solutions to placeholders again
         var s1 =  document.getElementById('s1');
@@ -185,7 +204,7 @@
         var questiontag = document.getElementById('question')
         questiontag.textContent = event.detail.payload.question
 
-        // enable submitt button
+        // enable submit button
         document.getElementById("subbutton").disabled = false;
 
         // activate the round
@@ -205,7 +224,7 @@
            setTimeout( function() {run_round(anevent, stoptime);},1000)
        // time is up
        }else {
-           // disable the submitt button, so players cannot guess when the answers are shown
+           // disable the submit button, so players cannot guess when the answers are shown
            document.getElementById("subbutton").disabled = true;
            // display results
            setTimeout(function () {display_all(anevent);}, 100);
@@ -237,8 +256,8 @@
 
         // check if there is a question left otherwise go to the next page in oTree
         if (questions_left == 0){
-            // family feud finished, wait and submitt page
-            setTimeout( function(){ submitt_nextbutton();}, oTree.waitBetween*1000)
+            // family feud finished, wait and submit page
+            setTimeout( function(){ submit_nextbutton();}, oTree.waitBetween*1000)
         }else{
             // wait 'waitBetween' seconds and then let the first player in the group request oTree to send another question
             setTimeout( function() {request_question();}, oTree.waitBetween*1000)
@@ -247,7 +266,7 @@
     }
 
     // this will abort the game and move to the next oTree page is called from display_all()
-    function submitt_nextbutton(){
+    function submit_nextbutton(){
         document.getElementById('next').click()
     }
 
@@ -389,9 +408,6 @@
 	    </redwood-channel>
 
 
-
-    {% if player.plays %}
-
       <!-- Template of the page -->
 
       <div id="wrapper">
@@ -431,8 +447,8 @@
                         <!-- Input form -->
                         <input id='guessfield' type='text' maxlength='25' placeholder="Guess a word!">
                         <br><br>
-                        <!-- Button submitt input  -->
-                        <button id='subbutton' type='button'>Submitt your guess</button>
+                        <!-- Button submit input  -->
+                        <button id='subbutton' type='button'>Submit your guess</button>
                   </div>
 
               </div>
@@ -457,18 +473,16 @@
       </div>
 
 
+
+      <!-- Only show to excluded player -->
+      <div id="excluded">
+        <p id="ex_screen"></p>
+
+      </div>
+
+
       <!-- hidden next button, is clicked after all question rounds -->
       <button class="otree-btn-next btn btn-primary next-button otree-next-button" id="next" style="visibility: hidden" ></button>
-
-
-
-
-    {% else %}
-        You are not allowed to play!
-        Put screenshot here
-
-
-    {% endif %}
 
 
 

@@ -91,6 +91,13 @@ class VoteResults(Page):
        return data
 
 
+
+class BeforeFamilyFeudWaitPage(WaitPage):
+    def is_displayed(self):
+        return self.player.treatment == 'voting'
+
+
+
 class FamilyFeud(Page):
     pass
 
@@ -102,5 +109,6 @@ page_sequence = [
     Vote,
     VoteWaitPage,
     VoteResults,
+    BeforeFamilyFeudWaitPage,
     FamilyFeud,
 ]
