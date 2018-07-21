@@ -7,7 +7,7 @@ from .models import Constants
 class Instructions(Page):
     # TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'voting':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
             return True
         else:
             return False
@@ -19,7 +19,7 @@ class Contribution(Page):
 
     #TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'voting':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
             return True
         else:
             return False
@@ -31,7 +31,7 @@ class FirstWaitPage(WaitPage):
 
     # TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'voting':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
             return True
         else:
             return False
@@ -50,25 +50,36 @@ class ResultsPG(Page):
 
     # TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'voting':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
             return True
         else:
             return False
 
 
 class Vote(Page):
-    # Only needed in the voting treatment
-    def is_displayed(self):
-        return self.player.treatment == 'voting'
 
     form_model = models.Player
-    form_fields = ['vote_A', 'vote_B','vote_C','vote_D','vote_E']
+
+    def get_form_fields(self):
+        if self.player.treatment == 'exclude':
+            return ['vote_A', 'vote_B', 'vote_C', 'vote_D', 'vote_E', 'exclude_none']
+        elif self.player.treatment == 'include':
+            return ['vote_A', 'vote_B','vote_C','vote_D','vote_E']
+
 
     #TODO: Be cautious, if the initial values of the vote_X are changed
     def error_message(self, values):
         vote_count = sum([values['vote_A'], values['vote_B'], values['vote_C'], values['vote_D'],values['vote_E']])
-        if vote_count > 1:
-            return 'You can only vote for one player, who you want to exclude.'
+        if self.player.treatment == 'exclude':
+            if vote_count > 0 and values['exclude_none'] == True:
+                return 'You cannot exlude a player while non exlcuding any.'
+            #enforce the player to choose an option
+            if vote_count == 0 and values['exclude_none'] == False:
+                return 'Please choose an option.'
+        elif self.player.treatment == 'include':
+            if vote_count == 0:
+                return 'Please invite at least one player.'
+
 
     def vars_for_template(self):
         data = {}
@@ -80,16 +91,16 @@ class Vote(Page):
 
     #TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'voting':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
             return True
         else:
             return False
 
 
 class VoteWaitPage(WaitPage):
-    # Only needed in voting treatment
+    # Only needed in exclude treatment
     def is_displayed(self):
-        return self.player.treatment == 'voting'
+        return self.player.treatment == 'exclude'
 
     def after_all_players_arrive(self):
         # Count the votes for every player
@@ -101,15 +112,14 @@ class VoteWaitPage(WaitPage):
 
     #TODO delete me:
     def is_displayed(self):
-        if self.player.treatment == 'voting':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
             return True
         else:
             return False
 
 class VoteResults(Page):
-   # Only needed in voting treatment
-   def is_displayed(self):
-       return self.player.treatment == 'voting'
+
+
    def vars_for_template(self):
        data = {}
        for player in self.group.get_players():
@@ -119,7 +129,7 @@ class VoteResults(Page):
 
     # TODO delete me:
    def is_displayed(self):
-       if self.player.treatment == 'voting':
+       if self.player.treatment == 'exclude' or self.player.treatment == 'include':
            return True
        else:
            return False
@@ -128,12 +138,10 @@ class VoteResults(Page):
 
 
 class BeforeFamilyFeudWaitPage(WaitPage):
-    def is_displayed(self):
-        return self.player.treatment == 'voting'
-
+    
     # TODO delete me:
     def is_displayed(self):
-        if self.player.treatment == 'voting':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
             return True
         else:
             return False

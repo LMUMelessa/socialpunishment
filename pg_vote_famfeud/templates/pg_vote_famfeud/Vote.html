@@ -23,18 +23,29 @@
 
          <div style=" margin-left: 15px" >
 
-             Which players do you want to play the second game of this round?
-             <br>
-             You can exclude one player by checking the box.
-             <br><br><br>
+             Which players do you want to play the social game?
+             <br><br>
 
-             Check the box for one player, if you want to vote for excluding him:
+            {% if player.treatment == 'exclude' %}
+                 You can vote for excluding players from the social game by clicking their boxes.
+                 <br><br>
+            {% elif player.treatment == "include" %}
+                 You can vote for inviting players for the social game by clicking their boxes.
+                <br><br>
+            {% endif %}
              {% if player.playerlabel != 'Player A' %}{% formfield player.vote_A %}{% endif %}
              {% if player.playerlabel != 'Player B' %}{% formfield player.vote_B %}{% endif %}
              {% if player.playerlabel != 'Player C' %}{% formfield player.vote_C %}{% endif %}
              {% if player.playerlabel != 'Player D' %}{% formfield player.vote_D %}{% endif %}
              {% if player.playerlabel != 'Player E' %}{% formfield player.vote_E %}{% endif %}
-             <br><br>
+
+            {% if player.treatment == 'exclude' %} {% formfield player.exclude_none %}{% endif %}
+
+
+
+
+            <br><br>
+
 
             Below, you can check the contributions from the first game again.
             <table class="table" style="width:75%">
@@ -76,6 +87,15 @@
 
 
 {% block scripts %}
+
+
+
+
+
+
+
+
+
     <style type="text/css">
         .otree-body{margin-top: 0px}
         .otree-body{padding-top: 0px}

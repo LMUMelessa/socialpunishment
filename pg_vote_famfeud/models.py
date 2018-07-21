@@ -318,26 +318,35 @@ class Group(RedwoodGroup):
         # Collect all the votes
         for player in self.get_players():
             invitationslist.append(player.myvotes)
-        # Find the highest number of votes a player had
-        _max = max(invitationslist)
 
-        # Check if max is unique, then there is a majority
-        occurence = invitationslist.count(_max)
-        # Unique max, there is a majority
+
+        # Find the highest number of votes a player had
+
+        min_or_max = None
+
+        if self.get_players()[0].treatment == 'exclude':
+            min_or_max = max(invitationslist)
+        elif self.get_players()[0].treatment == 'include':
+            min_or_max = min(invitationslist)
+
+        # Check if max/min is unique, because in that case there is a majority
+        occurence = invitationslist.count(min_or_max)
+        # Unique max/min, there is a majority
         if occurence == 1:
             self.all_play = False
             # Identify the player with the most exclusions
             for player in self.get_players():
-                if player.myvotes == _max:
+                if player.myvotes == min_or_max:
                     # The default is True
                     player.plays = False
-                    # Break, as only one player has max votes because max is unique
+                    # Break, as only one player has max/min votes because min/max is unique
                     break
         # Not unique, no majority
         elif occurence > 1:
             self.all_play = True
 
 
+    # Setting the goup level -  excluded player - variable
     def set_excluded_player(self):
         for player in self.get_players():
             if player.plays == False:
@@ -381,7 +390,7 @@ class Player(BasePlayer):
     )
 
 
-    # Variables where player can vote to exclude one player from the social arena game
+    # Variables where player can vote to exclude/invite one player from the social arena game
     vote_A = models.BooleanField(
         widget=widgets.CheckboxInput(),
         verbose_name='Player A')
@@ -399,6 +408,8 @@ class Player(BasePlayer):
         verbose_name='Player E')
 
 
+    # In exlude treatment
+    exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="I don't want to exclude any player.")
 
     ### Family Feud Variables
  

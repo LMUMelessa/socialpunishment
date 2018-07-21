@@ -116,15 +116,24 @@ SESSION_CONFIG_DEFAULTS = {
 SESSION_CONFIGS = [
     {
         'name': 'pgvoteff',
-        'display_name': 'socialpunishment',
+        'display_name': 'Exclude Treatment (T1)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'heidelberg',
-        'treatment': 'voting'
+        'treatment': 'exclude' #exclude; include
     },
+
 {
         'name': 'pgvoteff2',
-        'display_name': 'familyfeudonly',
+        'display_name': 'Include Treatment (T2)',
+        'num_demo_participants': 5,
+        'app_sequence': ['pg_vote_famfeud'],
+        'city': 'heidelberg',
+        'treatment': 'include' #exclude; include
+    },
+{
+        'name': 'pgvoteff3',
+        'display_name': 'Family Feud only',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'heidelberg',

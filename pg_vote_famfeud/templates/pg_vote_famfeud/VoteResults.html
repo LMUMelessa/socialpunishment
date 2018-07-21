@@ -27,15 +27,19 @@
             {% if player.plays == True %}
                 You are allowed to play the second game.
             {% else %}
-                This is the majority vote, you are <b>not</b> allowed to play the social game.
+                {% if player.treatment == 'exclude' %}
+                    You have the most exclusion votes. You are <b>not</b> allowed the play the social game.
+                {% elif player.treatment == 'include' %}
+                    You have the least invitation votes. You are <b>not</b> allowed to play the social game.
+                {% endif %}
             {% endif %}
             <br><br><br>
             The following table displays the voting results
             <table class="table" style="width: 75%">
                 <tr>
                     <th>Player Label</th>
-                    <th>Votes</th>
-                    <th>Plays the social game</th>
+                    <th>{% if player.treatment == 'exclude'%}Exclusion Votes{%  elif player.treatment == 'include' %}Invitation Votes{% endif %}</th>
+                    <th>Plays Social Game</th>
                 </tr>
                 </tr>
                 <tr>
@@ -67,13 +71,14 @@
             <br>
 
             {% if group.all_play == True %}
-                There was no majority in voting. All players will play the social game.
+                There was no {% if player.treatment == 'exclude'%} majority{% elif player.treatment == 'include'%}minority{% endif %} in voting.<br>
+                All players will play the social game.
             {% else %}
                 {% if player.plays == True %}
-                <b>{{ group.excluded_player }}</b> has the majority of votes. She/He will not play the second game.
+                <b>{{ group.excluded_player }}</b> will not play the social game.
 
                 {% elif player.plays == False %}
-                    You will not play the social game. You can only watch.
+                    You will not play the social game.
                 {% endif %}
             {% endif %}
          </div>
