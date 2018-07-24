@@ -22,7 +22,7 @@
 
     //Stackoverflow:
     // Make pressing enter to submit the guess
-    //TODO this might be blocked from the above code?
+    //TODO there is also this event.preventDefault() .. so the above code might not be necessary
     document.getElementById("guessfield")
     .addEventListener("keyup", function(event) {
     event.preventDefault();
@@ -84,7 +84,8 @@
         }
     }
 
-
+    var group_points = 0;
+    var player_points = 0;
     // Receives information over channel from 'on_guessingChannel_event' in oTree after the guess is processed there
     // Takes all the desired actions
     document.getElementById('guessInformations').addEventListener('event', instructions_after_guess)
@@ -116,10 +117,18 @@
             var scrollme = document.getElementById('aroundguesslist');
             scrollme.scrollTop = scrollme.scrollHeight;
 
+
+            // increment group points
+            group_points += 1;
+            document.getElementById('group_points').textContent = "Group points: " + group_points;
+
             // if the player is the who guessed correctly, tell him good job
             if (oTree.idInGroup == event.detail.payload.idInGroup){
                 var message = document.getElementById('message')
                 message.textContent = 'That was correct. Good job!'
+                player_points += 1;
+                document.getElementById('player_points').textContent = "Your points: " + player_points;
+
             }
 
             // all words have been found, still, wait until the time is up, so the overall timing stays consistent
@@ -228,7 +237,7 @@
            document.getElementById("subbutton").disabled = true;
            // display results
            setTimeout(function () {display_all(anevent);}, 100);
-           document.getElementById('timer').textContent = 'Round done, please wait a moment ...'
+           document.getElementById('message').textContent = 'Round done, please wait a moment ...'
 
        }
     }
@@ -343,6 +352,8 @@
             border-color: black;
             border:1px dashed;
             background-color: white;
+             color : blue;
+            font-weight: bolder;
         }
 
         #questionboard{
@@ -416,8 +427,10 @@
           <div id="middle">
 
 
-              <p id="timer" style="padding-top:5px;padding-left: 10px">Time left:</p>
-              <br>
+              <p id="timer" style="padding-top:5px;padding-left: 60px; display: inline; color:blue">Time left:</p>
+              <p id="player_points" style="padding-top:5px;padding-left: 70px;display: inline;color:blue">Your points: 0</p>
+              <p id="group_points" style="padding-top:5px;padding-left: 70px; display: inline;color:blue">Group points: 0</p>
+              <br><br>
 
               <div id="centerthis">
 
@@ -436,14 +449,12 @@
 
 
                   <!-- Messageboard -->
-                  <br>
                   <div id="messageboard">
                       <p id='message' style=" padding-top:15px; text-align: center">Load message board....</p>
                   </div>
 
 
                   <div id="aroundfieldbutton">
-                        <br>
                         <!-- Input form -->
                         <input id='guessfield' type='text' maxlength='25' placeholder="Guess a word!">
                         <br><br>

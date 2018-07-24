@@ -111,7 +111,7 @@ class Group(RedwoodGroup):
         self.current_quest_num = 0
         # TODO delete me..
         print('when all players ready was called...')
-        # send the whole quiz packet (one question) to the channel
+        # send the whole quiz package (one question) to the channel
         self.sendquizload_toplayers()
         return
 
@@ -120,9 +120,6 @@ class Group(RedwoodGroup):
         # the function is called at the beginning from when_all_players_ready and under multiple questions when requested from a player through questionChannel
 
     def sendquizload_toplayers(self):
-
-        # TODO delete me
-        print('I WANTED to send quizload')
 
         # increment the current question number
         # TODO: You need save() for all database operations ingame, otherwise the changes have no effect on the database
@@ -159,6 +156,7 @@ class Group(RedwoodGroup):
     def _on_questionChannel_event(self, event=None):
         # send a new question back
         self.sendquizload_toplayers()
+
 
         # reveives all the guesses of the players, decides if guess was right and shall calculate ff_points
         # also checks if a correct guess has been found already, so no ff_points are distributed
@@ -359,8 +357,6 @@ class Player(BasePlayer):
 
 
     # Public Good Variables
-
-
     playerlabel = models.CharField(
         doc='The player name. Player A - Player E',
         choices=['Player A', 'Player B', 'Player C', 'Player D', 'Player E'])
