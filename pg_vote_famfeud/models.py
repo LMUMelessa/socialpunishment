@@ -15,13 +15,13 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 3
+    num_rounds = 1
     #pg - vars
     endowment = 10
     multiplier = 2
 
     ### familyfeud
-    questions_per_round = 2
+    questions_per_round = 3
     secs_per_question = 20
     wait_between_question = 4
 
