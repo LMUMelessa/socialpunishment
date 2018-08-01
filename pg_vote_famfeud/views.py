@@ -124,7 +124,11 @@ class VoteResults(Page):
        data = {}
        for player in self.group.get_players():
            data[(player.playerlabel).replace(' ', '') + '_votes'] = player.myvotes
-           data[(player.playerlabel).replace(' ', '') + '_plays'] = player.plays
+           if player.plays == True:
+                data[(player.playerlabel).replace(' ', '') + '_plays'] = "Yes"
+           elif player.plays == False:
+               data[(player.playerlabel).replace(' ', '') + '_plays'] = "No"
+
        return data
 
     # TODO delete me:
