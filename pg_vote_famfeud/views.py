@@ -158,14 +158,20 @@ class FamilyFeud(Page):
 class FamilyFeudResults(Page):
 
     def vars_for_template(self):
+
         data_dic = {'alist':[]}
-        group_counter = 1
         for group in self.subsession.get_group_matrix():
-            helplist = [group_counter,self.group.group_ff_points,[]]
+            helplist = [group[0].group.id_in_subsession,group[0].group.group_ff_points,[]]
             for player in group:
-               helplist[2].append({ 'player_label':player.playerlabel, 'points':player.ff_points})
+               your_group = 'False'
+               if self.player.group.id_in_subsession == player.group.id_in_subsession:
+                   your_group = 'True'
+               if player.plays == True:
+                   helplist[2].append({ 'player_label':player.playerlabel, 'points':player.ff_points, 'your_group':your_group})
+               elif player.plays == False:
+                   helplist[2].append({'player_label': player.playerlabel, 'points': 'Was excluded', 'your_group':your_group})
+
             data_dic['alist'].append(helplist)
-            group_counter += 1
         return data_dic
 
 

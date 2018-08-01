@@ -7,9 +7,9 @@
 
 {% block content %}
 
-    <div style=" border: solid; border-color: #f6f6f6; padding-left: 0px; width: 65%"  >
+    <div id="main">
 
-         <table class="table" style="font-size: 12px">
+         <table class="table table-sm" style="font-size: 12px">
             <tr>
                 <td>You are <b>{{ player.playerlabel }}</b></td>
                 <td>Current round is <b>Round {{ player.round_number }}</b></td>
@@ -21,23 +21,29 @@
         </table>
 
 
-        <div style=" margin-left: 15px" >
+        <div id="info" >
+            <div id="info-text">
 
-            {% if player.round_number == 1 %}
-                {% if player.treatment == 'exclude' %}
-                    This are the instructions for the exclude treatment (T1). (Displayed only in round1)
-                {% elif player.treatment == 'include' %}
-                    This are the instructions for the iclusion treatment (T2) . (Displayed only in round1)
+                {% if player.round_number == 1 %}
+                    {% if player.treatment == 'exclude' %}
+                        This are the instructions for the exclude treatment (T1). (Displayed only in round1)
+                    {% elif player.treatment == 'include' %}
+                        This are the instructions for the inclusion treatment (T2) . (Displayed only in round1)
+                    {% endif %}
+                {% else %}
+                    Round {{ player.round_number }} starts now. On the next page you will determine your contribution for the public good game.
+                    All players will play this game.
+                    <br>
+                    (This is displayed if the round number is > 1)
                 {% endif %}
-            {% else %}
-                Round {{ player.round_number }} starts now. On the next page you will determine your contribution for the public good game.
-                All players will play this game.
-                <br>
-                (This is displayed if the round number is > 1)
-            {% endif %}
-
+           </div>
         </div>
-    <br>
+
+
+        <div id="tables"></div>
+
+
+
     </div>
     <br>
     {% next_button %}
@@ -47,6 +53,13 @@
 {% block scripts %}
 
     <style type="text/css">
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:200px; border-bottom: solid; border-color: #f6f6f6;}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+
+
         .otree-body{margin-top: 0px}
         .otree-body{padding-top: 0px}
         .page-header {padding-top: 0px;padding-bottom: 0px}

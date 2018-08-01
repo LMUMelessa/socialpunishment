@@ -7,10 +7,12 @@
 
 {% block content %}
 
-    <div style=" border: solid; border-color: #f6f6f6; padding-left: 0px; width: 65%">
+    <div id="main">
 
 
-         <table class="table" style="font-size: 12px">
+        <div id="tables">
+
+         <table class="table table-sm" style="font-size: 12px">
             <tr>
                 <td>You are <b>{{ player.playerlabel }}</b></td>
                 <td>Current round is <b>Round {{ player.round_number }}</b></td>
@@ -23,15 +25,34 @@
 
 
           {% for pl_list in alist %}
-              <table class="table">
-                <tr>
-                    <th>Group Number: {{ pl_list.0 }}</th>
-                    <th>Group Points: {{ pl_list.1 }}</th>
-                </tr>
-                <tr>
-                    <th>Player</th>
-                    <th>Points</th>
-                </tr>
+
+              {% if pl_list.2.1.your_group == "True" %}
+
+                  <table class="table table-sm" style="width:45%; font-size:12px; border: solid; border-color: blue ">
+                    <tr style="background-color: black; color:white">
+                        <th>Group Number: {{ pl_list.0 }} (Your group)</th>
+                        <th>Group Points: {{ pl_list.1 }}</th>
+                    </tr>
+                    <tr style="background-color: darkgray; color:white">
+                        <th>Player</th>
+                        <th>Points</th>
+                    </tr>
+
+              {% else %}
+
+                  <table class="table table-sm" style="width:45%; font-size:12px">
+                    <tr style="background-color: black; color:white">
+                        <th>Group Number: {{ pl_list.0 }}</th>
+                        <th>Group Points: {{ pl_list.1 }}</th>
+                    </tr>
+                    <tr style="background-color: darkgray; color:white">
+                        <th>Player</th>
+                        <th>Points</th>
+                    </tr>
+
+              {% endif %}
+
+
               {%  for pl in pl_list.2 %}
                   <tr>
                     <td>{{pl.player_label}}</td>
@@ -41,6 +62,9 @@
               </table>
               <br>
           {% endfor %}
+
+
+    </div>
 
 
 
@@ -55,9 +79,21 @@
 
 {% block scripts %}
     <style type="text/css">
+
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:200px; border-bottom: solid; border-color: #f6f6f6;}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+
+
+
         .otree-body{margin-top: 0px}
         .otree-body{padding-top: 0px}
         .page-header {padding-top: 0px;padding-bottom: 0px}
         .otree-title{font-size: 20px}
+
+
     </style>
 {% endblock %}

@@ -6,9 +6,9 @@
 {% endblock %}
 
 {% block content %}
-    <div style=" border: solid; border-color: #f6f6f6; padding-left: 0px; width: 65%">
+    <div id="main">
 
-         <table class="table" style="font-size: 12px">
+         <table class="table table-sm" style="font-size: 12px">
                 <tr>
                     <td>You are <b>{{ player.playerlabel }}</b></td>
                     <td>Current round is <b>Round {{ player.round_number }}</b></td>
@@ -20,17 +20,20 @@
          </table>
 
 
-        <div style=" margin-left: 15px" >
-            <br>
-            This is the public good game of this round and all five players play the game. <br>
-            Your endowment is <b>{{Constants.endowment }}</b>.<br>
-            You can contribute every integer from 0 up to your endowment.
-            <br>
-            <br><br>
-            {% formfield player.contribution %}
+        <div id="info">
+            <div id="info-text">
+
+                This is the public good game of this round and all five players play the game. <br>
+                Your endowment is <b>{{Constants.endowment }}</b>.<br>
+                You can contribute every integer from 0 up to your endowment.
+                <br>
+                <br>
+                {% formfield player.contribution %}
+            </div>
         </div>
 
-    <br>
+        <div id="tables"></div>
+
     </div>
     <br>
     {% next_button %}
@@ -39,6 +42,13 @@
 
 {% block scripts %}
     <style type="text/css">
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:200px; border-bottom: solid; border-color: #f6f6f6;}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+
+
         .otree-body{margin-top: 0px}
         .otree-body{padding-top: 0px}
         .page-header {padding-top: 0px;padding-bottom: 0px}
