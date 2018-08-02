@@ -7,7 +7,7 @@ from .models import Constants
 class Instructions(Page):
     # TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'control' or self.player.treatment == 'feedback':
             return True
         else:
             return False
@@ -19,7 +19,7 @@ class Contribution(Page):
 
     #TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'control' or self.player.treatment == 'feedback':
             return True
         else:
             return False
@@ -31,7 +31,7 @@ class FirstWaitPage(WaitPage):
 
     # TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'control' or self.player.treatment == 'feedback':
             return True
         else:
             return False
@@ -50,7 +50,7 @@ class ResultsPG(Page):
 
     # TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'control' or self.player.treatment == 'feedback':
             return True
         else:
             return False
@@ -61,7 +61,7 @@ class Vote(Page):
     form_model = models.Player
 
     def get_form_fields(self):
-        if self.player.treatment == 'exclude':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'feedback':
             return ['vote_A', 'vote_B', 'vote_C', 'vote_D', 'vote_E', 'exclude_none']
         elif self.player.treatment == 'include':
             return ['vote_A', 'vote_B','vote_C','vote_D','vote_E']
@@ -89,18 +89,14 @@ class Vote(Page):
             data[(player.playerlabel).replace(' ', '')] = player.contribution
         return data
 
-    #TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'feedback':
             return True
         else:
             return False
 
 
 class VoteWaitPage(WaitPage):
-    # Only needed in exclude treatment
-    def is_displayed(self):
-        return self.player.treatment == 'exclude'
 
     def after_all_players_arrive(self):
         # Count the votes for every player
@@ -110,15 +106,14 @@ class VoteWaitPage(WaitPage):
         # Set the excluded player label on a group variable, if there is one
         self.group.set_excluded_player()
 
-    #TODO delete me:
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'feedback':
             return True
         else:
             return False
 
-class VoteResults(Page):
 
+class VoteResults(Page):
 
    def vars_for_template(self):
        data = {}
@@ -131,21 +126,28 @@ class VoteResults(Page):
 
        return data
 
-    # TODO delete me:
    def is_displayed(self):
-       if self.player.treatment == 'exclude' or self.player.treatment == 'include':
+       if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'feedback':
            return True
        else:
            return False
 
 
-
-
 class BeforeFamilyFeudWaitPage(WaitPage):
-    
+
+    def after_all_players_arrive(self):
+        # In the feedback treatment, player.plays is used to determine which player got the most negative feedback
+        # The FF game uses this to prevent players from playing wheras in the feedback treatment all players play FF
+        # Therefore rest the variable here
+        if self.group.get_players()[0].treatment == 'feedback':
+            for player in self.group.get_players():
+                player.plays = True
+        else:
+            pass
+
     # TODO delete me:
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'feedback' or self.player.treatment=='control':
             return True
         else:
             return False

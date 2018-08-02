@@ -114,31 +114,54 @@ SESSION_CONFIG_DEFAULTS = {
 
 
 SESSION_CONFIGS = [
+
     {
-        'name': 'pgvoteff',
-        'display_name': 'Exclude Treatment (T1)',
+        'name': 'pgvoteff0',
+        'display_name': 'Control Treatment No Vote (T0)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'heidelberg',
-        'treatment': 'exclude' #exclude; include
+        'treatment': 'control'  # #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
     },
 
 {
-        'name': 'pgvoteff2',
-        'display_name': 'Include Treatment (T2)',
+        'name': 'pgvoteff1',
+        'display_name': 'Feedback Treatment (T1)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'heidelberg',
-        'treatment': 'include' #exclude; include
+        'treatment': 'feedback' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
     },
+
+
+
+    {
+        'name': 'pgvoteff2',
+        'display_name': 'Exclude Treatment (T2)',
+        'num_demo_participants': 5,
+        'app_sequence': ['pg_vote_famfeud'],
+        'city': 'heidelberg',
+        'treatment': 'exclude' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
+    },
+
 {
         'name': 'pgvoteff3',
+        'display_name': 'Include Treatment (T3)',
+        'num_demo_participants': 5,
+        'app_sequence': ['pg_vote_famfeud'],
+        'city': 'heidelberg',
+        'treatment': 'include' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
+    },
+
+{
+        'name': 'pgvoteff4',
         'display_name': 'Family Feud only',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'heidelberg',
-        'treatment': 'ffonly'
-    }
+        'treatment': 'FF' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
+    },
+
 ]
 
 # anything you put after the below line will override

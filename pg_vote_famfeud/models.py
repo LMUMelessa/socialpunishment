@@ -322,7 +322,7 @@ class Group(RedwoodGroup):
 
         min_or_max = None
 
-        if self.get_players()[0].treatment == 'exclude':
+        if self.get_players()[0].treatment == 'exclude' or self.get_players()[0].treatment == 'feedback' :
             min_or_max = max(invitationslist)
         elif self.get_players()[0].treatment == 'include':
             min_or_max = min(invitationslist)
@@ -404,8 +404,8 @@ class Player(BasePlayer):
         verbose_name='Player E')
 
 
-    # In exlude treatment
-    exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="I don't want to exclude any player.")
+    # In exlude treatment and feedback treatment
+    exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="I don't want to vote for any player.")
 
     ### Family Feud Variables
  
