@@ -2,24 +2,23 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Results Public Good Game
 {% endblock %}
 
 {% block content %}
 
+
+     <div id="header">
+            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
+            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>
+        </div>
+
+
+
+
+
     <div id="main">
 
 
-         <table class="table table-sm" style="font-size: 12px">
-            <tr>
-                <td>You are <b>{{ player.playerlabel }}</b></td>
-                <td>Current round is <b>Round {{ player.round_number }}</b></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
 
 
 
@@ -80,8 +79,14 @@
     <style type="text/css">
 
 
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+
         #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
-        #info{ height:200px; border-bottom: solid; border-color: #f6f6f6;}
+        #info{ height:200px; border-bottom: solid 1px lightgrey;margin-top: 20px}
         #info-text{margin-left: 15px}
         #tables{margin-left: 15px; padding-top: 15px}
 
