@@ -157,7 +157,7 @@ class FamilyFeud(Page):
     pass
 
 
-class FamilyFeudResultsAlt(Page):
+class FamilyFeudResults(Page):
 
     def vars_for_template(self):
 
@@ -193,5 +193,5 @@ page_sequence = [
     VoteResults,
     BeforeFamilyFeudWaitPage,
     FamilyFeud,
-    FamilyFeudResultsAlt,
+    FamilyFeudResults,
 ]
