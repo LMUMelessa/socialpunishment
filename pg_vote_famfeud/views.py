@@ -73,7 +73,7 @@ class Vote(Page):
         if self.player.treatment == 'exclude':
             if vote_count > 0 and values['exclude_none'] == True:
                 return 'You cannot exlude a player while non exlcuding any.'
-            #enforce the player to choose an option
+            # Enforce the player to choose an option
             if vote_count == 0 and values['exclude_none'] == False:
                 return 'Please choose an option.'
         elif self.player.treatment == 'include':
@@ -137,8 +137,8 @@ class BeforeFamilyFeudWaitPage(WaitPage):
 
     def after_all_players_arrive(self):
         # In the feedback treatment, player.plays is used to determine which player got the most negative feedback
-        # The FF game uses this to prevent players from playing wheras in the feedback treatment all players play FF
-        # Therefore rest the variable here
+        # The FF game uses this to prevent players from playing in the other treatments. Instead, in the feedback treatment all players play FF
+        # Therefore, reset the variable here s. t. all can play FF in the Feedback treatment
         if self.group.get_players()[0].treatment == 'feedback':
             for player in self.group.get_players():
                 player.plays = True
@@ -157,7 +157,7 @@ class FamilyFeud(Page):
     pass
 
 
-class FamilyFeudResults(Page):
+class FamilyFeudResultsAlt(Page):
 
     def vars_for_template(self):
 
@@ -168,11 +168,15 @@ class FamilyFeudResults(Page):
                your_group = 'False'
                if self.player.group.id_in_subsession == player.group.id_in_subsession:
                    your_group = 'True'
+               thats_you = 'False'
+               if (your_group == 'True') and (self.player.id_in_group == player.id_in_group):
+                   thats_you = 'True'
+               pointinfo = None
                if player.plays == True:
-                   helplist[2].append({ 'player_label':player.playerlabel, 'points':player.ff_points, 'your_group':your_group})
-               elif player.plays == False:
-                   helplist[2].append({'player_label': player.playerlabel, 'points': 'Was excluded', 'your_group':your_group})
-
+                   pointinfo = player.ff_points
+               else:
+                   pointinfo = 'Was excluded'
+               helplist[2].append({ 'player_label':player.playerlabel, 'points':pointinfo, 'your_group':your_group, 'thats_you':thats_you})
             data_dic['alist'].append(helplist)
         return data_dic
 
@@ -189,5 +193,5 @@ page_sequence = [
     VoteResults,
     BeforeFamilyFeudWaitPage,
     FamilyFeud,
-    FamilyFeudResults,
+    FamilyFeudResultsAlt,
 ]

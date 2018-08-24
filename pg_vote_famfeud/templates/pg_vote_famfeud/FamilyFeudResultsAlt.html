@@ -19,55 +19,32 @@
         <h6>Results of the Social Game</h6>
         <div id="tables">
 
+
+          <table class="table table-sm" style="width:45%; font-size:12px; border: solid; border-color: gray ">
           {% for pl_list in alist %}
 
 
               {% if pl_list.2.1.your_group == "True" %}
 
-                  <table class="table table-sm" style="width:45%; font-size:12px; border: solid; border-color: blue ">
-                    <tr style="background-color: black; color:white">
+
+                    <tr style="background-color: lightgrey">
                         <th>Group Number: {{ pl_list.0 }} (Your group)</th>
                         <th>Group Points: {{ pl_list.1 }}</th>
                     </tr>
-                    <tr style="background-color: black; color:white">
-                        <th>Player</th>
-                        <th>Points</th>
-                    </tr>
-
               {% else %}
 
-                  <table class="table table-sm" style="width:45%; font-size:12px">
-                    <tr style="background-color: black; color:white">
+                    <tr>
                         <th>Group Number: {{ pl_list.0 }}</th>
                         <th>Group Points: {{ pl_list.1 }}</th>
                     </tr>
-                    <tr style="background-color: black; color:white">
-                        <th>Player</th>
-                        <th>Points</th>
-                    </tr>
-
               {% endif %}
 
-
-              {%  for pl in pl_list.2 %}
-
-
-                    {% if pl.thats_you == 'False'  %}<tr> <td>{{pl.player_label}}</td> {% else %}<tr style="background-color: lightgrey"> <td>You</td> {% endif %}
-                    {%if pl.points == 'Was excluded'%}<td style="color: red">Was excluded</td> {% else %} <td>{{ pl.points }}</td>{% endif %}
-                 </tr>
-              {% endfor %}
-              </table>
               <br>
           {% endfor %}
+          </table>
 
 
-    </div>
-
-
-
-
-
-
+        </div>
     </div>
     <br>
     {% next_button %}

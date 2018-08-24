@@ -156,7 +156,7 @@ SESSION_CONFIGS = [
 {
         'name': 'pgvoteff4',
         'display_name': 'Family Feud only',
-        'num_demo_participants': 5,
+        'num_demo_participants': 10,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'heidelberg',
         'treatment': 'FF' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'

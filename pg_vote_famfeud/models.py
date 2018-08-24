@@ -21,7 +21,7 @@ class Constants(BaseConstants):
     multiplier = 2
 
     ### familyfeud
-    questions_per_round = 3
+    questions_per_round = 2
     secs_per_question = 20
     wait_between_question = 4
 
