@@ -23,29 +23,23 @@
 
 
             {% if player.treatment != 'feedback' %}
-                    You have <b>{{ player.myvotes }}</b> votes.
+                    You have <b>{{ player.myvotes }}</b> {% if player.treatment == 'exclude' %} exclusions.{% elif player.treatment == 'include' %}invitations.{% endif %}
                     <br>
                     {% if player.plays == True %}
-                        You are allowed to play the second game.
+                        You are allowed to play the guessing game.
                     {% else %}
                         {% if player.treatment == 'exclude' %}
-                            You have the most exclusion votes. You are <b>not</b> allowed the play the social game.
+                             You are <b>not</b> allowed to play the guessing game.
                         {% elif player.treatment == 'include' %}
-                            You have the least invitation votes. You are <b>not</b> allowed to play the social game.
+                            You have not enough invitations. You are <b>not</b> allowed to play the guessing game.
                         {% endif %}
                     {% endif %}
                     <br>
 
                  {% if group.all_play == True %}
-                    There was no {% if player.treatment == 'exclude'%} majority{% elif player.treatment == 'include'%}minority{% endif %} in voting.<br>
-                    All players will play the social game.
+                    All players will play the guessing game.
                  {% else %}
-                    {% if player.plays == True %}
-                    <b>{{ group.excluded_player }}</b> will not play the social game.
-
-                    {% elif player.plays == False %}
-                        You will not play the social game.
-                    {% endif %}
+                    See below, who will play the guessing game.
                  {% endif %}
 
             {% else %}
@@ -71,7 +65,7 @@
                        {% if player.treatment == 'feedback'%}Feedback Votes{% endif%}   </th>
 
 
-               {% if player.treatment != 'feedback' %} <th> Plays Social Game</th> {% endif %}
+               {% if player.treatment != 'feedback' %} <th> Plays Guessing Game</th> {% endif %}
                 </tr>
                 </tr>
                 <tr>

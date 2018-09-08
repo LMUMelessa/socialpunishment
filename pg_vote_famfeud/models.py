@@ -24,6 +24,7 @@ class Constants(BaseConstants):
     questions_per_round = 3
     secs_per_question = 30
     wait_between_question = 5
+    cost_for_vote = 1
 
     with open('data.csv') as f:
         questions = list(csv.reader(f))
@@ -261,7 +262,7 @@ class Group(RedwoodGroup):
 
 
     #### Family feud end
-
+    ######################################################################################################################
 
     ### Public good game
     all_play = models.BooleanField(
@@ -290,6 +291,7 @@ class Group(RedwoodGroup):
     # Assigns for all the players how many votes they had
     # The variable updated is player.myvotes
     def set_myvotes(self):
+        # Set the votes a player received from the other players
         for set_player in self.get_players():
             vote_count = 0
             # Screen the invitations of all players
@@ -304,59 +306,73 @@ class Group(RedwoodGroup):
                     vote_count += 1
             set_player.myvotes = vote_count
 
+        # Set the votes a player distributed towards the other players (they cost)
+        for player in self.get_players():
+            player.ivoted = sum([player.vote_A, player.vote_B, player.vote_C, player.vote_D, player.vote_E])
 
 
+    # New version of the function after 08.09.2018
     # Find out if there is a majority after the voting
     # Assign for all players if they play in the second game (social game, familyfeud)
     # Assign if the second game/social game/family feud will be played with all players in the group
     # Sets group.all_play and player.plays
     def set_social_game(self):
-        invitationslist = []
-
-        # Collect all the votes
-        for player in self.get_players():
-            invitationslist.append(player.myvotes)
-
-
-        # Find the highest number of votes a player had
-
-        min_or_max = None
-
-        if self.get_players()[0].treatment == 'exclude' or self.get_players()[0].treatment == 'feedback' :
-            min_or_max = max(invitationslist)
-        elif self.get_players()[0].treatment == 'include':
-            min_or_max = min(invitationslist)
-
-        # Check if max/min is unique, because in that case there is a majority
-        occurence = invitationslist.count(min_or_max)
-        # Unique max/min, there is a majority
-        if occurence == 1:
-            self.all_play = False
-            # Identify the player with the most exclusions
+        if self.get_players()[0].treatment == "exclude" or self.get_players()[0].treatment == 'feedback':
             for player in self.get_players():
-                if player.myvotes == min_or_max:
-                    # The default is True
+                if player.myvotes >= 3:
                     player.plays = False
-                    # Break, as only one player has max/min votes because min/max is unique
-                    break
-        # Not unique, no majority
-        elif occurence > 1:
-            self.all_play = True
+        elif self.get_players()[0].treatment == "include":
+            for player in self.get_players():
+                if player.myvotes < 3:
+                    player.plays = False
+
+    # # Version of the function before 08.09.2018 - after that the exclusion mechanism changed, at least in exclusion treatment
+    # # Find out if there is a majority after the voting
+    # # Assign for all players if they play in the second game (social game, familyfeud)
+    # # Assign if the second game/social game/family feud will be played with all players in the group
+    # # Sets group.all_play and player.plays
+    # def set_social_game(self):
+    #     invitationslist = []
+    #
+    #     # Collect all the votes
+    #     for player in self.get_players():
+    #         invitationslist.append(player.myvotes)
+    #
+    #
+    #     # Find the highest number of votes a player had
+    #
+    #     min_or_max = None
+    #
+    #     if self.get_players()[0].treatment == 'exclude' or self.get_players()[0].treatment == 'feedback' :
+    #         min_or_max = max(invitationslist)
+    #     elif self.get_players()[0].treatment == 'include':
+    #         min_or_max = min(invitationslist)
+    #
+    #     # Check if max/min is unique, because in that case there is a majority
+    #     occurence = invitationslist.count(min_or_max)
+    #     # Unique max/min, there is a majority
+    #     if occurence == 1:
+    #         self.all_play = False
+    #         # Identify the player with the most exclusions
+    #         for player in self.get_players():
+    #             if player.myvotes == min_or_max:
+    #                 # The default is True
+    #                 player.plays = False
+    #                 # Break, as only one player has max/min votes because min/max is unique
+    #                 break
+    #     # Not unique, no majority
+    #     elif occurence > 1:
+    #         self.all_play = True
 
 
     # Setting the goup level -  excluded player - variable
-    def set_excluded_player(self):
-        for player in self.get_players():
-            if player.plays == False:
-                self.excluded_player = player.playerlabel
-                # Break, because only one player is excluded
-                break
+
 
 
 class Player(BasePlayer):
 
 
-    # Public Good Variables
+    ### Public Good Variables
     playerlabel = models.CharField(
         doc='The player name. Player A - Player E',
         choices=['Player A', 'Player B', 'Player C', 'Player D', 'Player E'])
@@ -380,8 +396,10 @@ class Player(BasePlayer):
     myvotes = models.IntegerField(
         doc='The number of votes the player got after the public good game.')
 
+    ivoted = models.IntegerField(doc='The number of votes the player distributed to other players.', initial=0)
+
     plays = models.BooleanField(
-        doc='Determines if the player is allowed to play the social game.',
+        doc='Determines if the player is allowed to play the guessing game.',
         default = True
     )
 
@@ -407,14 +425,20 @@ class Player(BasePlayer):
     # In exlude treatment and feedback treatment
     exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="I don't want to vote for any player.")
 
+    def update_payoff(self):
+        self.payoff = self.payoff - self.ivoted * Constants.cost_for_vote
+
+
+    ######################################################################################################################
+
+
     ### Family Feud Variables
- 
     guess_sequence = models.CharField(initial='')
 
-    # number of correctly answered questions
+    # Number of correctly answered questions
     ff_points = models.IntegerField(initial=0)
 
-    # number of tries (guesses) of a player
+    # Number of tries (guesses) of a player
     num_guesses = models.IntegerField(initial=0)
 
     def inc_num_guesses(self):

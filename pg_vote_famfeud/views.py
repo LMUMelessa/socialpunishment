@@ -40,15 +40,14 @@ class FirstWaitPage(WaitPage):
 class ResultsPG(Page):
     def vars_for_template(self):
         data = {}
-        #TODO: Note: Vars for template cannot be tested, therefore this has to be safe and doublechecked
         for player in self.group.get_players():
             # Remove whitespace from label so that it can be displayed in the template
             data[(player.playerlabel).replace(' ','')] = player.contribution
             # Also display the profit the player made
+            # TODO: Why am I doing this? Just use  {{player.payoff}} in the template?
             data['gameprofit'] = Constants.endowment - self.player.contribution + self.group.indiv_share
         return data
 
-    # TODO delete me
     def is_displayed(self):
         if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'control' or self.player.treatment == 'feedback':
             return True
@@ -100,11 +99,14 @@ class VoteWaitPage(WaitPage):
 
     def after_all_players_arrive(self):
         # Count the votes for every player
+        # And the votes every player made
         self.group.set_myvotes()
         # Assign for each player if he plays the social game
         self.group.set_social_game()
-        # Set the excluded player label on a group variable, if there is one
-        self.group.set_excluded_player()
+
+        # Update the payoffs as voting is costly
+        for player in self.group.get_players():
+            player.update_payoff()
 
     def is_displayed(self):
         if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'feedback':
@@ -136,9 +138,9 @@ class VoteResults(Page):
 class BeforeFamilyFeudWaitPage(WaitPage):
 
     def after_all_players_arrive(self):
-        # In the feedback treatment, player.plays is used to determine which player got the most negative feedback
-        # The FF game uses this to prevent players from playing in the other treatments. Instead, in the feedback treatment all players play FF
-        # Therefore, reset the variable here s. t. all can play FF in the Feedback treatment
+        # In the feedback treatment, player.plays is used to determine which player got the most negative feedback.
+        # The FF game uses this to prevent players from playing in the other treatments. Instead, in the feedback treatment all players play FF.
+        # Therefore, reset the variable here s. t. all can play FF in the Feedback treatment.
         if self.group.get_players()[0].treatment == 'feedback':
             for player in self.group.get_players():
                 player.plays = True
