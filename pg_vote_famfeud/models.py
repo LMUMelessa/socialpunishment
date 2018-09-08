@@ -80,7 +80,7 @@ class Subsession(BaseSubsession):
                                  's5': question[5].split('*'), })
 
             questions_per_round = Constants.questions_per_round
-
+            random.seed(42)
             for round_num in range(1, Constants.num_rounds + 1):
                 for question_num in range(1, questions_per_round + 1):
                     question = random.choice(quizload)

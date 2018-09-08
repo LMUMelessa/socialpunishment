@@ -2,7 +2,7 @@
 {% load staticfiles otree %}
 
 {% block title %}
-    Social Game
+    Guessing Game
 {% endblock %}
 
 {% block scripts %}
@@ -237,14 +237,17 @@
            document.getElementById("subbutton").disabled = true;
            // display results
            setTimeout(function () {display_all(anevent);}, 100);
-           document.getElementById('message').textContent = 'Round done, please wait a moment ...'
-
+           document.getElementById('message').textContent = 'Round done, please wait a moment ...';
+           //emtpy guesslist
+           clearme = document.getElementById('guesslist')
+           while( clearme.firstChild ){
+                clearme.removeChild( clearme.firstChild );
+           }
        }
     }
 
     var questions_left = oTree.questionsPerRound - 1;
-    //this is called from 'receive_question' 40 seconds after a question is displayed
-    //TODO 02.012 ok and then after this wait 5 seconds and send next question to do this again basically
+    //this is called from 'receive_question' X seconds after a question is displayed
     function display_all(anevent){
 
         var s1 =  document.getElementById('s1');
