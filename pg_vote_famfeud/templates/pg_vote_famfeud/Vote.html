@@ -25,7 +25,7 @@
                      Which players do you want to play the social game?
                      <br>
                     {% if player.treatment == 'exclude' %}
-                         You can vote for excluding players from the social game by clicking their boxes.
+                         You can vote for excluding players from the social game by clicking their boxes. This costs {{Constants.cost_for_vote}} per vote.
                          <br>
 
                     {% elif player.treatment == "include" %}
@@ -44,6 +44,8 @@
 
                 {% endif %}
 
+
+                <br>
                 {% if player.playerlabel != 'Player A' %}{% formfield player.vote_A %}{% endif %}
                 {% if player.playerlabel != 'Player B' %}{% formfield player.vote_B %}{% endif %}
                 {% if player.playerlabel != 'Player C' %}{% formfield player.vote_C %}{% endif %}

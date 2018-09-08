@@ -103,10 +103,10 @@ class VoteWaitPage(WaitPage):
         self.group.set_myvotes()
         # Assign for each player if he plays the social game
         self.group.set_social_game()
-
-        # Update the payoffs as voting is costly
-        for player in self.group.get_players():
-            player.update_payoff()
+        # Update the payoffs as voting is costly in feedback and exclusion treatment
+        if self.group.get_players()[0].treatment == "feedback" or self.group.get_players()[0].treatment == "exclusion":
+            for player in self.group.get_players():
+                player.update_payoff()
 
     def is_displayed(self):
         if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'feedback':
