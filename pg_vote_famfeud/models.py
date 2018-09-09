@@ -4,6 +4,7 @@ from otree.api import (
 )
 from otree_redwood.models import Group as RedwoodGroup
 import csv,random
+import difflib as dif
 
 author = 'Your name here'
 
@@ -89,7 +90,7 @@ class Subsession(BaseSubsession):
                     # ql_11 e.g. means quizload for round 1 question 1
                     self.session.vars['ql_' + str(round_num) + str(question_num)] = question
 
-    pass
+
 
 
 class Group(RedwoodGroup):
@@ -191,6 +192,17 @@ class Group(RedwoodGroup):
             # e. g. question[s1] is a list with all the solutions for the correct word 1 of the current question
             if guess in list(map(lambda x: x.lower(), question[answernum])):  # guess is correct
                 good_guess = True
+
+            # if the guess was not in the answerlist, check for string similarity
+            if good_guess == False:
+                for answer in question[answernum]:
+                    match = dif.SequenceMatcher(a=guess, b=answer.lower())
+                    #TODO delete me (print)
+                    print(guess + " and " + answer.lower() + " have string equality of: " + str(match.ratio()))
+                    if match.ratio() > 0.75:
+                        good_guess = True
+
+            if good_guess == True:
                 # only take action and distribute ff_points if the correct answer has not been guessed before
                 if [self.s1_answered, self.s2_answered, self.s3_answered, self.s4_answered, self.s5_answered][questionindex] != True:
                     # give the player a point (save() is called in the function)
@@ -234,14 +246,12 @@ class Group(RedwoodGroup):
 
                     print('thats finished' + str(finished))
 
-
-                # TODO: note: with that design choice, if a question is answered correctly for the second time, just nothing happens
+                # TODO: note: with that design choice, if a question is answered correctly for the second time, nothing happens
                 # TODO: there will be also nothing displayed in the group guess message board
                 # guess was correct, but that correct guess was already made before
-                # do nothing, dont send anything out, dont distribute ff_points
                 else:
                     pass
-                # we can break here, because this is the space where the guess was correct, so then no other of the answers has to be checked
+                # break because no other answer has to be checked if the guess is correct
                 break
             questionindex += 1
 
