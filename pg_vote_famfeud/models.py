@@ -23,8 +23,9 @@ class Constants(BaseConstants):
 
     ### familyfeud
     questions_per_round = 3
+    extra_questions = 2
     secs_per_question = 30
-    wait_between_question = 5
+    wait_between_question = 4
     cost_for_vote = 1
 
     with open('data.csv') as f:
@@ -81,10 +82,16 @@ class Subsession(BaseSubsession):
                                  's5': question[5].split('*'), })
 
             questions_per_round = Constants.questions_per_round
-            random.seed(42)
+            extra_questions = Constants.extra_questions
+
+
+
             for round_num in range(1, Constants.num_rounds + 1):
-                for question_num in range(1, questions_per_round + 1):
-                    question = random.choice(quizload)
+                for question_num in range(1, questions_per_round + extra_questions + 1):
+
+                    question = quizload[0]
+                    #use this for random questions
+                    #question = random.choice(quizload)
                     quizload.remove(question)
                     # Save the quizload of the question in session.vars to access later
                     # ql_11 e.g. means quizload for round 1 question 1

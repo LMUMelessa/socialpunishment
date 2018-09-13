@@ -2,7 +2,7 @@
 {% load staticfiles otree %}
 
 {% block title %}
-    Guessing Game
+    Family Feud
 {% endblock %}
 
 {% block scripts %}
@@ -22,7 +22,7 @@
 
     //Stackoverflow:
     // Make pressing enter to submit the guess
-    //TODO there is also this event.preventDefault() .. so the above code might not be necessary
+    //TODO this might be blocked from the above code?
     document.getElementById("guessfield")
     .addEventListener("keyup", function(event) {
     event.preventDefault();
@@ -50,7 +50,7 @@
       oTree.secsPerQuestion = {{ Constants.secs_per_question }}
       oTree.waitBetween = {{ Constants.wait_between_question }}
       oTree.questionsPerRound = {{ Constants.questions_per_round }}
-      oTree.plays = "{{ player.plays }}";
+      oTree.extra_questions = {{ Constants.extra_questions }}
       {% if view.is_debug %}
       oTree.debug = true;
       {% else %}
@@ -59,13 +59,59 @@
     })();
 
 
+ // set this to "off" to shut the bot off
+    var botmode = "off";
+    var frequency = 100;
 
-    // Call the handle Guess function when the submit button is clicked
+
+    // for bot, is filled with the correct answers below
+    var a1 = "Answer1";
+    var a2 = "Answer2";
+    var a3 = "Answer3";
+    var a4 = "Answer4";
+    var a5 = "Answer5";
+
+    function bot(){
+
+         var guessed = document.getElementById('guessfield')
+         var text = "";
+         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+         var ran = Math.random();
+         if (ran < 0.03){
+
+
+         var answers = [a1 ,a2 ,a3, a4, a5];
+
+         var answeridx = Math.floor(Math.random() * 6)
+
+
+         guessed.placeholder = answers[answeridx];
+         guessed.value = answers[answeridx];
+
+         }else{
+
+              for (var i = 0; i < 5; i++){
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+
+         guessed.placeholder = text;
+         guessed.value = text;
+         }
+         handleGuess();
+    }
+
+
+    // this ensures that run_round() doesnt run twice if a group answers all questions early
+    var answered_early = false;
+
+
+    // call the handle Guess function when the submit button is clicked
     var subButton = document.getElementById('subbutton');
     subButton.addEventListener('click', handleGuess);
 
-    //This function is called when the submit button is clicked
-    // It sends the guess over the guessing Channel to otree, therefore on_guessingchannel_event is called
+    // this function is called when the submit button is clicked
+    // it sends the guess over the guessing Channel to otree, therefore on_guessingchannel_event is called
     function handleGuess() {
         //grap the input of the input form as a variable
          var guessed = document.getElementById('guessfield').value;
@@ -84,10 +130,11 @@
         }
     }
 
+
     var group_points = 0;
     var player_points = 0;
-    // Receives information over channel from 'on_guessingChannel_event' in oTree after the guess is processed there
-    // Takes all the desired actions
+    // receives information over channel from 'on_guessingChannel_event' in oTree after the guess is processed there
+    // takes all the desired actions
     document.getElementById('guessInformations').addEventListener('event', instructions_after_guess)
     function instructions_after_guess(event){
         // if the guess was right
@@ -95,10 +142,9 @@
 
             // reveal the correctly guessed word
             var correctguess = document.getElementById(event.detail.payload.whichword);
-            correctguess.textContent = event.detail.payload.guess;
+            correctguess.textContent = event.detail.payload.guess
             //color the background green
-            correctguess.style.background = 'linear-gradient(lightgreen, limegreen)';
-
+            correctguess.style.background = 'linear-gradient(lightgreen, limegreen)'
 
             // display message about the guess for all players on message board
             var node = document.createElement("Li");
@@ -113,28 +159,29 @@
             node.appendChild(span1);
             document.getElementById("guesslist").appendChild(node);
 
-            //scroll the div holding the guesslist to the end, so always the newewst guess is displayed
+            // scroll the div holding the guesslist to the end, so always the newewst guess is displayed
             var scrollme = document.getElementById('aroundguesslist');
             scrollme.scrollTop = scrollme.scrollHeight;
 
-
             // increment group points
             group_points += 1;
-            document.getElementById('group_points').textContent = "Group points: " + group_points;
+            document.getElementById('group_points').textContent = "Group points: " + group_points
 
-            // if the player is the who guessed correctly, tell him good job
+            // if the player is the who guessed correctly, tell him good job, increment his points
             if (oTree.idInGroup == event.detail.payload.idInGroup){
-                var message = document.getElementById('message')
-                message.textContent = 'That was correct. Good job!'
+                var message = document.getElementById('message');
+                message.textContent = 'That was correct. Good job!';
+                // increment player points
                 player_points += 1;
-                document.getElementById('player_points').textContent = "Your points: " + player_points;
+                document.getElementById('player_points').textContent = "Your points: " + player_points
 
             }
 
             // all words have been found, still, wait until the time is up, so the overall timing stays consistent
             if (event.detail.payload.finished == true){
-                var message = document.getElementById('message')
-                message.textContent = 'Great! your group found all the questions. Please wait for the round to finish...'
+
+                // set answered_early = true s. t. in run_round the round will be restarted
+                answered_early = true;
             }
 
         // if the guess was wrong
@@ -152,12 +199,12 @@
             node.appendChild(span1);
             document.getElementById("guesslist").appendChild(node);
 
-            //scroll the div around the guesslist to the end, so always the newewst guess is displayed
+            // scroll the div around the guesslist to the end, so always the newewst guess is displayed
             var scrollme = document.getElementById('aroundguesslist');
             scrollme.scrollTop = scrollme.scrollHeight;
 
 
-            // tell player to try again
+            // if the player is the who guessed correctly, tell him try again
             if (oTree.idInGroup == event.detail.payload.idInGroup){
                 var message = document.getElementById('message')
                 message.textContent = 'You tried ' + event.detail.payload.guess + '. Try again!'
@@ -165,31 +212,23 @@
         }
     }
 
-
+    var bonus_seconds = 0;
+    var curr_quest = 1;
     // sending a new question from oTree to the players
     // initializing the 40 + 5 seconds round of a question
     document.getElementById('questionChannel').addEventListener('event', receive_question);
     function receive_question(event){
 
 
-        // don't show the game, if the player was excluded
-        var wrapper = document.getElementById("wrapper");
-        if (oTree.plays == "True")
-        {
-            // don't show the screenshot
-            var ex = document.getElementById("excluded");
-            ex.style.display = "none";
-
-        }else{
-            // don't show the game
-            var wrapper = document.getElementById("wrapper");
-            wrapper.style.display = "none";
-            var ex = document.getElementById("excluded");
-            ex.textContent = "You are not allowed to play (Put Screenshot here)."
-        }
+        // atm the answers here are only needed for the bot. The design is that after a correct guess the correct guess is sended from oTree.
+        a1 = event.detail.payload.s1[0];
+        a2 = event.detail.payload.s2[0];
+        a3 = event.detail.payload.s3[0];
+        a4 = event.detail.payload.s4[0];
+        a5 = event.detail.payload.s5[0];
 
 
-        // if multiple family feud subrounds (more then 1 question) are played turn the shown solutions to placeholders again
+        // if multiple family feud subrounds (more then 1 question) are played, turn the shown solutions to placeholders again
         var s1 =  document.getElementById('s1');
         s1.textContent = 'Word 1'
         s1.style.background = 'linear-gradient(lightyellow,yellow)'
@@ -201,53 +240,110 @@
         s3.style.background = 'linear-gradient(lightyellow,yellow)'
         var s4 =  document.getElementById('s4');
         s4.textContent = 'Word 4'
-        s4.style.background = 'linear-gradient(lightyellow,yellow)'
+        s4.style.background = 'linear-gradient(lightyellow,yellow)';
         var s5 =  document.getElementById('s5');
-        s5.textContent = 'Word 5'
-        s5.style.background = 'linear-gradient(lightyellow,yellow)'
+        s5.textContent = 'Word 5';
+        s5.style.background = 'linear-gradient(lightyellow,yellow)';
 
         // send to message board
-        document.getElementById('message').textContent = "Let's go. Type your guess in the field below!"
+        document.getElementById('message').textContent = "Let's go. Type your guess in the field below!";
 
         // display question
-        var questiontag = document.getElementById('question')
-        questiontag.textContent = event.detail.payload.question
+        var questiontag = document.getElementById('question');
+        questiontag.textContent = event.detail.payload.question;
 
         // enable submit button
         document.getElementById("subbutton").disabled = false;
 
         // activate the round
-        currtime = new Date().getTime()
-        stoptime = currtime + (oTree.secsPerQuestion*1000)
-        run_round(event,stoptime)
 
+        // new round, set answered early to false
+        answered_early = false;
+        currtime = new Date().getTime();
+
+        if (curr_quest <= oTree.questionsPerRound){
+            var stoptime = currtime + (oTree.secsPerQuestion*1000);
+        }else{
+             var stoptime = currtime + (bonus_seconds*1000);
+        }
+        run_round(event,stoptime,"inactive", "none")
     }
 
-    function run_round(anevent, stoptime){
-        // start the timer
+
+
+    function run_round(anevent, stoptime, botstate, botintervalID){
+
+        // don't worry, bot stuff
+        // start bot one time this will not be called in subsequent calls
+        // it only will be called if run_round is called from receice question
+        var intID = 42;
+        if (botmode == "on"){
+            if (botstate=="inactive"){
+                intID =  setInterval(function() {bot();}, frequency);
+        }}
+        // update timer
        currtime = new Date().getTime();
        n = Math.floor((stoptime - currtime)/1000);
-       document.getElementById('timer').textContent = 'Time left: ' + parseInt(n);
-       // call function again every second until the time is up
-       if(n > 0 ) {
-           setTimeout( function() {run_round(anevent, stoptime);},1000)
+       if (n<10){
+           document.getElementById('timer').textContent = 'Time left: 0' + parseInt(n);
+       }else{
+           document.getElementById('timer').textContent = 'Time left: ' + parseInt(n);
+       }
+
+       // goup has all answers before the time is up
+       if (answered_early==true){
+
+           // current question is a bonus question
+           if (curr_quest > oTree.questionsPerRound){
+               // determine the remaining bonus seconds
+               bonus_seconds = n;
+           // current question is a normal question
+           }else{
+
+               // accumulate the bonus questions
+               bonus_seconds = bonus_seconds + n;
+           }
+           document.getElementById('message').textContent = 'You got all! Great.';
+
+           // emtpy guesslist
+           clearme = document.getElementById('guesslist');
+           while(clearme.firstChild ){
+                clearme.removeChild(clearme.firstChild);
+           }
+           // all questions are displayed already but
+           // you have to use display_all to keep the cycle consistent as this will either end the game or call request_question()
+           display_all(anevent);
+
+       // round keeps going, call yourself recursively
+       }else if(n > 0 ) {
+           setTimeout( function() {run_round(anevent, stoptime, "active", intID);},1000)
+
        // time is up
        }else {
+           // shut bot off if there is one
+           if (botmode =="on"){
+               clearInterval(botintervalID);
+           }
+           // for bonus question time is now finally up
+           if (curr_quest > oTree.questionsPerRound) {
+               bonus_seconds = 0;
+           }
+
            // disable the submit button, so players cannot guess when the answers are shown
            document.getElementById("subbutton").disabled = true;
-           // display results
-           setTimeout(function () {display_all(anevent);}, 100);
            document.getElementById('message').textContent = 'Round done, please wait a moment ...';
            // emtpy guesslist
-           clearme = document.getElementById('guesslist')
-           while( clearme.firstChild ){
-                clearme.removeChild( clearme.firstChild );
+           clearme = document.getElementById('guesslist');
+           while(clearme.firstChild ){
+                clearme.removeChild(clearme.firstChild);
            }
+           // display results (display_all also either requests new question or ends the game)
+           setTimeout(function () {display_all(anevent);}, 100);
        }
     }
 
-    var questions_left = oTree.questionsPerRound - 1;
-    //this is called from 'receive_question' X seconds after a question is displayed
+
+    // called from run_round()
     function display_all(anevent){
 
         var s1 =  document.getElementById('s1');
@@ -267,30 +363,35 @@
         s5.style.background = 'linear-gradient(lightgreen, limegreen)'
 
         // check if there is a question left otherwise go to the next page in oTree
-        if (questions_left == 0){
+        if ((curr_quest >= oTree.questionsPerRound) && (bonus_seconds < 1)) {
             // family feud finished, wait and submit page
-            setTimeout( function(){ submit_nextbutton();}, oTree.waitBetween*1000)
+            setTimeout(function () {submit_nextbutton();}, oTree.waitBetween * 1000);
+
+        }else if ( curr_quest == oTree.questionsPerRound + oTree.extra_questions ) {
+            // family feud finished, wait and submit page
+            setTimeout(function () {submit_nextbutton();}, oTree.waitBetween * 1000);
         }else{
-            // wait 'waitBetween' seconds and then let the first player in the group request oTree to send another question
-            setTimeout( function() {request_question();}, oTree.waitBetween*1000)
+            // wait 'waitBetween' seconds and then let the first player in the group tell oTree to send another question
+            setTimeout( function() {request_question();}, oTree.waitBetween*1000);
         }
-        questions_left -= 1
+        curr_quest += 1;
     }
 
-    // this will abort the game and move to the next oTree page is called from display_all()
+    // called from display_all()
     function submit_nextbutton(){
-        document.getElementById('next').click()
+        document.getElementById('next').click();
     }
 
-    // if you play more then 1 question in a family feud subround
+    // if you play more then 1 question
     function request_question(){
         // the first player in the group requests the new question bundle
         if (oTree.idInGroup == 1){
         var questionChan = document.getElementById("questionChannel");
-        // send to Otree, so otree sends a question back to 'receive_question', this activates a new round
+        // send to oTree, so oTree sends a question back to 'receive_question', this activates a new round
         questionChan.send({some:'load'})
         }
     }
+
 
 
 
@@ -345,25 +446,26 @@
             height: 90%;
         }
 
-        #messageboard {
-            margin: 0 auto;
-            width: 70%;
-            padding-left: 5px;
-            padding-right: 5px;
-            height: 70px;
-            border-radius: 10px;
-            border-color: black;
-            border:1px dashed;
-            background-color: white;
-             color : blue;
-            font-weight: bolder;
-        }
+{#        #messageboard {#}
+{#            margin: 0 auto;#}
+{#            width: 70%;#}
+{#            padding-left: 5px;#}
+{#            padding-right: 5px;#}
+{#            height: 70px;#}
+{#            border-radius: 10px;#}
+{#            border-color: black;#}
+{#            border:1px dashed;#}
+{#            background-color: white;#}
+{#            color : blue;#}
+{#            font-weight: bolder;#}
+
+
 
         #questionboard{
             padding-left:5px;
             padding-right:5px;
             border-radius: 15px;
-            height: 80px;
+            height: 120px;
             border-color: black;
             border:1px dashed;
             margin-bottom: 20px;
@@ -422,6 +524,8 @@
 	    </redwood-channel>
 
 
+
+
       <!-- Template of the page -->
 
       <div id="wrapper">
@@ -433,15 +537,25 @@
               <p id="timer" style="padding-top:5px;padding-left: 60px; display: inline; color:blue">Time left:</p>
               <p id="player_points" style="padding-top:5px;padding-left: 70px;display: inline;color:blue">Your points: 0</p>
               <p id="group_points" style="padding-top:5px;padding-left: 70px; display: inline;color:blue">Group points: 0</p>
+
               <br><br>
 
               <div id="centerthis">
 
-                  <!-- Display the question -->
+                  <!-- Question Board -->
+                  <br>
                   <div id="questionboard" >
+                    <div style="height: 45px">
                     <p id="question" style="padding-top: 15px; text-align: center">Prepare for the first question ...</p>
-                  </div>
+                    </div>
+                      <!-- Messageboard -->
 
+                      <div style="border-top:lightgrey solid; padding-top: 15px; margin-top: 20px ">
+                      <p id='message' style="font-size:16px;color:blue;text-align: center">Load message board....</p>
+                      </div>
+
+
+                  </div>
 
                   <!-- Word placeholders in middle-->
                   <p id='s1' style="text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow); border:1px; border-style:solid; padding-left: 6px";>Word is loaded ...</p>
@@ -451,10 +565,7 @@
                   <p id='s5' style="text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow);border:1px; border-style:solid; padding-left: 6px";>Word is loaded ...</p>
 
 
-                  <!-- Messageboard -->
-                  <div id="messageboard">
-                      <p id='message' style=" padding-top:15px; text-align: center">Load message board....</p>
-                  </div>
+
 
 
                   <div id="aroundfieldbutton">
@@ -462,7 +573,7 @@
                         <input id='guessfield' type='text' maxlength='25' placeholder="Guess a word!">
                         <br><br>
                         <!-- Button submit input  -->
-                        <button id='subbutton' type='button'>Submit your guess</button>
+                        <button id='subbutton' type='button'>submit your guess</button>
                   </div>
 
               </div>
@@ -474,7 +585,7 @@
           <div id="groupguesses">
               <div id="aroundheading">
                 <h4>Group Guesses</h4>
-              </div>      
+              </div>
 
             <!-- Display guesses of the other players -->
               <br>
@@ -487,16 +598,10 @@
       </div>
 
 
-
-      <!-- Only show to excluded player -->
-      <div id="excluded">
-        <p id="ex_screen"></p>
-
-      </div>
-
-
       <!-- hidden next button, is clicked after all question rounds -->
       <button class="otree-btn-next btn btn-primary next-button otree-next-button" id="next" style="visibility: hidden" ></button>
+
+
 
 
 
