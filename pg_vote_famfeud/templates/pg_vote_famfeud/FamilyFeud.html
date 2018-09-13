@@ -51,6 +51,7 @@
       oTree.waitBetween = {{ Constants.wait_between_question }}
       oTree.questionsPerRound = {{ Constants.questions_per_round }}
       oTree.extra_questions = {{ Constants.extra_questions }}
+      oTree.plays = "{{ player.plays }}";
       {% if view.is_debug %}
       oTree.debug = true;
       {% else %}
@@ -218,6 +219,22 @@
     // initializing the 40 + 5 seconds round of a question
     document.getElementById('questionChannel').addEventListener('event', receive_question);
     function receive_question(event){
+
+
+        // don't show the game, if the player was excluded
+        var wrapper = document.getElementById("wrapper");
+        if (oTree.plays == "True") {
+            // don't show the screenshot
+            var ex = document.getElementById("excluded");
+            ex.style.display = "none";
+
+        }else{
+            // don't show the game
+            var wrapper = document.getElementById("wrapper");
+            wrapper.style.display = "none";
+            var ex = document.getElementById("excluded");
+            ex.textContent = "You are not allowed to play (Put Screenshot here)."
+        }
 
 
         // atm the answers here are only needed for the bot. The design is that after a correct guess the correct guess is sended from oTree.
@@ -594,6 +611,13 @@
               </div>
 
           </div>
+
+      </div>
+
+
+       <!-- Only show to excluded player -->
+      <div id="excluded">
+        <p id="ex_screen"></p>
 
       </div>
 
