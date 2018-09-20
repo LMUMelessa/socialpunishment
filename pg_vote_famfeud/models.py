@@ -20,6 +20,7 @@ class Constants(BaseConstants):
     #pg - vars
     endowment = 10
     multiplier = 2
+    timoutsecs = 10
 
     ### familyfeud
     questions_per_round = 3 #3
@@ -48,7 +49,7 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
 
-    #TODO this is deterministic but should be fine as I group randomly?
+
     def define_label(self):
         labellist = ['Player A', 'Player B', 'Player C', 'Player D', 'Player E']
         for group in self.get_group_matrix():
@@ -60,11 +61,8 @@ class Subsession(BaseSubsession):
         for player in self.get_players():
             player.treatment = self.session.config['treatment']
             player.city = self.session.config['city']
-        #TODO: is group randomly the desired impementation?
-        if self.round_number == 1:
-            self.group_randomly()
-        else:
-            self.group_like_round(1)
+
+        self.group_randomly()
         # Assign the labels
         self.define_label()
 
@@ -307,6 +305,7 @@ class Group(RedwoodGroup):
 
     # Assigns for all the players how many votes they had
     # The variable updated is player.myvotes
+    # Note: later votes can have different meanings e.g. invitation or exclusion, this depends on the treatment
     def set_myvotes(self):
         # Set the votes a player received from the other players
         for set_player in self.get_players():
@@ -340,7 +339,7 @@ class Group(RedwoodGroup):
                     player.plays = False
         elif self.get_players()[0].treatment == "include":
             for player in self.get_players():
-                if player.myvotes < 3:
+                if player.myvotes < 1:
                     player.plays = False
 
     # # Version of the function before 08.09.2018 - after that the exclusion mechanism changed, at least in exclusion treatment

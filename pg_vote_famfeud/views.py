@@ -5,6 +5,9 @@ from .models import Constants
 
 
 class Instructions(Page):
+
+    timeout_seconds = Constants.timoutsecs
+
     # TODO delete me
     def is_displayed(self):
         if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'control' or self.player.treatment == 'feedback':
@@ -14,8 +17,11 @@ class Instructions(Page):
 
 
 class Contribution(Page):
+
     form_model = models.Player
     form_fields = ['contribution']
+
+    timeout_seconds = Constants.timoutsecs
 
     #TODO delete me
     def is_displayed(self):
@@ -38,6 +44,9 @@ class FirstWaitPage(WaitPage):
 
 
 class ResultsPG(Page):
+
+    timeout_seconds = Constants.timoutsecs
+
     def vars_for_template(self):
         data = {}
         for player in self.group.get_players():
@@ -56,6 +65,8 @@ class ResultsPG(Page):
 
 
 class Vote(Page):
+
+    timeout_seconds = Constants.timoutsecs
 
     form_model = models.Player
 
@@ -117,6 +128,8 @@ class VoteWaitPage(WaitPage):
 
 class VoteResults(Page):
 
+   timeout_seconds = Constants.timoutsecs
+
    def vars_for_template(self):
        data = {}
        for player in self.group.get_players():
@@ -160,6 +173,9 @@ class FamilyFeud(Page):
 
 
 class FamilyFeudResults(Page):
+
+
+    timeout_seconds = Constants.timoutsecs
 
     def vars_for_template(self):
 
