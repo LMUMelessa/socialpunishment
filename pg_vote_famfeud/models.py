@@ -20,7 +20,7 @@ class Constants(BaseConstants):
     #pg - vars
     endowment = 10
     multiplier = 2
-    timoutsecs = 10
+    timoutsecs = 90
 
     ### familyfeud
     questions_per_round = 3 #3
