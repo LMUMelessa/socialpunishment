@@ -303,7 +303,13 @@
        currtime = new Date().getTime();
        n = Math.floor((stoptime - currtime)/1000);
 
-       document.getElementById('timer').style.color = "blue";
+       if (n>5){
+           document.getElementById('timer').style.color = "blue";
+       }else{
+           document.getElementById('timer').style.color = "red";
+
+       }
+
        document.getElementById('timer').textContent = 'Time: ' + parseInt(n);
 
        if (n<=0){
