@@ -24,6 +24,8 @@ ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 # don't share this with anybody.
 SECRET_KEY = '(50kdv-2+)m*=(k_+zw2g93j!%*)2k*o3p07%eo5o6#7lfx%n#'
 
+environ['DATABASE_URL'] = 'postgres://postgres@localhost/django_db'
+
 DATABASES = {
     'default': dj_database_url.config(
         # Rather than hardcoding the DB parameters here,
