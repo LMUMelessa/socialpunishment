@@ -161,7 +161,7 @@ SESSION_CONFIGS = [
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'heidelberg',
-        'treatment': 'FF' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
+        'treatment': 'FF' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include' #
     },
 
 ]
