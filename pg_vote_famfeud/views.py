@@ -115,8 +115,9 @@ class VoteWaitPage(WaitPage):
         # Assign for each player if he plays the social game
         self.group.set_social_game()
         # Update the payoffs as voting is costly in feedback and exclusion treatment
-        if self.group.get_players()[0].treatment == "feedback" or self.group.get_players()[0].treatment == "exclusion":
+        if self.group.get_players()[0].treatment == "feedback" or self.group.get_players()[0].treatment == "exclude":
             for player in self.group.get_players():
+                print("I should have updated the payoff?")
                 player.update_payoff()
 
     def is_displayed(self):
@@ -147,29 +148,24 @@ class VoteResults(Page):
        else:
            return False
 
+   def before_next_page(self):
+       # In the feedback treatment, player.plays is used to determine which player got the most negative feedback.
+       # The FF game uses this to prevent players from playing in the other treatments. Instead, in the feedback treatment all players play FF.
+       # Therefore, reset the variable here s. t. all can play FF in the Feedback treatment.
+       if self.player.treatment == 'feedback':
+           self.player.plays = True
+
 
 class BeforeFamilyFeudWaitPage(WaitPage):
-
-    def after_all_players_arrive(self):
-        # In the feedback treatment, player.plays is used to determine which player got the most negative feedback.
-        # The FF game uses this to prevent players from playing in the other treatments. Instead, in the feedback treatment all players play FF.
-        # Therefore, reset the variable here s. t. all can play FF in the Feedback treatment.
-        if self.group.get_players()[0].treatment == 'feedback':
-            for player in self.group.get_players():
-                player.plays = True
-        else:
-            pass
-
-    # TODO delete me:
-    def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'feedback' or self.player.treatment=='control':
-            return True
-        else:
-            return False
+    wait_for_all_groups = True
 
 
 class FamilyFeud(Page):
     pass
+
+class AfterFamilyFeudWaitPage(WaitPage):
+    wait_for_all_groups = True
+
 
 
 class FamilyFeudResults(Page):
@@ -199,7 +195,19 @@ class FamilyFeudResults(Page):
         return data_dic
 
 
-    pass
+class Questionnaire(Page):
+    form_model = models.Player
+    form_fields = ['age', 'student_bool', 'subject', 'stringfield1', 'stringfield2' , 'number1']
+
+
+    def is_displayed(self):
+        return Constants.num_rounds == self.round_number
+
+
+
+
+
+
 
 page_sequence = [
     Instructions,
@@ -211,5 +219,7 @@ page_sequence = [
     VoteResults,
     BeforeFamilyFeudWaitPage,
     FamilyFeud,
+    AfterFamilyFeudWaitPage,
     FamilyFeudResults,
+    Questionnaire,
 ]

@@ -1,0 +1,68 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+
+      <div id="header">
+            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
+            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>
+        </div>
+
+    <div id="main">
+
+        <br>
+        <b>As a last step of the experiment, please fill out the questionnaire.</b>
+
+        <div id="info" >
+            <div id="info-text">
+
+
+
+
+                {% formfield player.age %}
+                {% formfield player.student_bool %}
+                {% formfield player.subject %}
+                {% formfield player.stringfield1 %}
+                {% formfield player.stringfield2 %}
+                <br>
+                {% formfield player.number1 %}
+
+
+
+
+           </div>
+        </div>
+
+
+
+    <br>
+    {% next_button %}
+{% endblock %}
+
+
+{% block scripts %}
+
+    <style type="text/css">
+
+
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:100%; border-bottom: 1px solid; border-color: lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+
+
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+    </style>
+
+{% endblock %}

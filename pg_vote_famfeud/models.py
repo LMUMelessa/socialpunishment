@@ -16,18 +16,23 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 1
+    num_rounds = 2
     #pg - vars
     endowment = 10
     multiplier = 2
     timoutsecs = 90
+    cost_for_vote = 1
 
-    ### familyfeud
+    ### Familyfeud
+
+    ### The overall time for one FF round is questions_per_round * secs_per_questions
+    ### The players will receive new questions until: overall time is up  OR all questions_per_round + extra_questions are answered
+
     questions_per_round = 3 #3
-    extra_questions = 2
+    extra_questions = 2 #2
     secs_per_question = 30 #30
     wait_between_question = 4
-    cost_for_vote = 1
+
 
     with open('data.csv') as f:
         questions = list(csv.reader(f))
@@ -442,7 +447,23 @@ class Player(BasePlayer):
     exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="I don't want to vote for any player.")
 
     def update_payoff(self):
-        self.payoff = self.payoff - self.ivoted * Constants.cost_for_vote
+        self.payoff = self.payoff - (self.ivoted * Constants.cost_for_vote)
+
+
+
+    ######################################################################################################################
+    ### Questionnaire variables
+
+    age = models.IntegerField(verbose_name="Please enter your age", min=0)
+    student_bool = models.IntegerField(widget=widgets.RadioSelectHorizontal(), verbose_name="Are you a student?", choices=[[1,"Yes"],[0, "No"]])
+    subject = models.StringField(verbose_name="Please enter your subject or profession")
+    stringfield1 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
+    stringfield2 = models.StringField(verbose_name="Please enter some text")
+    number1 = models.IntegerField(widget=widgets.Slider() , min=0 , max=100 , verbose_name="Please select a number between 0 and 100")
+
+
+
+
 
 
     ######################################################################################################################
