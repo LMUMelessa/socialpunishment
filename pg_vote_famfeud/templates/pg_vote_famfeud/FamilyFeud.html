@@ -62,7 +62,7 @@
 
  // set this to "off" to shut the bot off
     var botmode = "off";
-    var frequency = 100;
+    var frequency = 500;
 
 
     // for bot, is filled with the correct answers below
@@ -131,7 +131,7 @@
         }
     }
 
-
+    var intID = 0;
     var group_points = 0;
     var player_points = 0;
     // receives information over channel from 'on_guessingChannel_event' in oTree after the guess is processed there
@@ -144,7 +144,10 @@
 
              // all words have been found, still, wait until the time is up
             if (event.detail.payload.finished == true){
-
+                // if there is a bot: shut it off
+                if (botmode =="on"){
+               clearInterval(intID);
+                }
                 // set answered_early = true s. t. in run_round the round will be restarted
                 answered_early = true;
             }
@@ -239,11 +242,13 @@
 
 
         // atm the answers here are only needed for the bot. The design is that after a correct guess the correct guess is sended from oTree.
-        a1 = event.detail.payload.s1[0];
-        a2 = event.detail.payload.s2[0];
-        a3 = event.detail.payload.s3[0];
-        a4 = event.detail.payload.s4[0];
-        a5 = event.detail.payload.s5[0];
+        if (botmode="on"){
+            a1 = event.detail.payload.s1[0];
+            a2 = event.detail.payload.s2[0];
+            a3 = event.detail.payload.s3[0];
+            a4 = event.detail.payload.s4[0];
+            a5 = event.detail.payload.s5[0];
+        }
 
 
         // if multiple family feud subrounds (more then 1 question) are played, turn the shown solutions to placeholders again
@@ -288,13 +293,11 @@
     }
 
 
-
     function run_round(anevent, stoptime, botstate, botintervalID){
 
         // don't worry, bot stuff
         // start bot one time this will not be called in subsequent calls
         // it only will be called if run_round is called from receice question
-        var intID = 42;
         if (botmode == "on"){
             if (botstate=="inactive"){
                 intID =  setInterval(function() {bot();}, frequency);
@@ -307,6 +310,11 @@
            document.getElementById('timer').style.color = "blue";
        }else{
            document.getElementById('timer').style.color = "red";
+
+           // if there is a bot: shut it off early s.t. javascript can handle all the round finishing stuff
+           if (botmode =="on"){
+               clearInterval(botintervalID);
+           }
 
        }
 
@@ -322,13 +330,16 @@
        // goup has all answers before the time is up
        if (answered_early==true){
 
+
+
+
+
            // current question is a bonus question
            if (curr_quest > oTree.questionsPerRound){
                // determine the remaining bonus seconds
                bonus_seconds = n;
            // current question is a normal question
            }else{
-
                // accumulate the bonus questions
                bonus_seconds = bonus_seconds + n;
            }
@@ -348,10 +359,6 @@
 
        // time is up
        }else {
-           // shut bot off if there is one
-           if (botmode =="on"){
-               clearInterval(botintervalID);
-           }
            // for bonus question time is now finally up
            if (curr_quest > oTree.questionsPerRound) {
                bonus_seconds = 0;
@@ -437,7 +444,9 @@
     // if you play more then 1 question
     function request_question(){
         // the first player in the group requests the new question bundle
+
         if (oTree.idInGroup == 1){
+
         var questionChan = document.getElementById("questionChannel");
         // send to oTree, so oTree sends a question back to 'receive_question', this activates a new round
         questionChan.send({some:'load'})

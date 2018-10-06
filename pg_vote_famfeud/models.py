@@ -30,7 +30,7 @@ class Constants(BaseConstants):
 
     questions_per_round = 3 #3
     extra_questions = 2 #2
-    secs_per_question = 30 #30
+    secs_per_question = 45 #30
     wait_between_question = 4
 
 
