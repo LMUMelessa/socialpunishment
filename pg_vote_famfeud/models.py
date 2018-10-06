@@ -28,10 +28,10 @@ class Constants(BaseConstants):
     ### The overall time for one FF round is questions_per_round * secs_per_questions
     ### The players will receive new questions until: overall time is up  OR all questions_per_round + extra_questions are answered
 
-    questions_per_round = 1 #3
-    extra_questions = 0 #2
-    secs_per_question = 5 #30
-    wait_between_question = 1 #4
+    questions_per_round = 3 #3
+    extra_questions = 2 #2
+    secs_per_question = 30#30
+    wait_between_question = 4 #4
 
 
     with open('data.csv') as f:
