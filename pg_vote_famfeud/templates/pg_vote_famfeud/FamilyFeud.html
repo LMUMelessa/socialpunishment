@@ -237,7 +237,9 @@
             var wrapper = document.getElementById("wrapper");
             wrapper.style.display = "none";
             var ex = document.getElementById("excluded");
-            ex.textContent = "You are not allowed to play (Put Screenshot here)."
+            ex.textContent = ""
+             var shot = document.getElementById("screenshot");
+            shot.style.display = "block";
         }
 
 
@@ -587,6 +589,8 @@
 
 
       <!-- Template of the page -->
+
+      <img id="screenshot" src="{% static "global/screen.png" %}" style="display: none; height: 570px; width:850px"/>
 
       <div id="wrapper">
 

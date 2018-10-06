@@ -346,8 +346,8 @@ class EndPage(Page):
 
 
 page_sequence = [
-    #Instructions,
-    #ControlQuestions,#After this page there will be the FamilyFeud page and this has a group waitpage before
+    Instructions,
+    ControlQuestions,#After this page there will be the FamilyFeud page and this has a group waitpage before
     Contribution,
     FirstWaitPage,
     ResultsPG,
@@ -360,8 +360,8 @@ page_sequence = [
     BeforeFamilyFeudWaitPage,
     FamilyFeud,
     AfterFamilyFeudWaitPage,
-    #FamilyFeudResults,
+    FamilyFeudResults,
     RateYourExperience,
-    #Questionnaire,
+    Questionnaire,
     EndPage,
 ]

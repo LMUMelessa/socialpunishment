@@ -16,7 +16,7 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 3 #never change to something smaller 3
+    num_rounds = 4 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
@@ -424,7 +424,7 @@ class Player(BasePlayer):
         default = True
     )
 
-    round_payoff = models.IntegerField()
+    round_payoff = models.IntegerField(initial=0)
 
     # Variables where player can vote to exclude/invite one player from the social arena game
     vote_A = models.BooleanField(
