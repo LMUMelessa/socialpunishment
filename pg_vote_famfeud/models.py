@@ -16,7 +16,7 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 2
+    num_rounds = 3
     #pg - vars
     endowment = 10
     multiplier = 2
@@ -443,6 +443,11 @@ class Player(BasePlayer):
         verbose_name='Player E')
 
 
+    # RateYourExperience after FamilyFeud
+    ff_experience = models.IntegerField(verbose_name="How would you rate your experience of the last stage of this round on a scale from 0 to 5",
+                                        widget=widgets.RadioSelect(), choices=[[1,"1 (bad/sad/boring)"],[2,"2"],[3,"3"],[4,"4"],[5,"5 (good/happy/exciting)"]])
+
+
     # In exlude treatment and feedback treatment
     exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="I don't want to vote for any player.")
 
@@ -461,8 +466,14 @@ class Player(BasePlayer):
     stringfield2 = models.StringField(verbose_name="Please enter some text")
     number1 = models.IntegerField(widget=widgets.Slider() , min=0 , max=100 , verbose_name="Please select a number between 0 and 100")
 
+    ######################################################################################################################
+    ### Control Variables
 
-
+    control1 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
+    control2 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
+    control3 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
+    control4 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
+    control5 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
 
 
 

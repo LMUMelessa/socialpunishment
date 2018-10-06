@@ -9,7 +9,7 @@
 
       <div id="header">
             <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>
+{#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
         </div>
 
     <div id="main">
@@ -22,23 +22,14 @@
 
                 {% if player.round_number == 1 %}
 
-                    {% if player.treatment == 'exclude' %}
-                        These are the instructions for the exclude treatment (T2). (Displayed only in round1)
-                    {% elif player.treatment == 'include' %}
-                        These are the instructions for the inclusion treatment (T3) . (Displayed only in round1)
-                    {% elif player.treatment == 'control' %}
-                        These are the instructions for the control treatment (T0) . (Displayed only in round1)
-                    {% elif player.treatment == 'feedback' %}
-                        These are the instructions for the inclusion treatment (T1) . (Displayed only in round1)
-
-                    {% endif %}
+                   Please read the instructions carefully. On the next page, your understanding of the instructions will be tested.<br>
+                   Press next to proceed.
 
 
                 {% else %}
-                    Round {{ player.round_number }} starts now. On the next page you will determine your contribution for the public good game.
-                    All players will play this game.
-                    <br>
-                    (This is displayed if the round number is > 1)
+
+                    On the next page, the new round starts.
+
                 {% endif %}
            </div>
         </div>
@@ -65,7 +56,7 @@
 
 
         #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
-        #info{ height:200px; border-bottom: 1px solid; border-color: lightgrey;margin-top: 20px}
+        #info{ height:200px; border-color: lightgrey;margin-top: 20px}
         #info-text{margin-left: 15px}
         #tables{margin-left: 15px; padding-top: 15px}
 

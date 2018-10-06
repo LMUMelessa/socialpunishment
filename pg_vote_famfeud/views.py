@@ -15,6 +15,28 @@ class Instructions(Page):
         else:
             return False
 
+class ControlQuestions(Page):
+
+    timeout_seconds = Constants.timoutsecs
+
+    form_model = models.Player
+    form_fields = ['control1', 'control2', 'control3' , 'control4' , 'control5']
+
+
+    def is_displayed(self):
+        if self.player.treatment=="FF":
+            return False
+        if self.round_number == 1:
+            return True
+        else:
+            return False
+
+
+class AfterControlQuestionsWaitPage(WaitPage):
+    wait_for_all_groups = True
+
+
+
 
 class Contribution(Page):
 
@@ -195,6 +217,15 @@ class FamilyFeudResults(Page):
         return data_dic
 
 
+
+class RateYourExperience(Page):
+    timeout_seconds = Constants.timoutsecs
+
+    form_model = models.Player
+    form_fields = ['ff_experience']
+
+
+
 class Questionnaire(Page):
     form_model = models.Player
     form_fields = ['age', 'student_bool', 'subject', 'stringfield1', 'stringfield2' , 'number1']
@@ -211,15 +242,18 @@ class Questionnaire(Page):
 
 page_sequence = [
     Instructions,
-    Contribution,
-    FirstWaitPage,
-    ResultsPG,
-    Vote,
-    VoteWaitPage,
-    VoteResults,
-    BeforeFamilyFeudWaitPage,
-    FamilyFeud,
-    AfterFamilyFeudWaitPage,
-    FamilyFeudResults,
+    ControlQuestions,
+    AfterControlQuestionsWaitPage,
+    #Contribution,
+    #FirstWaitPage,
+    #ResultsPG,
+    #Vote,
+    #VoteWaitPage,
+    #VoteResults,
+    #BeforeFamilyFeudWaitPage,
+    #FamilyFeud,
+    #AfterFamilyFeudWaitPage,
+    #FamilyFeudResults,
+    RateYourExperience,
     Questionnaire,
 ]

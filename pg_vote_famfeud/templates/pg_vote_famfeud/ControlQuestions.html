@@ -9,13 +9,14 @@
 
       <div id="header">
             <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Last page</b> </div>
+{#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
         </div>
 
     <div id="main">
 
-        <br>
-        <b>As a last step of the experiment, please fill out the questionnaire.</b>
+     <br>
+        <b>Please answer all the questions.</b>
+
 
         <div id="info" >
             <div id="info-text">
@@ -23,16 +24,12 @@
 
 
 
-                {% formfield player.age %}
-                {% formfield player.student_bool %}
-                {% formfield player.subject %}
-                {% formfield player.stringfield1 %}
-                {% formfield player.stringfield2 %}
-                <br>
-                {% formfield player.number1 %}
 
-
-
+                {% formfield player.control1 %}
+                {% formfield player.control2 %}
+                {% formfield player.control3 %}
+                {% formfield player.control4 %}
+                {% formfield player.control5 %}
 
            </div>
         </div>
@@ -57,6 +54,7 @@
         #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
         #info{ height:100%; border-color: lightgrey;margin-top: 20px}
         #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
 
 
         .otree-body{margin-top: 0px}
