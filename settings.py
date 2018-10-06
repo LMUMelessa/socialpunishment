@@ -59,8 +59,9 @@ AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY')
 
 
 # e.g. EUR, CAD, GBP, CHF, CNY, JPY
-REAL_WORLD_CURRENCY_CODE = 'USD'
+REAL_WORLD_CURRENCY_CODE = 'EUR'
 USE_POINTS = True
+
 
 
 # e.g. en, de, fr, it, ja, zh-hans
@@ -109,7 +110,7 @@ mturk_hit_settings = {
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = {
-    'real_world_currency_per_point': 0.000,
+    'real_world_currency_per_point': 2,
     'participation_fee': 0.00,
     'doc': "",
     'mturk_hit_settings': mturk_hit_settings,

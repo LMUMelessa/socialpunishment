@@ -9,7 +9,7 @@
 
      <div id="header">
             <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>
+            <div id="header-right">Current round is <b>Round {{round_number }}</b> </div>
         </div>
 
 
@@ -30,7 +30,7 @@
                 In total, the sum of all contributions is  <b>{{ group.total_cont }}</b>
                 <br>
                 Therefore, each player receives an individual share of <b>{{ group.indiv_share }}</b> from the project.<br>
-                Your profit for this game is <b>{{ gameprofit }}</b>.
+                Your profit for this game is <b>{{ player.round_payoff }}</b>.
             </div>
 
         </div>

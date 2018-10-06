@@ -7,36 +7,30 @@
 {% block content %}
 
 
-     <div id="header">
+      <div id="header">
             <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Current round is <b>Round {{ round_number }}</b> </div>
+            <div id="header-right">Last page</b> </div>
         </div>
-
-
-
 
     <div id="main">
-        <div id="info">
-            <div id="info-text">
 
-                This is the public good game of this round and all five players play the game. <br>
-                Your endowment is <b>{{Constants.endowment }}</b>.<br>
-                You can contribute every integer from 0 up to your endowment.
-                <br>
-                <br>
-                {% formfield player.contribution %}
-            </div>
+        <br>
+        The experiment is finished.<br>
+        Please remain seated until you obtain further instructions.<br>
+        Thank you for your participation
+
+           </div>
         </div>
 
-        <div id="tables"></div>
 
-    </div>
+
     <br>
-    {% next_button %}
+
 {% endblock %}
 
 
 {% block scripts %}
+
     <style type="text/css">
 
 
@@ -46,9 +40,8 @@
 
 
         #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
-        #info{ height:200px; border-bottom: solid 1px lightgrey;margin-top: 20px}
+        #info{ height:100%; border-color: lightgrey;margin-top: 20px}
         #info-text{margin-left: 15px}
-        #tables{margin-left: 15px; padding-top: 15px}
 
 
         .otree-body{margin-top: 0px}
@@ -56,4 +49,5 @@
         .page-header {padding-top: 0px;padding-bottom: 0px}
         .otree-title{font-size: 20px}
     </style>
+
 {% endblock %}

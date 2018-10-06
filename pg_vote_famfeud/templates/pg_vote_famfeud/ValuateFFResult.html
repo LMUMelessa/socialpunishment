@@ -9,7 +9,7 @@
 
       <div id="header">
             <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Current round is <b>Round {{round_number }}</b> </div>
+{#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
         </div>
 
     <div id="main">
@@ -22,7 +22,22 @@
 
 
 
-        {% formfield player.ff_experience %}
+                The computer drew the number <b>{{ player.random_ff_valuation }}</b>. <br>
+
+                {% if  player.plays == False %}
+                    The number of the computer is higher than your <b>{{ player.ff_valuation }}</b>. <br>
+                    Nothing will be subtracted from your account.<br>
+                    Please wait. You will be redirected to the screenshot...<br>
+                {% else %}
+                    Your number <b>{{ player.ff_valuation }}</b> is higher as the number of the computer.<br>
+                    <b>{{ player.ff_valuation }}</b> points will be subtracted from your account.<br>
+                    Please wait. You will be redirected to the game... <br>
+                {% endif %}
+
+
+
+
+
 
 
            </div>
@@ -31,7 +46,6 @@
 
 
     <br>
-    {% next_button %}
 {% endblock %}
 
 

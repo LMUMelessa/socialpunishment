@@ -242,7 +242,7 @@
 
 
         // atm the answers here are only needed for the bot. The design is that after a correct guess the correct guess is sended from oTree.
-        if (botmode="on"){
+        if (botmode=="on"){
             a1 = event.detail.payload.s1[0];
             a2 = event.detail.payload.s2[0];
             a3 = event.detail.payload.s3[0];
@@ -300,6 +300,8 @@
         // it only will be called if run_round is called from receice question
         if (botmode == "on"){
             if (botstate=="inactive"){
+                alert(botmode)
+                alert("I went in here ...???")
                 intID =  setInterval(function() {bot();}, frequency);
         }}
         // update timer
@@ -329,9 +331,6 @@
 
        // goup has all answers before the time is up
        if (answered_early==true){
-
-
-
 
 
            // current question is a bonus question
@@ -605,6 +604,7 @@
                   <!-- Question Board -->
                   <br>
                   <div id="questionboard" >
+
                     <div style="height: 45px">
                     <p id="question" style="padding-top: 15px; text-align: center">Prepare for the first question ...</p>
                     </div>

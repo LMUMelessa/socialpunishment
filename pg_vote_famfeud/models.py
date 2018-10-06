@@ -16,11 +16,11 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 3
+    num_rounds = 3 #never change to something smaller 3
     #pg - vars
     endowment = 10
     multiplier = 2
-    timoutsecs = 90
+    timeoutsecs = 90
     cost_for_vote = 1
 
     ### Familyfeud
@@ -28,10 +28,10 @@ class Constants(BaseConstants):
     ### The overall time for one FF round is questions_per_round * secs_per_questions
     ### The players will receive new questions until: overall time is up  OR all questions_per_round + extra_questions are answered
 
-    questions_per_round = 3 #3
-    extra_questions = 2 #2
-    secs_per_question = 45 #30
-    wait_between_question = 4
+    questions_per_round = 1 #3
+    extra_questions = 0 #2
+    secs_per_question = 5 #30
+    wait_between_question = 1 #4
 
 
     with open('data.csv') as f:
@@ -71,7 +71,7 @@ class Subsession(BaseSubsession):
         # Assign the labels
         self.define_label()
 
-        ### family feud
+        ### Family feud
         if self.round_number == 1:
 
             quizload = []
@@ -300,12 +300,12 @@ class Group(RedwoodGroup):
         doc='The player, who is excluded from the social game.')
 
 
-    # Payoffs for pg game; function also sets total_cont and indiv_share
-    def set_payoffs(self):
+    # round_payoffs for pg game; function also sets total_cont and indiv_share
+    def set_round_payoffs(self):
         self.total_cont = sum([p.contribution for p in self.get_players()])
         self.indiv_share = (self.total_cont * Constants.multiplier) / Constants.players_per_group
         for p in self.get_players():
-            p.payoff = (Constants.endowment - p.contribution) + self.indiv_share
+            p.round_payoff = (Constants.endowment - p.contribution) + self.indiv_share
 
 
     # Assigns for all the players how many votes they had
@@ -424,6 +424,7 @@ class Player(BasePlayer):
         default = True
     )
 
+    round_payoff = models.IntegerField()
 
     # Variables where player can vote to exclude/invite one player from the social arena game
     vote_A = models.BooleanField(
@@ -443,16 +444,21 @@ class Player(BasePlayer):
         verbose_name='Player E')
 
 
-    # RateYourExperience after FamilyFeud
+    # RateYourExperience after every FamilyFeud game
     ff_experience = models.IntegerField(verbose_name="How would you rate your experience of the last stage of this round on a scale from 0 to 5",
                                         widget=widgets.RadioSelect(), choices=[[1,"1 (bad/sad/boring)"],[2,"2"],[3,"3"],[4,"4"],[5,"5 (good/happy/exciting)"]])
 
 
+    # the valuation variable before the end of the experiment
+    ff_valuation = models.IntegerField(verbose_name="Please select a number of points between 0 and 20", widget=widgets.Slider(), min=0, max=20)
+
+    random_ff_valuation = models.IntegerField(min=0, max=20)
+
     # In exlude treatment and feedback treatment
     exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="I don't want to vote for any player.")
 
-    def update_payoff(self):
-        self.payoff = self.payoff - (self.ivoted * Constants.cost_for_vote)
+    def update_round_payoff(self):
+        self.round_payoff = self.round_payoff - (self.ivoted * Constants.cost_for_vote)
 
 
 

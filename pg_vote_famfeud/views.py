@@ -2,26 +2,26 @@ from otree.api import Currency as c, currency_range
 from . import models
 from ._builtin import Page, WaitPage
 from .models import Constants
+import random
 
 
 class Instructions(Page):
 
-    timeout_seconds = Constants.timoutsecs
+    timeout_seconds = Constants.timeoutsecs
 
-    # TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'control' or self.player.treatment == 'feedback':
-            return True
-        else:
+        if self.player.treatment == 'FF' or self.player.round_number == Constants.num_rounds:
             return False
+        else:
+            return True
+
 
 class ControlQuestions(Page):
 
-    timeout_seconds = Constants.timoutsecs
+    timeout_seconds = Constants.timeoutsecs
 
     form_model = models.Player
     form_fields = ['control1', 'control2', 'control3' , 'control4' , 'control5']
-
 
     def is_displayed(self):
         if self.player.treatment=="FF":
@@ -32,63 +32,61 @@ class ControlQuestions(Page):
             return False
 
 
-class AfterControlQuestionsWaitPage(WaitPage):
-    wait_for_all_groups = True
-
-
-
-
 class Contribution(Page):
 
     form_model = models.Player
     form_fields = ['contribution']
 
-    timeout_seconds = Constants.timoutsecs
+    timeout_seconds = Constants.timeoutsecs
 
-    #TODO delete me
+    def vars_for_template(self):
+        return {'round_number': self.player.round_number - 1}
+
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'control' or self.player.treatment == 'feedback':
-            return True
-        else:
+        if self.player.treatment == 'FF':
             return False
+        if self.round_number == 1 or self.round_number == Constants.num_rounds:
+            return False
+        else:
+            return True
 
 
 class FirstWaitPage(WaitPage):
     def after_all_players_arrive(self):
-        self.group.set_payoffs()
+        self.group.set_round_payoffs()
 
-    # TODO delete me
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'control' or self.player.treatment == 'feedback':
-            return True
-        else:
+        if self.player.treatment == 'FF':
             return False
+        if self.round_number == 1 or self.round_number == Constants.num_rounds:
+            return False
+        else:
+            return True
 
 
 class ResultsPG(Page):
 
-    timeout_seconds = Constants.timoutsecs
+    timeout_seconds = Constants.timeoutsecs
 
     def vars_for_template(self):
-        data = {}
+        data = {'round_number':self.player.round_number -1}
         for player in self.group.get_players():
             # Remove whitespace from label so that it can be displayed in the template
             data[(player.playerlabel).replace(' ','')] = player.contribution
-            # Also display the profit the player made
-            # TODO: Why am I doing this? Just use  {{player.payoff}} in the template?
-            data['gameprofit'] = Constants.endowment - self.player.contribution + self.group.indiv_share
         return data
 
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'control' or self.player.treatment == 'feedback':
-            return True
-        else:
+        if self.player.treatment == 'FF':
             return False
+        if self.round_number == 1 or self.round_number == Constants.num_rounds:
+            return False
+        else:
+            return True
 
 
 class Vote(Page):
 
-    timeout_seconds = Constants.timoutsecs
+    timeout_seconds = Constants.timeoutsecs
 
     form_model = models.Player
 
@@ -114,7 +112,7 @@ class Vote(Page):
 
 
     def vars_for_template(self):
-        data = {}
+        data = {'round_number': self.player.round_number-1}
         # TODO: Note Vars for template cannot be tested, therefore this has to be safe and doublechecked
         for player in self.group.get_players():
             # Remove whitespace from label so that it can be displayed in the template
@@ -122,10 +120,12 @@ class Vote(Page):
         return data
 
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'feedback':
-            return True
-        else:
+        if self.player.treatment == 'FF' or self.player.treatment == 'control':
             return False
+        if self.round_number == 1 or self.round_number == Constants.num_rounds:
+            return False
+        else:
+            return True
 
 
 class VoteWaitPage(WaitPage):
@@ -139,36 +139,38 @@ class VoteWaitPage(WaitPage):
         # Update the payoffs as voting is costly in feedback and exclusion treatment
         if self.group.get_players()[0].treatment == "feedback" or self.group.get_players()[0].treatment == "exclude":
             for player in self.group.get_players():
-                print("I should have updated the payoff?")
-                player.update_payoff()
+                player.update_round_payoff()
 
     def is_displayed(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'feedback':
-            return True
-        else:
+        if self.player.treatment == 'FF' or self.player.treatment == 'control':
             return False
+        if self.round_number == 1 or self.round_number == Constants.num_rounds:
+            return False
+        else:
+            return True
 
 
 class VoteResults(Page):
 
-   timeout_seconds = Constants.timoutsecs
+   timeout_seconds = Constants.timeoutsecs
 
    def vars_for_template(self):
-       data = {}
+       data = {'round_number':self.player.round_number-1}
        for player in self.group.get_players():
            data[(player.playerlabel).replace(' ', '') + '_votes'] = player.myvotes
            if player.plays == True:
                 data[(player.playerlabel).replace(' ', '') + '_plays'] = "Yes"
            elif player.plays == False:
                data[(player.playerlabel).replace(' ', '') + '_plays'] = "No"
-
        return data
 
    def is_displayed(self):
-       if self.player.treatment == 'exclude' or self.player.treatment == 'include' or self.player.treatment == 'feedback':
-           return True
-       else:
+       if self.player.treatment == 'FF' or self.player.treatment == 'control':
            return False
+       if self.round_number == 1 or self.round_number == Constants.num_rounds:
+           return False
+       else:
+           return True
 
    def before_next_page(self):
        # In the feedback treatment, player.plays is used to determine which player got the most negative feedback.
@@ -178,6 +180,78 @@ class VoteResults(Page):
            self.player.plays = True
 
 
+class ValuateFFSelect(Page):
+    timeout_seconds = Constants.timeoutsecs
+
+    form_model = models.Player
+    form_fields = ['ff_valuation']
+
+    def is_displayed(self):
+        if self.player.treatment == "FF":
+            return False
+        if self.round_number == Constants.num_rounds:
+            return True
+        else:
+            return False
+
+    def before_next_page(self):
+
+        ## I also do the complete payoff calculation here
+        ## Determine from which round the payoff will be taken randomly for every player
+        ## Then set the payoff to this particular round_payoff
+
+        #Select a round from the 10 playing rounds (e.g. cut off the practive round and the valuation_ff round)
+        if Constants.num_rounds > 3:
+
+            payround = random.choice(range(2,Constants.num_rounds,1))
+            self.player.payoff = self.player.in_round(payround).round_payoff
+        else:
+            payround = 2
+            self.player.payoff = self.player.in_round(payround).round_payoff
+
+
+        ## FF valuation here
+        ## determine if the player is allowed to play FF one last time or if he has to watch the screen
+        ## depending on his
+        self.player.random_ff_valuation = random.choice(range(21))
+
+        if self.player.random_ff_valuation > self.player.ff_valuation:
+            self.player.plays = False
+
+        else:
+            # Player plays again, subtract his willingness to pay from his overall payoff
+            self.player.payoff = self.player.payoff - self.player.ff_valuation
+
+
+class WaitAfterValuateFFSelect(WaitPage):
+
+    timeout_seconds = 120
+
+    def is_displayed(self):
+        if self.player.treatment=="FF":
+            return False
+        if self.round_number == Constants.num_rounds:
+            return True
+        else:
+            return False
+
+    wait_for_all_groups = True
+
+
+class ValuateFFResult(Page):
+
+    timeout_seconds = 10
+
+    def is_displayed(self):
+        if self.player.treatment=="FF":
+            return False
+        if self.round_number == Constants.num_rounds:
+            return True
+        else:
+            return False
+
+
+
 class BeforeFamilyFeudWaitPage(WaitPage):
     wait_for_all_groups = True
 
@@ -185,6 +259,7 @@ class BeforeFamilyFeudWaitPage(WaitPage):
 class FamilyFeud(Page):
     pass
 
+# defo need this because the results are displayed over all groups
 class AfterFamilyFeudWaitPage(WaitPage):
     wait_for_all_groups = True
 
@@ -192,12 +267,20 @@ class AfterFamilyFeudWaitPage(WaitPage):
 
 class FamilyFeudResults(Page):
 
+    timeout_seconds = Constants.timeoutsecs
 
-    timeout_seconds = Constants.timoutsecs
+    #don't display in the valuation round (last round) and practice round (first round)
+    def is_displayed(self):
+        if self.player.round_number == Constants.num_rounds or self.player.round_number == 1:
+            return False
+        else:
+            return True
+
+
 
     def vars_for_template(self):
 
-        data_dic = {'alist':[]}
+        data_dic = {'round_number':self.player.round_number-1,'alist':[]}
         for group in self.subsession.get_group_matrix():
             helplist = [group[0].group.id_in_subsession,group[0].group.group_ff_points,[]]
             for player in group:
@@ -219,7 +302,22 @@ class FamilyFeudResults(Page):
 
 
 class RateYourExperience(Page):
-    timeout_seconds = Constants.timoutsecs
+
+
+    timeout_seconds = Constants.timeoutsecs
+
+    def vars_for_template(self):
+        return {'round_number':self.player.round_number -1}
+
+    def is_displayed(self):
+        if self.player.treatment=="FF":
+            return False
+
+        #don't show in the valuation round and in the practice round
+        if self.player.round_number == Constants.num_rounds or self.player.round_number == 1:
+            return False
+        else:
+            return True
 
     form_model = models.Player
     form_fields = ['ff_experience']
@@ -230,9 +328,16 @@ class Questionnaire(Page):
     form_model = models.Player
     form_fields = ['age', 'student_bool', 'subject', 'stringfield1', 'stringfield2' , 'number1']
 
-
     def is_displayed(self):
         return Constants.num_rounds == self.round_number
+
+class EndPage(Page):
+    def is_displayed(self):
+        if self.player.round_number == Constants.num_rounds:
+            return True
+        else:
+            return False
+
 
 
 
@@ -241,19 +346,22 @@ class Questionnaire(Page):
 
 
 page_sequence = [
-    Instructions,
-    ControlQuestions,
-    AfterControlQuestionsWaitPage,
-    #Contribution,
-    #FirstWaitPage,
-    #ResultsPG,
-    #Vote,
-    #VoteWaitPage,
-    #VoteResults,
-    #BeforeFamilyFeudWaitPage,
-    #FamilyFeud,
-    #AfterFamilyFeudWaitPage,
+    #Instructions,
+    #ControlQuestions,#After this page there will be the FamilyFeud page and this has a group waitpage before
+    Contribution,
+    FirstWaitPage,
+    ResultsPG,
+    Vote,
+    VoteWaitPage,
+    VoteResults,
+    ValuateFFSelect,
+    WaitAfterValuateFFSelect,
+    ValuateFFResult,
+    BeforeFamilyFeudWaitPage,
+    FamilyFeud,
+    AfterFamilyFeudWaitPage,
     #FamilyFeudResults,
     RateYourExperience,
-    Questionnaire,
+    #Questionnaire,
+    EndPage,
 ]

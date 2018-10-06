@@ -22,13 +22,19 @@
 
                 {% if player.round_number == 1 %}
 
-                   Please read the instructions carefully. On the next page, your understanding of the instructions will be tested.<br>
+                   Please read the instructions carefully.<br>
+                    On the next page, your understanding of the instructions will be tested.<br>
                    Press next to proceed.
 
 
-                {% else %}
+                {% elif player.round_number == 2 %}
 
-                    On the next page, the new round starts.
+                    That was the practice round of the guessing game. <br>
+                    On the next page, the first round of the experiment will start.<br>
+
+                 {% else %}
+
+                    On the next page, a new round of the experiment will start.
 
                 {% endif %}
            </div>

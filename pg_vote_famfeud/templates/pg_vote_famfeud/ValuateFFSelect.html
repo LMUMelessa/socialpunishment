@@ -9,7 +9,7 @@
 
       <div id="header">
             <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Current round is <b>Round {{round_number }}</b> </div>
+{#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
         </div>
 
     <div id="main">
@@ -21,8 +21,16 @@
             <div id="info-text">
 
 
+        This was the last round of the experiment. <br>
+        Before you can proceed to the questionnaire, which will end the experiment, you can choose between looking at a screenshot for 90 seconds or playing the guessing game one last time for 90 seconds.<br>
+        Please enter below a number of points which you are willing to pay for playing the guessing game one last time.<br>
+        The computer will then randomly draw a number between 0 and 20.<br>
+        If this number is higher than your chosen number, you will watch the screen for 90 seconds and nothing will be taken from your account.<br>
+        If this number is lower than your number, your number will be subtracted from your account and you will play the guessing game for 90 seconds.<br><br>
 
-        {% formfield player.ff_experience %}
+
+
+        {% formfield player.ff_valuation %}
 
 
            </div>
