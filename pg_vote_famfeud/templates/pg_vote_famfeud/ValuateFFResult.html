@@ -8,7 +8,7 @@
 
 
       <div id="header">
-            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
 {#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
         </div>
 
@@ -20,25 +20,17 @@
         <div id="info" >
             <div id="info-text">
 
-
-
-                The computer drew the number <b>{{ player.random_ff_valuation }}</b>. <br>
+                Der Computer hat die Zahl <b>{{ player.random_ff_valuation }}</b> gezogen. <br>
 
                 {% if  player.plays == False %}
-                    The number of the computer is higher than your <b>{{ player.ff_valuation }}</b>. <br>
-                    Nothing will be subtracted from your account.<br>
-                    Please wait. You will be redirected to the screenshot...<br>
+                    Die Zahl des Computers ist höher als Ihre <b>{{ player.ff_valuation }}</b>.<br>
+                    Es wird nichts von Ihrem Konto abgezogen.<br>
+                    Bitte warten Sie. Sie werden zum Screenshot weitergeleitet...<br>
                 {% else %}
-                    Your number <b>{{ player.ff_valuation }}</b> is higher as the number of the computer.<br>
-                    <b>{{ player.ff_valuation }}</b> points will be subtracted from your account.<br>
-                    Please wait. You will be redirected to the game... <br>
+                    Ihre <b>{{ player.ff_valuation }}</b> ist höher als die Zahl des Computers.<br>
+                    <b>{{ player.random_ff_valuation }}</b> Euro werden von Ihrem Konto abgezogen.<br>
+                    Bitte warten Sie. Sie werden zum Spiel weitergeleitet... <br>
                 {% endif %}
-
-
-
-
-
-
 
            </div>
         </div>

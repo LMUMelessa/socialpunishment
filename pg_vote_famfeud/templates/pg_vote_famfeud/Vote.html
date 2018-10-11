@@ -9,8 +9,8 @@
 
 
      <div id="header">
-            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Current round is <b>Round {{round_number }}</b> </div>
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+            <div id="header-right">Dies ist <b>Runde {{round_number }}</b> </div>
         </div>
 
 
@@ -20,32 +20,14 @@
          <div id="info">
             <div id="info-text">
 
-                {%  if player.treatment != 'feedback' %}
-
-                     Which players do you want to play the social game?
-                     <br>
-                    {% if player.treatment == 'exclude' %}
-                         You can vote for excluding players from the social game by clicking their boxes. This costs {{Constants.cost_for_vote}} per vote.
-                         <br>
-
-                    {% elif player.treatment == "include" %}
-                         You can vote for inviting players for the social game by clicking their boxes.
-                        <br>
-
-                    {% endif %}
-
-                {% else %}
-
-                    Which players do you want to give negative feedback.
-                    <br>
-                    You can vote for giving players negative feedback by clicking their boxes.
-                    <br>
 
 
-                {% endif %}
+            Sie können jetzt abstimmen, welche Gruppenmitglieder von dem Gruppenspiel in dieser Runde ausgeschlossen werden sollen.<br>
+            Welche Mitglieder möchten Sie ausschließen? Bitte klicken Sie die entsprechenden Boxen an. Eine Stimme kostet 1 Taler.<br><br>
 
 
-                <br>
+
+
                 {% if player.playerlabel != 'Player A' %}{% formfield player.vote_A %}{% endif %}
                 {% if player.playerlabel != 'Player B' %}{% formfield player.vote_B %}{% endif %}
                 {% if player.playerlabel != 'Player C' %}{% formfield player.vote_C %}{% endif %}
@@ -60,37 +42,36 @@
 
 
             <div id="tables">
+                Einzahlungen:<br>
 
-                Table of contributions: <br>
-                <table class="table table-bordered table-sm" style="width:60%">
-                    <tr style="background-color: black; color: white;">
-                        <th>Player Label</th>
-                        <th>Contribution</th>
+                 <table class="table table-bordered table-sm" style="width:60%">
+                    <tr style="background-color: black; color: white">
+                        <th>Teilnehmer</th>
+                        <th>Betrag</th>
                     </tr>
                     <tr>
-                        {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player A</td>{% endif %}
+                        {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer A</td>{% endif %}
                         {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>{{ PlayerA }}</b></td> {% else %}<td>{{ PlayerA }}</td>{% endif %}
                     </tr>
                     <tr>
-                        {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player B</td>{% endif %}
+                        {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer B</td>{% endif %}
                         {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>{{ PlayerB }}</b></td> {% else %}<td>{{ PlayerB }}</td>{% endif %}
                     </tr>
                     <tr>
-                        {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player C</td>{% endif %}
+                        {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer C</td>{% endif %}
                         {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>{{ PlayerC }}</b></td> {% else %}<td>{{ PlayerC }}</td>{% endif %}
                     </tr>
                     <tr>
-                        {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player D</td>{% endif %}
+                        {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer D</td>{% endif %}
                         {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>{{ PlayerD }}</b></td> {% else %}<td>{{ PlayerD }}</td>{% endif %}
                     </tr>
                     <tr>
-                        {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player E</td>{% endif %}
+                        {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer E</td>{% endif %}
                         {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>{{ PlayerE }}</b></td> {% else %}<td>{{ PlayerE }}</td>{% endif %}
                     </tr>
                 </table>
 
-
-         </div>
+            </div>
 
     </div>
     <br>

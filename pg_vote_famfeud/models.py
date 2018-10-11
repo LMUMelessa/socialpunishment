@@ -5,6 +5,7 @@ from otree.api import (
 from otree_redwood.models import Group as RedwoodGroup
 import csv,random
 import difflib as dif
+from decimal import Decimal
 
 author = 'Your name here'
 
@@ -56,10 +57,12 @@ class Subsession(BaseSubsession):
 
 
     def define_label(self):
+        germanlabellist = ['Teilnehmer A', 'Teilnehmer B', 'Teilnehmer C' , 'Teilnehmer D' , 'Teilnehmer E']
         labellist = ['Player A', 'Player B', 'Player C', 'Player D', 'Player E']
         for group in self.get_group_matrix():
             for player in group:
                 player.playerlabel = labellist[player.id_in_group-1]
+                player.germanplayerlabel = germanlabellist[player.id_in_group-1]
 
     def creating_session(self):
         # Assign treatment
@@ -146,8 +149,8 @@ class Group(RedwoodGroup):
         # string sentence of the question
         question = self.session.vars['ql_' + str(self.round_number) + str(self.current_quest_num)]['question']
         # TODO: use a better string operation
-        self.question_sequence = self.question_sequence + str(self.current_quest_num) + ':' + question + ';'
-        self.save()
+        #self.question_sequence = self.question_sequence + str(self.current_quest_num) + ':' + question + ';'
+        #self.save()
 
         # at the beginning of every new question round, no solution has been found
         # TODO, do i need all the saves or is 1 enough?
@@ -176,8 +179,8 @@ class Group(RedwoodGroup):
 
     def _on_guessingChannel_event(self, event=None):
         # TODO Delete me
-        print('I went into "_on_guessing_Channel_events_" function...')
-        print('I received the guess of the player, the guess is: %s' % (event.value['guess']))
+        #print('I went into "_on_guessing_Channel_events_" function...')
+        #print('I received the guess of the player, the guess is: %s' % (event.value['guess']))
 
         # the guess of the player
         guess = event.value['guess'].lower()
@@ -192,8 +195,8 @@ class Group(RedwoodGroup):
 
         # update the guess sequence of the player
         # TODO: Use a better string operation
-        player.guess_sequence = player.guess_sequence + str(self.current_quest_num) + ':' + str(guess) + ';'
-        player.save()
+        #player.guess_sequence = player.guess_sequence + str(self.current_quest_num) + ':' + str(guess) + ';'
+        #player.save()
 
         good_guess = False
         questionindex = 0
@@ -207,8 +210,7 @@ class Group(RedwoodGroup):
             if good_guess == False:
                 for answer in question[answernum]:
                     match = dif.SequenceMatcher(a=guess, b=answer.lower())
-                    #TODO delete me (print)
-                    print(guess + " and " + answer.lower() + " have string equality of: " + str(match.ratio()))
+                    ##print(guess + " and " + answer.lower() + " have string equality of: " + str(match.ratio()))
                     if match.ratio() > 0.75:
                         good_guess = True
 
@@ -241,7 +243,7 @@ class Group(RedwoodGroup):
                         self.save()
 
                     # Todo Delete me
-                    print([self.s1_answered, self.s2_answered, self.s3_answered, self.s4_answered, self.s5_answered])
+                    #print([self.s1_answered, self.s2_answered, self.s3_answered, self.s4_answered, self.s5_answered])
                     # determine, if now all possible answers have been found
                     finished = all(
                         [self.s1_answered, self.s2_answered, self.s3_answered, self.s4_answered, self.s5_answered])
@@ -254,7 +256,7 @@ class Group(RedwoodGroup):
                                                     'correct': True,
                                                     'finished': finished})
 
-                    print('thats finished' + str(finished))
+                    #print('thats finished' + str(finished))
 
                 # TODO: note: with that design choice, if a question is answered correctly for the second time, nothing happens
                 # TODO: there will be also nothing displayed in the group guess message board
@@ -289,10 +291,10 @@ class Group(RedwoodGroup):
         doc= 'Boolean. Defines if all player play the social arena game in a round.')
 
 
-    total_cont = models.CurrencyField(
+    total_cont = models.IntegerField(
         doc='The overall contribution of the group in the public good game.')
 
-    indiv_share = models.CurrencyField(
+    indiv_share = models.IntegerField(
         doc='The share the players get after the public good game.')
 
     # Is needed so that we can display on any template the excluded player
@@ -394,6 +396,9 @@ class Player(BasePlayer):
 
 
     ### Public Good Variables
+
+    germanplayerlabel = models.StringField()
+
     playerlabel = models.CharField(
         doc='The player name. Player A - Player E',
         choices=['Player A', 'Player B', 'Player C', 'Player D', 'Player E'])
@@ -407,9 +412,9 @@ class Player(BasePlayer):
         doc='Defines the city where the experiment took place ',
         choices=['münchen', 'heidelberg'])
 
-    contribution = models.CurrencyField(
+    contribution = models.IntegerField(
         doc='The players contribution in the public good game',
-        verbose_name='What do you want to contribute to the project?',
+        verbose_name='Ihr Betrag',
         min=0,
         max=Constants.endowment)
 
@@ -429,33 +434,37 @@ class Player(BasePlayer):
     # Variables where player can vote to exclude/invite one player from the social arena game
     vote_A = models.BooleanField(
         widget=widgets.CheckboxInput(),
-        verbose_name='Player A')
+        verbose_name='Teilnehmer A')
     vote_B = models.BooleanField(
         widget=widgets.CheckboxInput(),
-        verbose_name='Player B')
+        verbose_name='Teilnehmer B')
     vote_C = models.BooleanField(
         widget=widgets.CheckboxInput(),
-        verbose_name='Player C')
+        verbose_name='Teilnehmer C')
     vote_D = models.BooleanField(
         widget=widgets.CheckboxInput(),
-        verbose_name='Player D')
+        verbose_name='Teilnehmer D')
     vote_E = models.BooleanField(
         widget=widgets.CheckboxInput(),
-        verbose_name='Player E')
+        verbose_name='Teilnehmer E')
 
 
     # RateYourExperience after every FamilyFeud game
-    ff_experience = models.IntegerField(verbose_name="How would you rate your experience of the last stage of this round on a scale from 0 to 5",
-                                        widget=widgets.RadioSelect(), choices=[[1,"1 (bad/sad/boring)"],[2,"2"],[3,"3"],[4,"4"],[5,"5 (good/happy/exciting)"]])
+    ff_experience = models.IntegerField(verbose_name="Bitte zeigen Sie auf der Skala unten an, wie Sie Ihre Erfahrung in der letzten Phase dieser Runde bewerten würden. 1 bedeutet schlecht und 5 gut.",
+                                        widget=widgets.Slider() , min=1, max=5)
 
 
     # the valuation variable before the end of the experiment
-    ff_valuation = models.IntegerField(verbose_name="Please select a number of points between 0 and 20", widget=widgets.Slider(), min=0, max=20)
+    ff_valuation = models.DecimalField(verbose_name="Bitte wählen Sie Ihre Zahlungsbereitschaft aus.",
+                                       widget=widgets.Slider(),
+                                       min=0, max=6,
+                                       decimal_places=1,
+                                       max_digits = 2)
 
-    random_ff_valuation = models.IntegerField(min=0, max=20)
+    random_ff_valuation = models.FloatField()
 
     # In exlude treatment and feedback treatment
-    exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="I don't want to vote for any player.")
+    exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="Ich möchte kein Gruppenmitglied ausschließen.")
 
     def update_round_payoff(self):
         self.round_payoff = self.round_payoff - (self.ivoted * Constants.cost_for_vote)
@@ -465,21 +474,105 @@ class Player(BasePlayer):
     ######################################################################################################################
     ### Questionnaire variables
 
-    age = models.IntegerField(verbose_name="Please enter your age", min=0)
-    student_bool = models.IntegerField(widget=widgets.RadioSelectHorizontal(), verbose_name="Are you a student?", choices=[[1,"Yes"],[0, "No"]])
-    subject = models.StringField(verbose_name="Please enter your subject or profession")
-    stringfield1 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
-    stringfield2 = models.StringField(verbose_name="Please enter some text")
-    number1 = models.IntegerField(widget=widgets.Slider() , min=0 , max=100 , verbose_name="Please select a number between 0 and 100")
+
+    q1 = models.IntegerField(verbose_name="Was denken Sie, wie viele Taler sollte man zum Gruppenkonto beitragen?", min=0 , max=10)
+    q2 = models.StringField(verbose_name="Denken Sie, die meisten anderen sehen das auch wie Sie?", choices=["Ja",
+                                                                                                             "Ich bin mir unsicher",
+                                                                                                             "Nein, die meisten anderen denken man sollte mehr beitragen",
+                                                                                                             "Nein, die meisten anderen denken man sollte weniger beitragen",
+                                                                                                             ])
+
+    #only in exclude
+    q3 = models.StringField(verbose_name="In jeder Runde hatten Sie die Möglichkeit, Gruppenmitglieder vom Gruppenspiel auszuschließen. Welche Überlegungen haben Sie dabei angestellt? (Bitte wählen Sie die Option, die am besten passt.)",
+                            choices=["Ich habe rein zufällig meine Stimme vergeben",
+                                    "Ich wollte Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
+                                    "Ich wollte andere von der Last des Gruppenspiels befreien",
+                                    "Ich wollte ausprobieren was passiert",
+                                    "Ich habe in keiner Runde eine Stimme abgegeben"])
+
+    #only in exclude
+    q4 = models.StringField(
+        verbose_name="Was denken Sie, warum haben andere Teilnehmer dafür gestimmt, Gruppenmitglieder auszuschließen?",
+        choices=["Rein zufällig",
+                 "Sie wollten Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
+                 "Sie wollten andere von der Last des Gruppenspiels befreien",
+                 "Sie wollten andere von der Last des Gruppenspiels befreien",
+                 "Sie wollten ausprobieren was passiert"])
+
+    q5 = models.IntegerField(verbose_name="Bitte geben Sie ihr Alter an", min=0, max=300)
+    q6 = models.StringField(verbose_name="Bitte geben Sie ihr Geschlecht an", choices=["männlich", "weiblich", "keine Angabe"])
+    q7 = models.StringField(verbose_name="Bitte geben Sie ihr Studenfach an")
+    q8 = models.IntegerField(min=0,verbose_name="Wie oft haben Sie bereits an einer ökonomischen Laborstudie teilgenommen (auch außerhalb dieses Labors)?")
+    q9 = models.StringField(verbose_name="Wie viele Teilnehmerinnen oder Teilnehmer in diesem Raum haben Sie schon vor dem Experiment gekannt?")
+    q10 = models.StringField(verbose_name="Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!")
+
+
 
     ######################################################################################################################
     ### Control Variables
 
-    control1 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
-    control2 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
-    control3 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
-    control4 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
-    control5 = models.StringField(verbose_name="Please select something", choices=["Something1", "Something2", "Something3", "Something4"])
+    #exlude + control
+    control1 = models.IntegerField(verbose_name="Wie viele Taler haben Sie auf Ihrem privaten Konto, wenn Sie 3 Taler auf das Gruppenkonto einzahlen?",
+                                   min=0)
+
+    # exlude + control
+    control2 = models.IntegerField(verbose_name="20 Taler liegen auf dem Gruppenkonto. Wie viele Taler erhalten Sie daraus?",
+                                   min=0)
+
+    # exlude + control
+    control3a = models.StringField(verbose_name="Es kann sein, dass verschiedene Gruppenmitglieder unterschiedlich viele Taler aus dem Gruppenkonto erhalten.",
+                                   choices=["wahr", "falsch"])
+    # exlude + control
+    control3b = models.StringField(
+        verbose_name="Am Ende der ersten Stufe einer jeweiligen Runde wissen Sie, wie viel jedes Gruppenmitglied ins Gruppenkonto eingezahlt hat.",
+        choices=["wahr", "falsch"])
+    # exlude + control
+    control3c = models.StringField(
+        verbose_name="Sie spielen in jeder Runde in einer neuen Gruppe mit anderen Personen",
+        choices=["wahr", "falsch"])
+
+    #exclude
+    control3d = models.StringField(
+        verbose_name="Sollten Sie in einer Runde vom Gruppenspiel ausgeschlossen werden, so können Sie in der nächsten Runde nicht an der Aufteilungsentscheidung teilnehmen.",
+        choices=["wahr", "falsch"])
+
+    #exclude
+    control4 = models.IntegerField(verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
+                                  choices=[0,1,2,3,4,5])
+    #exclude
+    control5 = models.IntegerField(
+        verbose_name="Sie schließen zwei Gruppenmitglieder aus. Wie viele Taler kostet Sie das?",
+        min=0)
+
+    #exclude
+    control6 = models.StringField(
+        verbose_name="Sie erhalten zwei Stimmen. Dürfen Sie an dem Gruppenspiel teilnehmen?",
+        choices=["ja", "nein"])
+
+    #control
+    control7control = models.StringField(
+        verbose_name="Mit wem spielen Sie das Gruppenspiel?",
+        choices=["Alleine",
+                 "Mit 4 Teilnehmern, die in Stufe 1 dieser Runde nicht in meiner Gruppe waren",
+                 "Mit den 4 Teilnehmern, die in Stufe 1 dieser Runde in meiner Gruppe waren"])
+
+    #exclude
+    control7exclude = models.StringField(
+        verbose_name="Mit wem spielen Sie das Gruppenspiel?",
+        choices=["Alleine",
+                 "Mit 4 Teilnehmern, die in Stufe 1 dieser Runde nicht in meiner Gruppe waren",
+                 "Mit den Teilnehmern meiner Gruppe, die nicht ausgeschlossen wurden",
+                 "Mit den ausgeschlossenen Gruppenmitgliedern aus dieser Runde"])
+
+    #exclude + control
+    control8 = models.StringField(
+        verbose_name="Was passiert, wenn Sie einen richtigen Begriff im Gruppenspiel eingeben?",
+        choices=["Nichts",
+                 "Er wird allen Gruppenmitgliedern gezeigt und ich verdiene einen Taler",
+                 "Er wird allen Gruppenmitgliedern gezeigt und die Gruppe bekommt einen Spielpunkt"])
+
+
+
 
 
 

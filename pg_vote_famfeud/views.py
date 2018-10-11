@@ -17,11 +17,16 @@ class Instructions(Page):
 
 
 class ControlQuestions(Page):
+    timeout_seconds = 300
 
-    timeout_seconds = Constants.timeoutsecs
 
-    form_model = models.Player
-    form_fields = ['control1', 'control2', 'control3' , 'control4' , 'control5']
+    form_model = 'player'
+
+    def get_form_fields(self):
+        if self.player.treatment=='exclude':
+            return ['control1','control2','control3a','control3b', 'control3c', 'control3d', 'control4', 'control5', 'control6' ,'control7exclude','control8']
+        elif self.player.treatment=='control':
+            return ['control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
 
     def is_displayed(self):
         if self.player.treatment=="FF":
@@ -36,8 +41,6 @@ class Contribution(Page):
 
     form_model = models.Player
     form_fields = ['contribution']
-
-    timeout_seconds = Constants.timeoutsecs
 
     def vars_for_template(self):
         return {'round_number': self.player.round_number - 1}
@@ -69,7 +72,7 @@ class ResultsPG(Page):
     timeout_seconds = Constants.timeoutsecs
 
     def vars_for_template(self):
-        data = {'round_number':self.player.round_number -1}
+        data = {'round_number':self.player.round_number -1 ,}
         for player in self.group.get_players():
             # Remove whitespace from label so that it can be displayed in the template
             data[(player.playerlabel).replace(' ','')] = player.contribution
@@ -102,7 +105,7 @@ class Vote(Page):
         vote_count = sum([values['vote_A'], values['vote_B'], values['vote_C'], values['vote_D'],values['vote_E']])
         if self.player.treatment == 'exclude':
             if vote_count > 0 and values['exclude_none'] == True:
-                return 'You cannot exlude a player while non exlcuding any.'
+                return 'Sie können nicht für keinen und einen Spieler wählen.'
             # Enforce the player to choose an option
             if vote_count == 0 and values['exclude_none'] == False:
                 return 'Please choose an option.'
@@ -159,9 +162,9 @@ class VoteResults(Page):
        for player in self.group.get_players():
            data[(player.playerlabel).replace(' ', '') + '_votes'] = player.myvotes
            if player.plays == True:
-                data[(player.playerlabel).replace(' ', '') + '_plays'] = "Yes"
+                data[(player.playerlabel).replace(' ', '') + '_plays'] = "Ja"
            elif player.plays == False:
-               data[(player.playerlabel).replace(' ', '') + '_plays'] = "No"
+               data[(player.playerlabel).replace(' ', '') + '_plays'] = "Nein"
        return data
 
    def is_displayed(self):
@@ -181,6 +184,7 @@ class VoteResults(Page):
 
 
 class ValuateFFSelect(Page):
+
     timeout_seconds = Constants.timeoutsecs
 
     form_model = models.Player
@@ -213,19 +217,20 @@ class ValuateFFSelect(Page):
         ## FF valuation here
         ## determine if the player is allowed to play FF one last time or if he has to watch the screen
         ## depending on his
-        self.player.random_ff_valuation = random.choice(range(21))
+        self.player.random_ff_valuation = random.choice(range(600))/100
 
-        if self.player.random_ff_valuation > self.player.ff_valuation:
+
+
+        if self.player.random_ff_valuation > float(self.player.ff_valuation):
             self.player.plays = False
-
         else:
-            # Player plays again, subtract his willingness to pay from his overall payoff
-            self.player.payoff = self.player.payoff - self.player.ff_valuation
+            # Player plays again, subtract the computer number his overall payoff
+            # First recalculate to points
+            self.player.payoff = self.player.payoff - (1/ float(self.session.config['real_world_currency_per_point'])* float(self.player.random_ff_valuation))
+
 
 
 class WaitAfterValuateFFSelect(WaitPage):
-
-    timeout_seconds = 120
 
     def is_displayed(self):
         if self.player.treatment=="FF":
@@ -240,7 +245,7 @@ class WaitAfterValuateFFSelect(WaitPage):
 
 class ValuateFFResult(Page):
 
-    timeout_seconds = 10
+    timeout_seconds = 15
 
     def is_displayed(self):
         if self.player.treatment=="FF":
@@ -325,8 +330,17 @@ class RateYourExperience(Page):
 
 
 class Questionnaire(Page):
-    form_model = models.Player
-    form_fields = ['age', 'student_bool', 'subject', 'stringfield1', 'stringfield2' , 'number1']
+
+
+    form_model = 'player'
+
+    def get_form_fields(self):
+        if self.player.treatment == 'exclude':
+            return ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8','q9','q10']
+        elif self.player.treatment == 'control':
+            return ['q1','q2','q5','q6','q7','q8','q9','q10']
+
+
 
     def is_displayed(self):
         return Constants.num_rounds == self.round_number

@@ -8,8 +8,8 @@
 
 
      <div id="header">
-            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Current round is <b>Round {{ round_number }}</b> </div>
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+            <div id="header-right">Dies ist <b>Runde {{ round_number }}</b> </div>
         </div>
 
 
@@ -19,11 +19,14 @@
         <div id="info">
             <div id="info-text">
 
-                This is the public good game of this round and all five players play the game. <br>
-                Your endowment is <b>{{Constants.endowment }}</b>.<br>
-                You can contribute every integer from 0 up to your endowment.
+
+                Dies ist die Verteilungsentscheidung in der Runde {{round_number}}. <br>
+                Sie haben {{ Constants.endowment }} Taler. Wie viele Taler möchten Sie auf das Gruppenkonto einzahlen? <br>
+                Sie können jede ganze Zahl zwischen 0 und 10 wählen.
+
                 <br>
                 <br>
+
                 {% formfield player.contribution %}
             </div>
         </div>
@@ -32,7 +35,9 @@
 
     </div>
     <br>
+
     {% next_button %}
+    <div id="Timeout"></div>
 {% endblock %}
 
 
@@ -56,4 +61,20 @@
         .page-header {padding-top: 0px;padding-bottom: 0px}
         .otree-title{font-size: 20px}
     </style>
+
+
+    <script>
+
+    setTimeout(
+    function () {
+        document.getElementById("Timeout").style.color = "red";
+        document.getElementById("Timeout").textContent = "Die Zeit ist um! Sie müssen sich jetzt entscheiden.";
+
+    },
+    10*1000
+);
+
+    </script>
+
+
 {% endblock %}

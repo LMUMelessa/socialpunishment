@@ -8,28 +8,47 @@
 
 
       <div id="header">
-            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Last page</b> </div>
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+            <div id="header-right"></b> </div>
         </div>
 
     <div id="main">
 
         <br>
-        <b>As a last step of the experiment, please fill out the questionnaire.</b>
+        Dieser Fragebogen beendet das Experiment. Bitte füllen Sie ihn aus.
 
         <div id="info" >
             <div id="info-text">
 
 
+            {% if player.treatment == "exclude" %}
 
+                {% formfield player.q1 %}
+                {% formfield player.q2 %}
+                {% formfield player.q3 %}
+                {% formfield player.q4 %}
+                {% formfield player.q5 %}
+                {% formfield player.q6 %}
+                {% formfield player.q7 %}
+                {% formfield player.q8 %}
+                {% formfield player.q9 %}
+                {% formfield player.q10%}
 
-                {% formfield player.age %}
-                {% formfield player.student_bool %}
-                {% formfield player.subject %}
-                {% formfield player.stringfield1 %}
-                {% formfield player.stringfield2 %}
+             {% elif player.treatment == "control"%}
+
+                {% formfield player.q1 %}
+                {% formfield player.q2 %}
+                {% formfield player.q5 %}
+                {% formfield player.q6 %}
+                {% formfield player.q7 %}
+                {% formfield player.q8 %}
+                {% formfield player.q9 %}
+                {% formfield player.q10%}
+
+             {% endif %}
+
                 <br>
-                {% formfield player.number1 %}
+
 
 
 

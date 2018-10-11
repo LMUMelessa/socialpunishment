@@ -8,35 +8,59 @@
 
 
       <div id="header">
-            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
 {#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
         </div>
 
     <div id="main">
 
      <br>
-        <b>Please answer all the questions.</b>
+        Bitte beantworten Sie alle Fragen. Sie müssen alle Fragen richtig beantworten.
 
 
         <div id="info" >
             <div id="info-text">
 
 
+                {% if player.treatment == 'exclude' %}
 
 
+                    {% formfield player.control1 %}
+                    {% formfield player.control2 %}
+                    {% formfield player.control3a %}
+                    {% formfield player.control3b %}
+                    {% formfield player.control3c %}
+                    {% formfield player.control3d %}
+                    {% formfield player.control4 %}
+                    {% formfield player.control5 %}
+                    {% formfield player.control6 %}
+                    {% formfield player.control7exclude %}
+                    {% formfield player.control8 %}
 
-                {% formfield player.control1 %}
-                {% formfield player.control2 %}
-                {% formfield player.control3 %}
-                {% formfield player.control4 %}
-                {% formfield player.control5 %}
+
+                {% elif player.treatment == 'control' %}
+
+
+                    {% formfield player.control1 %}
+                    {% formfield player.control2 %}
+                    {% formfield player.control3a %}
+                    {% formfield player.control3b %}
+                    {% formfield player.control3c %}
+                    {% formfield player.control7control %}
+                    {% formfield player.control8 %}
+
+
+                {% endif %}
+
+
 
            </div>
         </div>
+    <br>
+    Auf der nächsten Seite startet die Übung des Gruppenspiels.
+    <br>
+    <br>
 
-    The practice round of the guessing game will start on the next page. Please press next after answering all questions.
-    <br>
-    <br>
     {% next_button %}
 {% endblock %}
 

@@ -8,8 +8,8 @@
 
 
      <div id="header">
-            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Current round is <b>Round {{round_number }}</b> </div>
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+            <div id="header-right">Dies ist <b>Runde {{round_number }}</b> </div>
         </div>
 
 
@@ -25,43 +25,44 @@
         <div id="info">
 
             <div id="info-text">
-                You contributed <b>{{ player.contribution }}</b>.
-                <br>
-                In total, the sum of all contributions is  <b>{{ group.total_cont }}</b>
-                <br>
-                Therefore, each player receives an individual share of <b>{{ group.indiv_share }}</b> from the project.<br>
-                Your profit for this game is <b>{{ player.round_payoff }}</b>.
+
+                Die Gesamtbeiträge zum Gruppenkonto belaufen sich auf {{ group.total_cont }} Taler. <br>
+                Damit ist Ihr Verdienst vom Gruppenkonto {{ group.indiv_share }} Taler. <br>
+                Ihr Verdienst von Ihrem privaten Konto ist {{ left_on_account }} Taler. <br>
+                Ihr Gesamtverdienst ist {{ player.round_payoff }} Taler. <br>
+                <br><br><br>
+                In der untenstehenden Tabelle können Sie sehen, wie viel jedes Gruppenmitglied beigetragen hat. <br>
             </div>
 
         </div>
 
 
         <div id="tables">
-            Table of contributions:<br>
+            Einzahlungen:<br>
 
              <table class="table table-bordered table-sm" style="width:60%">
                 <tr style="background-color: black; color: white">
-                    <th>Player Label</th>
-                    <th>Contribution</th>
+                    <th>Teilnehmer</th>
+                    <th>Betrag</th>
                 </tr>
                 <tr>
-                    {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player A</td>{% endif %}
+                    {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer A</td>{% endif %}
                     {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>{{ PlayerA }}</b></td> {% else %}<td>{{ PlayerA }}</td>{% endif %}
                 </tr>
                 <tr>
-                    {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player B</td>{% endif %}
+                    {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer B</td>{% endif %}
                     {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>{{ PlayerB }}</b></td> {% else %}<td>{{ PlayerB }}</td>{% endif %}
                 </tr>
                 <tr>
-                    {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player C</td>{% endif %}
+                    {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer C</td>{% endif %}
                     {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>{{ PlayerC }}</b></td> {% else %}<td>{{ PlayerC }}</td>{% endif %}
                 </tr>
                 <tr>
-                    {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player D</td>{% endif %}
+                    {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer D</td>{% endif %}
                     {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>{{ PlayerD }}</b></td> {% else %}<td>{{ PlayerD }}</td>{% endif %}
                 </tr>
                 <tr>
-                    {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player E</td>{% endif %}
+                    {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer E</td>{% endif %}
                     {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>{{ PlayerE }}</b></td> {% else %}<td>{{ PlayerE }}</td>{% endif %}
                 </tr>
             </table>

@@ -8,7 +8,7 @@
 
 
       <div id="header">
-            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
 {#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
         </div>
 
@@ -20,14 +20,11 @@
         <div id="info" >
             <div id="info-text">
 
+                Vor dem abschließenden Fragebogen können Sie 90 Sekunden entweder auf einen Screenshot schauen oder das Gruppenspiel spielen.
+                Bitte geben Sie unten an, wie viele Euro Sie bereit sind für die Teilnahme am Gruppenspiel zu zahlen. Sie können jede Zahl zwischen 0,0 und 6,0 mit einer Nachkommastelle angeben.<br><br>
 
-        This was the last round of the experiment. <br>
-        Before you can proceed to the questionnaire, which will end the experiment, you can choose between looking at a screenshot for 90 seconds or playing the guessing game one last time for 90 seconds.<br>
-        Please enter below a number of points which you are willing to pay for playing the guessing game one last time.<br>
-        The computer will then randomly draw a number between 0 and 20.<br>
-        If this number is higher than your chosen number, you will watch the screen for 90 seconds and nothing will be taken from your account.<br>
-        If this number is lower than your number, your number will be subtracted from your account and you will play the guessing game for 90 seconds.<br><br>
-
+                Der Computer wird dann zufällig eine Zahl zwischen 0,0 und 6,0 ziehen. Ist diese Zufallszahlahl höher als Ihre angegebene Zahlungsbereitschaft, so können Sie das Gruppenspiel nicht spielen, sondern werden 90 Sekunden den Screenshot anschauen.<br>
+                Wenn die Zufallszahl niedriger als Ihre Zahlungsbereitschaft ist, können Sie in den 90 Sekunden das Gruppenspiel spielen  und es wird ein Eurobetrag in Höhe von der Zufallszahl von Ihrer Prämie für pünktliches Erscheinen abgezogen.<br>
 
 
         {% formfield player.ff_valuation %}

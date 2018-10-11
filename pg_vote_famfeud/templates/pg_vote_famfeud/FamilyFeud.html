@@ -2,11 +2,12 @@
 {% load staticfiles otree %}
 
 {% block title %}
-    Family Feud
+    Gruppenspiel
 {% endblock %}
 
 {% block scripts %}
   <script>
+
 
     // Stackoverflow:
     //this prevents that pressing enter will automatically submit the page and abort the game for a player
@@ -30,8 +31,6 @@
         document.getElementById("subbutton").click();
     }
 });
-
-
 
 
     // Boilerplate that lets you access useful oTree template variables from Javascript.
@@ -124,7 +123,7 @@
          var guessingChan = document.getElementById("guessingChannel");
 
         if (guessed.length < 1) {
-            message.textContent = 'Please type anything';
+            message.textContent = 'Ihr Wort';
 
         } else {
             guessingChan.send({guess: guessed, id: oTree.idInGroup})
@@ -255,23 +254,23 @@
 
         // if multiple family feud subrounds (more then 1 question) are played, turn the shown solutions to placeholders again
         var s1 =  document.getElementById('s1');
-        s1.textContent = 'Word 1'
+        s1.textContent = 'Wort 1'
         s1.style.background = 'linear-gradient(lightyellow,yellow)'
         var s2 =  document.getElementById('s2');
-        s2.textContent = 'Word 2'
+        s2.textContent = 'Wort 2'
         s2.style.background = 'linear-gradient(lightyellow,yellow)'
         var s3 =  document.getElementById('s3');
-        s3.textContent = 'Word 3'
+        s3.textContent = 'Wort 3'
         s3.style.background = 'linear-gradient(lightyellow,yellow)'
         var s4 =  document.getElementById('s4');
-        s4.textContent = 'Word 4'
+        s4.textContent = 'Wort 4'
         s4.style.background = 'linear-gradient(lightyellow,yellow)';
         var s5 =  document.getElementById('s5');
-        s5.textContent = 'Word 5';
+        s5.textContent = 'Wort 5';
         s5.style.background = 'linear-gradient(lightyellow,yellow)';
 
         // send to message board
-        document.getElementById('message').textContent = "Let's go. Type your guess in the field below!";
+        document.getElementById('message').textContent = "Los geht's. Geben Sie Ihren Begriff unten ein!";
 
         // display question
         var questiontag = document.getElementById('question');
@@ -303,7 +302,6 @@
         if (botmode == "on"){
             if (botstate=="inactive"){
                 alert(botmode)
-                alert("I went in here ...???")
                 intID =  setInterval(function() {bot();}, frequency);
         }}
         // update timer
@@ -322,11 +320,11 @@
 
        }
 
-       document.getElementById('timer').textContent = 'Time: ' + parseInt(n);
+       document.getElementById('timer').textContent = 'Zeit: ' + parseInt(n);
 
        if (n<=0){
 
-           document.getElementById('timer').textContent = "Question finished";
+           document.getElementById('timer').textContent = "Frage beendet";
            document.getElementById('timer').style.color = "red";
        }
 
@@ -400,11 +398,11 @@
         // check if there is a question left otherwise go to the next page in oTree
         if ((curr_quest >= oTree.questionsPerRound) && (bonus_seconds < 1)) {
             // family feud finished, wait and submit page
-            document.getElementById('message').textContent = 'You overall time is up. Game will be finished in a moment...';
+            document.getElementById('message').textContent = 'Die Gesamtzeit ist um. Spiel wird gleich beendet...';
             setTimeout(function () {submit_nextbutton();}, oTree.waitBetween * 1000);
 
         }else if ( curr_quest == oTree.questionsPerRound + oTree.extra_questions ) {
-            document.getElementById('message').textContent = 'That was the last question. Game will be finished in a moment...';
+            document.getElementById('message').textContent = 'Das war die letzte Frage. Spiel wird gleich beendet...';
             // family feud finished, wait and submit page
             setTimeout(function () {submit_nextbutton();}, oTree.waitBetween * 1000);
         // all scenarios where a new question has to be requested
@@ -420,14 +418,14 @@
 
             if (answered_early != true){
 
-                var string1 = 'Overall, you have ';
+                var string1 = 'Ihre Gruppe hat ';
                 var string2 = time_left.toString();
-                var string3 = ' seconds left. Prepare for next question..';
+                var string3 = ' Sekunden übrig. Die nächste Frage lädt...';
                 document.getElementById('message').textContent = string1.concat(string2).concat(string3);
             }else{
-                var string1 = 'Great! Overall, you have ';
+                var string1 = 'Top! Ihre Gruppe hat ';
                 var string2 = time_left.toString();
-                var string3 = ' seconds left. Prepare for next question..';
+                var string3 = ' Sekunden übrig. Die nächste Frage lädt..';
                 document.getElementById('message').textContent = string1.concat(string2).concat(string3);
 
             }
@@ -598,9 +596,9 @@
           <div id="middle">
 
               <div id="wrapinfo" style="width: 100%;" >
-              <div id="timer" style=" width: 35%; display: inline-block;padding-left: 5px; padding-top:1px;  color:blue">Time left:</div>
-              <div id="player_points"  style=" width: 35%;margin-right: 10px; display: inline-block;padding-top:1px;color:blue">Your points: 0</div>
-              <div id="group_points" style=" width: 25%;display:inline-block;padding-top:1px; color:blue">Group points: 0</div>
+              <div id="timer" style=" width: 35%; display: inline-block;padding-left: 5px; padding-top:1px;  color:blue">Zeit übrig:</div>
+              <div id="player_points"  style=" width: 35%;margin-right: 10px; display: inline-block;padding-top:1px;color:blue">Ihre Punkte: 0</div>
+              <div id="group_points" style=" width: 25%;display:inline-block;padding-top:1px; color:blue">Gruppen Punkte: 0</div>
               </div>
 
               <div id="centerthis">
@@ -610,12 +608,12 @@
                   <div id="questionboard" >
 
                     <div style="height: 45px">
-                    <p id="question" style="padding-top: 15px; text-align: center">Prepare for the first question ...</p>
+                    <p id="question" style="padding-top: 15px; text-align: center">Die erste Frage wird geladen ...</p>
                     </div>
                       <!-- Messageboard -->
 
                       <div style="border-top:lightgrey solid; padding-top: 15px; margin-top: 30px ">
-                      <p id='message' style="font-size:16px;color:blue;text-align: center">Load message board....</p>
+                      <p id='message' style="font-size:16px;color:blue;text-align: center">Nachrichtenfeld wird geladen....</p>
                       </div>
                   </div>
 
@@ -623,11 +621,11 @@
 
 
                   <!-- Word placeholders in middle-->
-                  <p id='s1' style="width:80%;margin-left:40px;text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow); border:1px; border-style:solid; padding-left: 6px";>Word is loaded ...</p>
-                  <p id='s2' style="width:80%;margin-left:40px;text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow);border:1px; border-style:solid; padding-left: 6px";>Word is loaded ...</p>
-                  <p id='s3' style="width:80%;margin-left:40px;text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow);border:1px; border-style:solid; padding-left: 6px";>Word is loaded ...</p>
-                  <p id='s4' style="width:80%;margin-left:40px;text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow);border:1px; border-style:solid; padding-left: 6px";>Word is loaded ...</p>
-                  <p id='s5' style="width:80%;margin-left:40px;text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow);border:1px; border-style:solid; padding-left: 6px";>Word is loaded ...</p>
+                  <p id='s1' style="width:80%;margin-left:40px;text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow); border:1px; border-style:solid; padding-left: 6px";>Wort wird geladen ...</p>
+                  <p id='s2' style="width:80%;margin-left:40px;text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow);border:1px; border-style:solid; padding-left: 6px";>Wort wird geladen ...</p>
+                  <p id='s3' style="width:80%;margin-left:40px;text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow);border:1px; border-style:solid; padding-left: 6px";>Wort wird geladen ...</p>
+                  <p id='s4' style="width:80%;margin-left:40px;text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow);border:1px; border-style:solid; padding-left: 6px";>Wort wird geladen ...</p>
+                  <p id='s5' style="width:80%;margin-left:40px;text-align:center;border-radius: 5px;background:linear-gradient(lightyellow, yellow);border:1px; border-style:solid; padding-left: 6px";>Wort wird geladen ...</p>
 
 
 
@@ -635,10 +633,10 @@
 
                   <div id="aroundfieldbutton">
                         <!-- Input form -->
-                        <input id='guessfield' type='text' maxlength='25' placeholder="Guess a word!">
+                        <input id='guessfield' type='text' maxlength='25' placeholder="Raten Sie!">
                         <br><br>
                         <!-- Button submit input  -->
-                        <button id='subbutton' type='button'>submit your guess</button>
+                        <button id='subbutton' type='button'>Begriff abschicken</button>
                   </div>
 
               </div>
@@ -649,7 +647,7 @@
           <!-- the box on the right hand side-->
           <div id="groupguesses">
               <div id="aroundheading">
-                <h4>Group Guesses</h4>
+                <h4>Gruppen Begriffe</h4>
               </div>
 
             <!-- Display guesses of the other players -->

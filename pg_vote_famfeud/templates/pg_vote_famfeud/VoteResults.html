@@ -8,8 +8,8 @@
 
 
      <div id="header">
-            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Current round is <b>Round {{round_number }}</b> </div>
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+            <div id="header-right">Dies ist <b>Runde {{round_number }}</b> </div>
         </div>
 
 
@@ -22,73 +22,98 @@
 
 
 
-            {% if player.treatment != 'feedback' %}
-                    You have <b>{{ player.myvotes }}</b> {% if player.treatment == 'exclude' %} exclusions.{% elif player.treatment == 'include' %}invitations.{% endif %}
-                    <br>
-                    {% if player.plays == True %}
-                        You are allowed to play the guessing game.
-                    {% else %}
-                        {% if player.treatment == 'exclude' %}
-                             You are <b>not</b> allowed to play the guessing game.
-                        {% elif player.treatment == 'include' %}
-                            You have not enough invitations. You are <b>not</b> allowed to play the guessing game.
-                        {% endif %}
-                    {% endif %}
-                    <br>
 
-                 {% if group.all_play == True %}
-                    All players will play the guessing game.
-                 {% else %}
-                    See below, who will play the guessing game.
-                 {% endif %}
+                {% if  player.plays == True%}
 
-            {% else %}
 
-                {% if player.plays == True %}
-                    Feedback treatment. Put wording here (You did not get the majority in negative feedback).
+                    {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie auszuschließen. <br>
+                    Damit sind Sie NICHT vom Gruppenspiel in dieser Runde ausgeschlossen und dürfen mitspielen.<br>
+                    In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben und wer das Spiel mit Ihnen spielen wird. <br>
+
+
                 {% else %}
-                    Feedback treatment. Put wording here <b>(You got the most negative feedback of all players).</b>
-                    <br><br>
-                    :(
+
+                    {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie auszuschließen.<br>
+                    Damit sind Sie vom Gruppenspiel in dieser Runde ausgeschlossen und dürfen NICHT mitspielen.<br>
+                    In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben und wer das Spiel spielen wird.
+
                 {% endif %}
-            {% endif %}
+
+
+
+
+
+
+
+
+
+{#            {% if player.treatment != 'feedback' %}#}
+{#                    You have <b>{{ player.myvotes }}</b> {% if player.treatment == 'exclude' %} exclusions.{% elif player.treatment == 'include' %}invitations.{% endif %}#}
+{#                    <br>#}
+{#                    {% if player.plays == True %}#}
+{#                        You are allowed to play the guessing game.#}
+{#                    {% else %}#}
+{#                        {% if player.treatment == 'exclude' %}#}
+{#                             You are <b>not</b> allowed to play the guessing game.#}
+{#                        {% elif player.treatment == 'include' %}#}
+{#                            You have not enough invitations. You are <b>not</b> allowed to play the guessing game.#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+{#                    <br>#}
+{##}
+{#                 {% if group.all_play == True %}#}
+{#                    All players will play the guessing game.#}
+{#                 {% else %}#}
+{#                    See below, who will play the guessing game.#}
+{#                 {% endif %}#}
+{##}
+{#            {% else %}#}
+{##}
+{#                {% if player.plays == True %}#}
+{#                    Feedback treatment. Put wording here (You did not get the majority in negative feedback).#}
+{#                {% else %}#}
+{#                    Feedback treatment. Put wording here <b>(You got the most negative feedback of all players).</b>#}
+{#                    <br><br>#}
+{#                    :(#}
+{#                {% endif %}#}
+{#            {% endif %}#}
 
             </div>
             </div>
 
             <div id="tables">
-               Table of Voting results:<br>
+               Ergebnisse der Abstimmung:<br>
             <table class="table table-bordered table-sm" style="width:60%">
                 <tr style="background-color: black; color: white">
                     <th>Player Label</th>
-                    <th>{% if player.treatment == 'exclude'%}Exclusion Votes{% endif%} {% if player.treatment == 'include' %}Invitation Votes{% endif %}
+                    <th>{% if player.treatment == 'exclude'%}Stimmen{% endif%} {% if player.treatment == 'include' %}Invitation Votes{% endif %}
                        {% if player.treatment == 'feedback'%}Feedback Votes{% endif%}   </th>
 
 
-               {% if player.treatment != 'feedback' %} <th> Plays Guessing Game</th> {% endif %}
+               {% if player.treatment != 'feedback' %} <th> Spielt Gruppenspiel</th> {% endif %}
                 </tr>
                 </tr>
                 <tr>
-                    {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player A</td>{% endif %}
+                    {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer A</td>{% endif %}
                     {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>{{ PlayerA_votes }}</b></td> {% else %}<td>{{ PlayerA_votes }}</td>{% endif %}
                      {% if player.treatment != 'feedback' %}{% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>{{ PlayerA_plays }}</b></td> {% else %}<td>{{ PlayerA_plays }}</td>{% endif %}{% endif %}
                 </tr>
                 <tr>
-                    {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player B</td>{% endif %}
+                    {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer B</td>{% endif %}
                     {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>{{ PlayerB_votes }}</b></td> {% else %}<td>{{ PlayerB_votes }}</td>{% endif %}
                      {% if player.treatment != 'feedback' %}{% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>{{ PlayerB_plays }}</b></td> {% else %}<td>{{ PlayerB_plays }}</td>{% endif %}{% endif %}
                 <tr>
-                    {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player C</td>{% endif %}
+                    {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer C</td>{% endif %}
                     {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>{{ PlayerC_votes }}</b></td> {% else %}<td>{{ PlayerC_votes }}</td>{% endif %}
                      {% if player.treatment != 'feedback' %}{% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>{{ PlayerC_plays }}</b></td> {% else %}<td>{{ PlayerC_plays }}</td>{% endif %}{% endif %}
                 </tr>
                 <tr>
-                    {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player D</td>{% endif %}
+                    {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer D</td>{% endif %}
                     {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>{{ PlayerD_votes }}</b></td> {% else %}<td>{{ PlayerD_votes }}</td>{% endif %}
                      {% if player.treatment != 'feedback' %}{% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>{{ PlayerD_plays }}</b></td> {% else %}<td>{{ PlayerD_plays }}</td>{% endif %}{% endif %}
                 </tr>
                 <tr>
-                    {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>You</b></td>{% else %}<td>Player E</td>{% endif %}
+                    {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer E</td>{% endif %}
                     {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>{{ PlayerE_votes }}</b></td> {% else %}<td>{{ PlayerE_votes }}</td>{% endif %}
                      {% if player.treatment != 'feedback' %}{% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>{{ PlayerE_plays }}</b></td> {% else %}<td>{{ PlayerE_plays }}</td>{% endif %}{% endif %}
                 </tr>

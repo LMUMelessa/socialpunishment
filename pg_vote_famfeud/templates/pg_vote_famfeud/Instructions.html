@@ -8,7 +8,7 @@
 
 
       <div id="header">
-            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
 {#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
         </div>
 
@@ -22,19 +22,16 @@
 
                 {% if player.round_number == 1 %}
 
-                   Please read the instructions carefully.<br>
-                    On the next page, your understanding of the instructions will be tested.<br>
-                   Press next to proceed.
+                   Ich bin mit der Teilnahme am Experiment einverstanden.
 
 
                 {% elif player.round_number == 2 %}
 
-                    That was the practice round of the guessing game. <br>
-                    On the next page, the first round of the experiment will start.<br>
+                    Ende der Übung des Gruppenspiels. Die erste Runde des Experiments startet auf der nächsten Seite.
 
                  {% else %}
 
-                    On the next page, a new round of the experiment will start.
+                    Ende der Runde. Die Gruppen werden neu zusammengesetzt.
 
                 {% endif %}
            </div>

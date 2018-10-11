@@ -8,15 +8,15 @@
 
 
      <div id="header">
-            <div id="header-left">You are <b>{{ player.playerlabel }}</b></div>
-            <div id="header-right">Current round is <b>Round {{round_number}}</b> </div>
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+            <div id="header-right">Dies ist <b>Runde {{round_number}}</b> </div>
         </div>
 
 
 
     <div id="main">
         <br>
-        <h6>Results of Family Feud</h6>
+        <h6>Ergebnisse des Gruppenspiels</h6>
         <div id="tables">
 
 
@@ -28,14 +28,14 @@
 
 
                     <tr style="background-color: lightgrey">
-                        <th>Group Number: {{ pl_list.0 }} (Your group)</th>
-                        <th>Group Points: {{ pl_list.1 }}</th>
+                        <th>Gruppe {{ pl_list.0 }} (Ihre Gruppe)</th>
+                        <th>Punkte: {{ pl_list.1 }}</th>
                     </tr>
               {% else %}
 
                     <tr>
-                        <th>Group Number: {{ pl_list.0 }}</th>
-                        <th>Group Points: {{ pl_list.1 }}</th>
+                        <th>Gruppe {{ pl_list.0 }}</th>
+                        <th>Punkte: {{ pl_list.1 }}</th>
                     </tr>
               {% endif %}
 
