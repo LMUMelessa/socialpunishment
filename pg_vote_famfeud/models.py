@@ -29,9 +29,9 @@ class Constants(BaseConstants):
     ### The overall time for one FF round is questions_per_round * secs_per_questions
     ### The players will receive new questions until: overall time is up  OR all questions_per_round + extra_questions are answered
 
-    questions_per_round = 3 #3
-    extra_questions = 2 #2
-    secs_per_question = 30#30
+    questions_per_round = 2 #2
+    extra_questions = 1 #1
+    secs_per_question = 30 #30
     wait_between_question = 4 #4
 
 
@@ -476,14 +476,14 @@ class Player(BasePlayer):
 
 
     q1 = models.IntegerField(verbose_name="Was denken Sie, wie viele Taler sollte man zum Gruppenkonto beitragen?", min=0 , max=10)
-    q2 = models.StringField(verbose_name="Denken Sie, die meisten anderen sehen das auch wie Sie?", choices=["Ja",
+    q2 = models.StringField(widget=widgets.RadioSelect(),verbose_name="Denken Sie, die meisten anderen sehen das auch wie Sie?", choices=["Ja",
                                                                                                              "Ich bin mir unsicher",
                                                                                                              "Nein, die meisten anderen denken man sollte mehr beitragen",
                                                                                                              "Nein, die meisten anderen denken man sollte weniger beitragen",
                                                                                                              ])
 
     #only in exclude
-    q3 = models.StringField(verbose_name="In jeder Runde hatten Sie die Möglichkeit, Gruppenmitglieder vom Gruppenspiel auszuschließen. Welche Überlegungen haben Sie dabei angestellt? (Bitte wählen Sie die Option, die am besten passt.)",
+    q3 = models.StringField(widget=widgets.RadioSelect(),verbose_name="In jeder Runde hatten Sie die Möglichkeit, Gruppenmitglieder vom Gruppenspiel auszuschließen. Welche Überlegungen haben Sie dabei angestellt? (Bitte wählen Sie die Option, die am besten passt.)",
                             choices=["Ich habe rein zufällig meine Stimme vergeben",
                                     "Ich wollte Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
                                     "Ich wollte andere von der Last des Gruppenspiels befreien",
@@ -491,7 +491,7 @@ class Player(BasePlayer):
                                     "Ich habe in keiner Runde eine Stimme abgegeben"])
 
     #only in exclude
-    q4 = models.StringField(
+    q4 = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Was denken Sie, warum haben andere Teilnehmer dafür gestimmt, Gruppenmitglieder auszuschließen?",
         choices=["Rein zufällig",
                  "Sie wollten Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
@@ -500,8 +500,8 @@ class Player(BasePlayer):
                  "Sie wollten ausprobieren was passiert"])
 
     q5 = models.IntegerField(verbose_name="Bitte geben Sie ihr Alter an", min=0, max=300)
-    q6 = models.StringField(verbose_name="Bitte geben Sie ihr Geschlecht an", choices=["männlich", "weiblich", "keine Angabe"])
-    q7 = models.StringField(verbose_name="Bitte geben Sie ihr Studenfach an")
+    q6 = models.StringField(widget=widgets.RadioSelect(),verbose_name="Bitte geben Sie ihr Geschlecht an", choices=["männlich", "weiblich", "keine Angabe"])
+    q7 = models.StringField(verbose_name="Bitte geben Sie ihr Studienfach an")
     q8 = models.IntegerField(min=0,verbose_name="Wie oft haben Sie bereits an einer ökonomischen Laborstudie teilgenommen (auch außerhalb dieses Labors)?")
     q9 = models.StringField(verbose_name="Wie viele Teilnehmerinnen oder Teilnehmer in diesem Raum haben Sie schon vor dem Experiment gekannt?")
     q10 = models.StringField(verbose_name="Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!")
@@ -520,24 +520,24 @@ class Player(BasePlayer):
                                    min=0)
 
     # exlude + control
-    control3a = models.StringField(verbose_name="Es kann sein, dass verschiedene Gruppenmitglieder unterschiedlich viele Taler aus dem Gruppenkonto erhalten.",
+    control3a = models.StringField(widget=widgets.RadioSelect(),verbose_name="Es kann sein, dass verschiedene Gruppenmitglieder unterschiedlich viele Taler aus dem Gruppenkonto erhalten.",
                                    choices=["wahr", "falsch"])
     # exlude + control
-    control3b = models.StringField(
+    control3b = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Am Ende der ersten Stufe einer jeweiligen Runde wissen Sie, wie viel jedes Gruppenmitglied ins Gruppenkonto eingezahlt hat.",
         choices=["wahr", "falsch"])
     # exlude + control
-    control3c = models.StringField(
+    control3c = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Sie spielen in jeder Runde in einer neuen Gruppe mit anderen Personen",
         choices=["wahr", "falsch"])
 
     #exclude
-    control3d = models.StringField(
+    control3d = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Sollten Sie in einer Runde vom Gruppenspiel ausgeschlossen werden, so können Sie in der nächsten Runde nicht an der Aufteilungsentscheidung teilnehmen.",
         choices=["wahr", "falsch"])
 
     #exclude
-    control4 = models.IntegerField(verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
+    control4 = models.IntegerField(widget=widgets.RadioSelectHorizontal(),verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
                                   choices=[0,1,2,3,4,5])
     #exclude
     control5 = models.IntegerField(
@@ -545,19 +545,19 @@ class Player(BasePlayer):
         min=0)
 
     #exclude
-    control6 = models.StringField(
+    control6 = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Sie erhalten zwei Stimmen. Dürfen Sie an dem Gruppenspiel teilnehmen?",
         choices=["ja", "nein"])
 
     #control
-    control7control = models.StringField(
+    control7control = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Mit wem spielen Sie das Gruppenspiel?",
         choices=["Alleine",
                  "Mit 4 Teilnehmern, die in Stufe 1 dieser Runde nicht in meiner Gruppe waren",
                  "Mit den 4 Teilnehmern, die in Stufe 1 dieser Runde in meiner Gruppe waren"])
 
     #exclude
-    control7exclude = models.StringField(
+    control7exclude = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Mit wem spielen Sie das Gruppenspiel?",
         choices=["Alleine",
                  "Mit 4 Teilnehmern, die in Stufe 1 dieser Runde nicht in meiner Gruppe waren",
@@ -565,7 +565,7 @@ class Player(BasePlayer):
                  "Mit den ausgeschlossenen Gruppenmitgliedern aus dieser Runde"])
 
     #exclude + control
-    control8 = models.StringField(
+    control8 = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Was passiert, wenn Sie einen richtigen Begriff im Gruppenspiel eingeben?",
         choices=["Nichts",
                  "Er wird allen Gruppenmitgliedern gezeigt und ich verdiene einen Taler",

@@ -7,6 +7,11 @@
 {% block content %}
 
 
+    <div id="softTO" class="otree-timer alert alert-warning">
+    <p>Die Zeit ist um! Sie müssen sich jetzt entscheiden.</p>
+    </div>
+
+
      <div id="header">
             <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
             <div id="header-right">Dies ist <b>Runde {{ round_number }}</b> </div>
@@ -22,7 +27,7 @@
 
                 Dies ist die Verteilungsentscheidung in der Runde {{round_number}}. <br>
                 Sie haben {{ Constants.endowment }} Taler. Wie viele Taler möchten Sie auf das Gruppenkonto einzahlen? <br>
-                Sie können jede ganze Zahl zwischen 0 und 10 wählen.
+                Sie können jede Zahl zwischen 0 und 10 wählen.
 
                 <br>
                 <br>
@@ -37,12 +42,15 @@
     <br>
 
     {% next_button %}
-    <div id="Timeout"></div>
+
 {% endblock %}
 
 
 {% block scripts %}
     <style type="text/css">
+
+
+        #softTO {display: none}
 
 
         #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
@@ -67,11 +75,10 @@
 
     setTimeout(
     function () {
-        document.getElementById("Timeout").style.color = "red";
-        document.getElementById("Timeout").textContent = "Die Zeit ist um! Sie müssen sich jetzt entscheiden.";
-
+        document.getElementById("softTO").style.display = "block"
     },
-    10*1000
+    //soft timeout seconds * 1000
+    90*1000
 );
 
     </script>

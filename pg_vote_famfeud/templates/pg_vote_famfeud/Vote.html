@@ -8,6 +8,12 @@
 
 
 
+      <div id="softTO" class="otree-timer alert alert-warning">
+    <p>Die Zeit ist um! Sie müssen sich jetzt entscheiden.</p>
+    </div>
+
+
+
      <div id="header">
             <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
             <div id="header-right">Dies ist <b>Runde {{round_number }}</b> </div>
@@ -22,8 +28,9 @@
 
 
 
-            Sie können jetzt abstimmen, welche Gruppenmitglieder von dem Gruppenspiel in dieser Runde ausgeschlossen werden sollen.<br>
-            Welche Mitglieder möchten Sie ausschließen? Bitte klicken Sie die entsprechenden Boxen an. Eine Stimme kostet 1 Taler.<br><br>
+            Sie können jetzt abstimmen, welches Gruppenmitglied von dem Gruppenspiel in dieser Runde ausgeschlossen werden soll.<br>
+            Welches Mitglied möchten Sie ausschließen? Sie können für ein Mitglied stimmen. Eine Stimme kostet 1 Taler.<br>
+            Bitte klicken Sie die entsprechende Box an.
 
 
 
@@ -84,7 +91,7 @@
 
     <style type="text/css">
 
-
+        #softTO {display: none}
         #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
         #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
         #header-right {display: inline-block; font-size: 12px; }
@@ -100,4 +107,21 @@
         .page-header {padding-top: 0px;padding-bottom: 0px}
         .otree-title{font-size: 20px}
     </style>
+
+
+
+
+    <script>
+
+    setTimeout(
+    function () {
+        document.getElementById("softTO").style.display = "block"
+    },
+    //soft timeout seconds * 1000
+    90*1000
+);
+
+    </script>
+
+
 {% endblock %}

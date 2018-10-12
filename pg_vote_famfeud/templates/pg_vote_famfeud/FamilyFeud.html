@@ -160,7 +160,7 @@
             // display message about the guess for all players on message board
             var node = document.createElement("Li");
             var span1 = document.createElement("span")
-            var textnode=document.createTextNode("A player found ");
+            var textnode=document.createTextNode("Jemand fand ");
             span1.appendChild(textnode)
             var span2 = document.createElement("span")
             span2.style.color = "blue"
@@ -176,7 +176,7 @@
 
             // increment group points
             group_points += 1;
-            document.getElementById('group_points').textContent = "Group points: " + group_points
+            document.getElementById('group_points').textContent = "Gruppen Punkte: " + group_points
 
             // if the player is the who guessed correctly, tell him good job, increment his points
             if (oTree.idInGroup == event.detail.payload.idInGroup){
@@ -184,7 +184,7 @@
                 message.textContent = 'That was correct. Good job!';
                 // increment player points
                 player_points += 1;
-                document.getElementById('player_points').textContent = "Your points: " + player_points
+                document.getElementById('player_points').textContent = "Ihre Punkte: " + player_points
 
             }
 
@@ -193,7 +193,7 @@
             // display message for all players on message board
             var node = document.createElement("Li");
             var span1 = document.createElement("span")
-            var textnode=document.createTextNode("A player tried ");
+            var textnode=document.createTextNode("Jemand versuchte ");
             span1.appendChild(textnode)
             var span2 = document.createElement("span")
             span2.style.color = "red"
@@ -211,7 +211,7 @@
             // if the player is the who guessed correctly, tell him try again
             if (oTree.idInGroup == event.detail.payload.idInGroup){
                 var message = document.getElementById('message')
-                message.textContent = 'You tried ' + event.detail.payload.guess + '. Try again!'
+                message.textContent = 'Dein Begriff ist ' + event.detail.payload.guess + '. Versuchs nochmal!'
             }
         }
     }

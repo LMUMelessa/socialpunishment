@@ -24,12 +24,12 @@
 
                 {% if  player.plays == False %}
                     Die Zahl des Computers ist höher als Ihre <b>{{ player.ff_valuation }}</b>.<br>
-                    Es wird nichts von Ihrem Konto abgezogen.<br>
-                    Bitte warten Sie. Sie werden zum Screenshot weitergeleitet...<br>
+                    Es wird nichts von Ihrem Konto abgezogen und Sie werden den Screenshot betrachten.<br>
+
                 {% else %}
                     Ihre <b>{{ player.ff_valuation }}</b> ist höher als die Zahl des Computers.<br>
-                    <b>{{ player.random_ff_valuation }}</b> Euro werden von Ihrem Konto abgezogen.<br>
-                    Bitte warten Sie. Sie werden zum Spiel weitergeleitet... <br>
+                    <b>{{ player.random_ff_valuation }}</b> Euro werden von Ihrem Konto abgezogen und Sie werden das Gruppenspiel spielen.<br>
+
                 {% endif %}
 
            </div>

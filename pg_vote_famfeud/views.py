@@ -7,7 +7,10 @@ import random
 
 class Instructions(Page):
 
+
     timeout_seconds = Constants.timeoutsecs
+    timer_text = "Verbleibende Zeit auf dieser Seite "
+
 
     def is_displayed(self):
         if self.player.treatment == 'FF' or self.player.round_number == Constants.num_rounds:
@@ -17,8 +20,6 @@ class Instructions(Page):
 
 
 class ControlQuestions(Page):
-    timeout_seconds = 300
-
 
     form_model = 'player'
 
@@ -70,6 +71,7 @@ class FirstWaitPage(WaitPage):
 class ResultsPG(Page):
 
     timeout_seconds = Constants.timeoutsecs
+    timer_text = "Verbleibende Zeit auf dieser Seite "
 
     def vars_for_template(self):
         data = {'round_number':self.player.round_number -1 ,}
@@ -89,8 +91,6 @@ class ResultsPG(Page):
 
 class Vote(Page):
 
-    timeout_seconds = Constants.timeoutsecs
-
     form_model = models.Player
 
     def get_form_fields(self):
@@ -105,10 +105,13 @@ class Vote(Page):
         vote_count = sum([values['vote_A'], values['vote_B'], values['vote_C'], values['vote_D'],values['vote_E']])
         if self.player.treatment == 'exclude':
             if vote_count > 0 and values['exclude_none'] == True:
-                return 'Sie können nicht für keinen und einen Spieler wählen.'
+                return 'Sie können nicht für keinen und einen Teilnehmer abstimmen.'
             # Enforce the player to choose an option
             if vote_count == 0 and values['exclude_none'] == False:
-                return 'Please choose an option.'
+                return 'Bitte stimmen Sie ab.'
+            # Enforce that the player can only vote for one other player
+            if vote_count > 1:
+                return 'Sie können nur für einen Teilnehmer abstimmen.'
         elif self.player.treatment == 'include':
             if vote_count == 0:
                 return 'Please invite at least one player.'
@@ -156,6 +159,7 @@ class VoteWaitPage(WaitPage):
 class VoteResults(Page):
 
    timeout_seconds = Constants.timeoutsecs
+   timer_text = "Verbleibende Zeit auf dieser Seite "
 
    def vars_for_template(self):
        data = {'round_number':self.player.round_number-1}
@@ -185,10 +189,14 @@ class VoteResults(Page):
 
 class ValuateFFSelect(Page):
 
-    timeout_seconds = Constants.timeoutsecs
+
 
     form_model = models.Player
     form_fields = ['ff_valuation']
+
+
+    def vars_for_template(self):
+        return {'time':Constants.questions_per_round * Constants.secs_per_question}
 
     def is_displayed(self):
         if self.player.treatment == "FF":
@@ -204,7 +212,7 @@ class ValuateFFSelect(Page):
         ## Determine from which round the payoff will be taken randomly for every player
         ## Then set the payoff to this particular round_payoff
 
-        #Select a round from the 10 playing rounds (e.g. cut off the practive round and the valuation_ff round)
+        # Select a round from the 10 playing rounds (e.g. cut off the practive round and the valuation_ff round)
         if Constants.num_rounds > 3:
 
             payround = random.choice(range(2,Constants.num_rounds,1))
@@ -245,7 +253,8 @@ class WaitAfterValuateFFSelect(WaitPage):
 
 class ValuateFFResult(Page):
 
-    timeout_seconds = 15
+    timeout_seconds = 10
+    timer_text = "Sie werden weitergeleitet in "
 
     def is_displayed(self):
         if self.player.treatment=="FF":
@@ -264,7 +273,7 @@ class BeforeFamilyFeudWaitPage(WaitPage):
 class FamilyFeud(Page):
     pass
 
-# defo need this because the results are displayed over all groups
+# Defo need this because the results are displayed over all groups
 class AfterFamilyFeudWaitPage(WaitPage):
     wait_for_all_groups = True
 
@@ -272,10 +281,15 @@ class AfterFamilyFeudWaitPage(WaitPage):
 
 class FamilyFeudResults(Page):
 
-    timeout_seconds = Constants.timeoutsecs
+    timeout_seconds = 30
+    timer_text = "Verbleibende Zeit auf dieser Seite "
 
-    #don't display in the valuation round (last round) and practice round (first round)
+
+    # Don't display in the valuation round (last round) and practice round (first round)
+    # Don't show to players which did not play the game
     def is_displayed(self):
+        if self.player.plays == False:
+            return False
         if self.player.round_number == Constants.num_rounds or self.player.round_number == 1:
             return False
         else:
@@ -308,9 +322,6 @@ class FamilyFeudResults(Page):
 
 class RateYourExperience(Page):
 
-
-    timeout_seconds = Constants.timeoutsecs
-
     def vars_for_template(self):
         return {'round_number':self.player.round_number -1}
 
@@ -331,7 +342,6 @@ class RateYourExperience(Page):
 
 class Questionnaire(Page):
 
-
     form_model = 'player'
 
     def get_form_fields(self):
@@ -339,8 +349,6 @@ class Questionnaire(Page):
             return ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8','q9','q10']
         elif self.player.treatment == 'control':
             return ['q1','q2','q5','q6','q7','q8','q9','q10']
-
-
 
     def is_displayed(self):
         return Constants.num_rounds == self.round_number
@@ -369,7 +377,7 @@ page_sequence = [
     VoteWaitPage,
     VoteResults,
     ValuateFFSelect,
-    WaitAfterValuateFFSelect,
+    #WaitAfterValuateFFSelect,  #I think, we don't need this
     ValuateFFResult,
     BeforeFamilyFeudWaitPage,
     FamilyFeud,

@@ -6,6 +6,10 @@
 
 {% block content %}
 
+     <div id="softTO" class="otree-timer alert alert-warning">
+    <p>Die Zeit ist um! Sie müssen sich jetzt entscheiden.</p>
+    </div>
+
 
       <div id="header">
             <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
@@ -20,12 +24,12 @@
         <div id="info" >
             <div id="info-text">
 
-                Vor dem abschließenden Fragebogen können Sie 90 Sekunden entweder auf einen Screenshot schauen oder das Gruppenspiel spielen.
+                Die letzte Runde des Experiments ist beendet. Vor dem abschließenden Fragebogen können Sie {{ time }} Sekunden entweder auf einen Screenshot schauen oder das Gruppenspiel spielen.
                 Bitte geben Sie unten an, wie viele Euro Sie bereit sind für die Teilnahme am Gruppenspiel zu zahlen. Sie können jede Zahl zwischen 0,0 und 6,0 mit einer Nachkommastelle angeben.<br><br>
 
-                Der Computer wird dann zufällig eine Zahl zwischen 0,0 und 6,0 ziehen. Ist diese Zufallszahlahl höher als Ihre angegebene Zahlungsbereitschaft, so können Sie das Gruppenspiel nicht spielen, sondern werden 90 Sekunden den Screenshot anschauen.<br>
-                Wenn die Zufallszahl niedriger als Ihre Zahlungsbereitschaft ist, können Sie in den 90 Sekunden das Gruppenspiel spielen  und es wird ein Eurobetrag in Höhe von der Zufallszahl von Ihrer Prämie für pünktliches Erscheinen abgezogen.<br>
-
+                Der Computer wird dann zufällig eine Zahl zwischen 0,0 und 6,0 ziehen. Ist diese Zufallszahlahl höher als Ihre angegebene Zahlungsbereitschaft, so können Sie das Gruppenspiel nicht spielen, sondern werden {{ time }} Sekunden den Screenshot anschauen.<br>
+                Wenn die Zufallszahl niedriger als Ihre Zahlungsbereitschaft ist, können Sie in den {{ time }} Sekunden das Gruppenspiel spielen und es wird ein Eurobetrag in Höhe von der Zufallszahl von Ihrer Prämie für pünktliches Erscheinen abgezogen.<br>
+                <br>
 
         {% formfield player.ff_valuation %}
 
@@ -44,7 +48,7 @@
 
     <style type="text/css">
 
-
+        #softTO {display: none}
         #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
         #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
         #header-right {display: inline-block; font-size: 12px; }
@@ -61,5 +65,19 @@
         .page-header {padding-top: 0px;padding-bottom: 0px}
         .otree-title{font-size: 20px}
     </style>
+
+
+    <script>
+
+    setTimeout(
+    function () {
+        document.getElementById("softTO").style.display = "block"
+    },
+    //soft timeout seconds * 1000
+    120*1000
+);
+
+    </script>
+
 
 {% endblock %}
