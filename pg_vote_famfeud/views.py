@@ -25,9 +25,9 @@ class ControlQuestions(Page):
 
     def get_form_fields(self):
         if self.player.treatment=='exclude':
-            return ['control1','control2','control3a','control3b', 'control3c', 'control3d', 'control4', 'control5', 'control6' ,'control7exclude','control8']
+            return ['control_tries','control1','control2','control3a','control3b', 'control3c', 'control3d', 'control4', 'control5', 'control6' ,'control7exclude','control8']
         elif self.player.treatment=='control':
-            return ['control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
+            return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
 
     def is_displayed(self):
         if self.player.treatment=="FF":
@@ -351,7 +351,11 @@ class Questionnaire(Page):
             return ['q1','q2','q5','q6','q7','q8','q9','q10']
 
     def is_displayed(self):
-        return Constants.num_rounds == self.round_number
+        if self.player.treatment == "FF":
+            return False
+        else:    
+            return Constants.num_rounds == self.round_number
+            
 
 class EndPage(Page):
     def is_displayed(self):
@@ -377,7 +381,7 @@ page_sequence = [
     VoteWaitPage,
     VoteResults,
     ValuateFFSelect,
-    #WaitAfterValuateFFSelect,  #I think, we don't need this
+    WaitAfterValuateFFSelect,  #I think, we don't need this
     ValuateFFResult,
     BeforeFamilyFeudWaitPage,
     FamilyFeud,

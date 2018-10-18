@@ -38,6 +38,7 @@ class Constants(BaseConstants):
     with open('data.csv') as f:
         questions = list(csv.reader(f))
 
+
         # Questions come as a list and will be formatted in a list of dics in creating session
         # Example format how to deal with questions in the code:
         # (The respective first answer is the desired answer, which will be displayed)
@@ -75,6 +76,9 @@ class Subsession(BaseSubsession):
         self.define_label()
 
         ### Family feud
+
+
+
         if self.round_number == 1:
 
             quizload = []
@@ -89,8 +93,6 @@ class Subsession(BaseSubsession):
 
             questions_per_round = Constants.questions_per_round
             extra_questions = Constants.extra_questions
-
-
 
             for round_num in range(1, Constants.num_rounds + 1):
                 for question_num in range(1, questions_per_round + extra_questions + 1):
@@ -108,10 +110,7 @@ class Subsession(BaseSubsession):
 
 class Group(RedwoodGroup):
 
-
-
     ### family feud ###
-
     current_quest_num = models.IntegerField()
     s1_answered = models.BooleanField()
     s2_answered = models.BooleanField()
@@ -124,8 +123,7 @@ class Group(RedwoodGroup):
     def when_all_players_ready(self):
         # initialize the current question to question number 1 when a new family feud round starts
         self.current_quest_num = 0
-        # TODO delete me..
-        print('when all players ready was called...')
+
         # send the whole quiz package (one question) to the channel
         self.sendquizload_toplayers()
         return
@@ -451,12 +449,12 @@ class Player(BasePlayer):
 
     # RateYourExperience after every FamilyFeud game
     ff_experience = models.IntegerField(verbose_name="Bitte zeigen Sie auf der Skala unten an, wie Sie Ihre Erfahrung in der letzten Phase dieser Runde bewerten würden. 1 bedeutet schlecht und 5 gut.",
-                                        widget=widgets.Slider() , min=1, max=5)
+                                        widget=widgets.Slider(show_value=False) , min=1, max=5)
 
 
     # the valuation variable before the end of the experiment
     ff_valuation = models.DecimalField(verbose_name="Bitte wählen Sie Ihre Zahlungsbereitschaft aus.",
-                                       widget=widgets.Slider(),
+                                       widget=widgets.Slider(show_value=False),
                                        min=0, max=6,
                                        decimal_places=1,
                                        max_digits = 2)
@@ -511,6 +509,12 @@ class Player(BasePlayer):
     ######################################################################################################################
     ### Control Variables
 
+
+    ##how often did the participant try to submit the control questions when some answers were still wrong
+    # if the participant was correct on the first try, than this will be 1
+    control_tries = models.IntegerField(initial=0)
+
+
     #exlude + control
     control1 = models.IntegerField(verbose_name="Wie viele Taler haben Sie auf Ihrem privaten Konto, wenn Sie 3 Taler auf das Gruppenkonto einzahlen?",
                                    min=0)
@@ -541,7 +545,7 @@ class Player(BasePlayer):
                                   choices=[0,1,2,3,4,5])
     #exclude
     control5 = models.IntegerField(
-        verbose_name="Sie schließen zwei Gruppenmitglieder aus. Wie viele Taler kostet Sie das?",
+        verbose_name="Wie viele Taler kostet es Sie, wenn Sie ein Gruppenmitglied ausschließen?",
         min=0)
 
     #exclude

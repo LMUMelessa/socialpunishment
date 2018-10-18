@@ -15,7 +15,7 @@
     <div id="main">
 
      <br>
-        Bitte beantworten Sie alle Fragen. Sie müssen alle Fragen richtig beantworten.
+        Bitte beantworten Sie alle Fragen. Sie müssen alle Fragen richtig beantworten.<br><br>
 
 
         <div id="info" >
@@ -24,29 +24,61 @@
 
                 {% if player.treatment == 'exclude' %}
 
-
+                    <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control1 %}
+                    <br>
+                    <div id="error_control2" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control2 %}
+                    <br>
+                    <div id="error_control3a" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control3a %}
+                    <br>
+                    <div id="error_control3b" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control3b %}
+                    <br>
+                    <div id="error_control3c" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control3c %}
+                    <br>
+                    <div id="error_control3d" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control3d %}
+                    <br>
+                    <div id="error_control4" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control4 %}
+                    <br>
+                    <div id="error_control5" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control5 %}
+                    <br>
+                    <div id="error_control6" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control6 %}
+                    <br>
+                    <div id="error_control7exclude" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control7exclude %}
+                    <br>
+                    <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control8 %}
 
 
                 {% elif player.treatment == 'control' %}
 
-
+                    <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control1 %}
+                    <br>
+                    <div id="error_control2" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control2 %}
+                    <br>
+                    <div id="error_control3a" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control3a %}
+                    <br>
+                    <div id="error_control3b" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control3b %}
+                    <br>
+                    <div id="error_control3c" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control3c %}
+                    <br>
+                    <div id="error_control7control" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control7control %}
+                    <br>
+                    <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control8 %}
 
 
@@ -58,11 +90,24 @@
         </div>
     </div>
     <br>
+    <div id="tellhim" style="color: red; display: none">Bitte überprüfen Sie Ihre Antworten</div>
     Auf der nächsten Seite startet die Übung des Gruppenspiels.
     <br>
     <br>
 
-    {% next_button %}
+
+    <!-- the button that the player sees, does not submit page-->
+    <button id='checkbutton' type='button' style="color: white">Next</button>
+
+    <!-- hidden next button, is clicked when the player has everything correctly -->
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button" id="next" style="visibility: hidden" ></button>
+
+    <!-- count players tries to submit the form, when he has not all answers correctly -->
+   <input type="hidden" name="control_tries" id="hidden_counter"/>
+
+
+
+
 {% endblock %}
 
 
@@ -86,6 +131,462 @@
         .otree-body{padding-top: 0px}
         .page-header {padding-top: 0px;padding-bottom: 0px}
         .otree-title{font-size: 20px}
+
+        #checkbutton{    color: #fff;
+                         background-color: #007bff;
+                         border-color: #007bff;
+        display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;  }
     </style>
+
+
+    <script>
+
+
+    var checkbutton = document.getElementById('checkbutton');
+    checkbutton.addEventListener('click', evaluate_answers);
+    var click_counter = 0;
+
+
+    //this is super ugly but I have to do it individually because in the loop always something broke
+    function evaluate_answers() {
+
+
+
+        var treatment = "{{ player.treatment }}";
+        var allCorrect = true;
+
+        var wrong_text = "Bei der folgenden Frage ist die Antwort nicht korrekt.";
+        var wrong_bg = "LightCoral";
+        var wrong_bc = "red";
+        var wrong_color = "white";
+
+        var corr_text = "Korrekt.";
+        var corr_bg = "lightgreen";
+        var corr_bc = "green";
+        var corr_color = "black"
+
+               //control1
+               var controlme = document.getElementById("id_control1");
+               var err_message = document.getElementById("error_control1");
+
+               if (controlme.value != 7){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+
+
+                 //control2
+                controlme = document.getElementById("id_control2");
+                err_message = document.getElementById("error_control2");
+
+               if (controlme.value != 8){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+
+
+                 //control3a
+                controlme = document.getElementById("id_control3a_1");
+                err_message = document.getElementById("error_control3a");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+
+
+                //control3b
+                controlme = document.getElementById("id_control3b_0");
+                err_message = document.getElementById("error_control3b");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+
+                 //control3c
+                controlme = document.getElementById("id_control3c_0");
+                err_message = document.getElementById("error_control3c");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+
+                 //control3d
+
+        if (treatment=="exclude"){
+                controlme = document.getElementById("id_control3d_1");
+                err_message = document.getElementById("error_control3d");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
+
+
+                 // control4
+        if (treatment=="exclude"){
+                controlme = document.getElementById("id_control4_1");
+                err_message = document.getElementById("error_control4");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
+
+
+                // control5
+        if (treatment=="exclude"){
+                controlme = document.getElementById("id_control5");
+                err_message = document.getElementById("error_control5");
+
+               if (controlme.value != 1){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
+
+        if (treatment=="exclude"){
+                // control6
+                controlme = document.getElementById("id_control6_0");
+                err_message = document.getElementById("error_control6");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
+
+
+               if (treatment=="exclude"){
+               // control7exclude
+                controlme = document.getElementById("id_control7exclude_2");
+                err_message = document.getElementById("error_control7exclude");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+               }
+
+               if (treatment=="control"){
+               // control7control
+                controlme = document.getElementById("id_control7control_2");
+                err_message = document.getElementById("error_control7control");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+               }
+
+               //control8
+                controlme = document.getElementById("id_control8_2");
+                err_message = document.getElementById("error_control8");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+
+
+
+        if (allCorrect == true) {
+
+            click_counter += 1;
+            document.getElementById('hidden_counter').value = click_counter;
+            document.getElementById('next').click();
+
+        }else{
+            document.getElementById("tellhim").style.display = "Block";
+            click_counter += 1;
+            }
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // I wante to make this in efficient loops but the evaluation differs between the different button types
+
+    function evaluate_answers2(){
+
+
+        var treatment = "{{ player.treatment }}";
+        var allCorrect = true;
+
+
+        if (treatment == "exclude"){
+
+            var questions = [
+                ["_control1",7],
+                ["_control2",8],
+                ["_control3a","falsch"],
+                ["_control3b", "wahr"],
+                ["_control3c","wahr"],
+                ["_control3d","falsch"],
+                ["_control4_1",1],
+                ["_control5",1],
+                ["_control6","ja"],
+                ["_control7exclude","2"],
+                ["_control8","2"]];
+
+
+            for (var i = 0; i < questions.length; i++) {
+
+
+               // get the "id_controlX" input field
+               var controlme = document.getElementById("id" + questions[i][0]);
+               alert("id" + questions[i][0]);
+               alert(controlme.value)
+
+               //get the "error_controlX message field
+                var err_message = document.getElementById("error" + questions[i][0]);
+
+
+
+
+               if (typeof(controlme.value) == "undefined"){
+
+                   err_message.textContent = "Bei dieser Eingabe stimmt etwas nicht.";
+                   err_message.style.display = "Block";
+
+                // there was an input of the user
+               }else {
+
+                   // input was false
+                   if (controlme.value.toString() != questions[i][1].toString()) {
+
+                       err_message.textContent = "Bei dieser Eingabe stimmt etwas nicht.";
+                       err_message.style.display = "Block";
+
+                   } else {
+
+                       err_message.textContent = "Korrekt.";
+                       err_message.style.display = "Block";
+                       err_message.style.backgroundColor = "lightgreen";
+                       err_message.style.borderColor = "green";
+                   }
+               }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+{#        var control1 = document.getElementById('id_control1').value;#}
+{#        if (control1 != 7){#}
+{#            document.getElementById("error_control1").textContent = "Bei dieser Eingabe stimmt etwas nicht.";#}
+{#            document.getElementById("error_control1").style.display = "block";#}
+{#        }#}
+
+
+
+
+{#        var control1 = document.getElementById('id_control1').value;#}
+{#        if (control1 != 7){#}
+{#            document.getElementById("error_control1").textContent = "Bei dieser Eingabe stimmt etwas nicht.";#}
+{#            document.getElementById("error_control1").style.display = "block";#}
+{#        }#}
+{##}
+{##}
+{#        alert(control1)#}
+{#        alert(treatment)#}
+
+
+
+    </script>
 
 {% endblock %}
