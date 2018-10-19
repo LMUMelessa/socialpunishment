@@ -381,7 +381,7 @@ page_sequence = [
     VoteWaitPage,
     VoteResults,
     ValuateFFSelect,
-    WaitAfterValuateFFSelect,  #I think, we don't need this
+    #WaitAfterValuateFFSelect,  #I think, we don't need this
     ValuateFFResult,
     BeforeFamilyFeudWaitPage,
     FamilyFeud,
