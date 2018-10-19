@@ -74,7 +74,7 @@ class ResultsPG(Page):
     timer_text = "Verbleibende Zeit auf dieser Seite "
 
     def vars_for_template(self):
-        data = {'round_number':self.player.round_number -1 ,}
+        data = {'round_number':self.player.round_number - 1 , 'left_on_account': Constants.endowment - self.player.contribution}
         for player in self.group.get_players():
             # Remove whitespace from label so that it can be displayed in the template
             data[(player.playerlabel).replace(' ','')] = player.contribution
@@ -372,8 +372,8 @@ class EndPage(Page):
 
 
 page_sequence = [
-    Instructions,
-    ControlQuestions,#After this page there will be the FamilyFeud page and this has a group waitpage before
+    #Instructions,
+    #ControlQuestions,#After this page there will be the FamilyFeud page and this has a group waitpage before
     Contribution,
     FirstWaitPage,
     ResultsPG,
