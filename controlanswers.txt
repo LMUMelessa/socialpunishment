@@ -1,3 +1,5 @@
+   Answers
+
    control1 = models.IntegerField(verbose_name="Wie viele Taler haben Sie auf Ihrem privaten Konto, wenn Sie 3 Taler auf das Gruppenkonto einzahlen?",
                                    min=0)
 
