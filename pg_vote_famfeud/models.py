@@ -35,7 +35,7 @@ class Constants(BaseConstants):
     wait_between_question = 4 #4
 
 
-    with codecs.open('data.csv', 'r', 'utf-8') as f:
+    with codecs.open('data.csv', 'r', 'latin-1') as f:
         questions = list(csv.reader(f))
 
 
