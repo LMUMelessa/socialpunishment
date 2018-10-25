@@ -17,7 +17,7 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 12 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
@@ -461,12 +461,15 @@ class Player(BasePlayer):
 
     random_ff_valuation = models.FloatField()
 
-    # In exlude treatment and feedback treatment
+    # In exclude treatment and feedback treatment
     exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="Ich möchte kein Gruppenmitglied ausschließen.")
 
     def update_round_payoff(self):
         self.round_payoff = self.round_payoff - (self.ivoted * Constants.cost_for_vote)
 
+
+    ## the round number that will be payed out for the player
+    payround = models.IntegerField()
 
 
     ######################################################################################################################

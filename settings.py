@@ -128,7 +128,7 @@ ROOMS = [
 
 SESSION_CONFIG_DEFAULTS = {
     'real_world_currency_per_point': 2.00,
-    'participation_fee': 0.00,
+    'participation_fee': 6.00,
     'doc': "",
     'mturk_hit_settings': mturk_hit_settings,
 }

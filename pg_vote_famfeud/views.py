@@ -189,8 +189,6 @@ class VoteResults(Page):
 
 class ValuateFFSelect(Page):
 
-
-
     form_model = models.Player
     form_fields = ['ff_valuation']
 
@@ -212,27 +210,24 @@ class ValuateFFSelect(Page):
         ## Determine from which round the payoff will be taken randomly for every player
         ## Then set the payoff to this particular round_payoff
 
-        # Select a round from the 10 playing rounds (e.g. cut off the practive round and the valuation_ff round)
+        # Select a round from the 10 playing rounds (e.g. cut off the practice round and the valuation_ff round)
         if Constants.num_rounds > 3:
-
-            payround = random.choice(range(2,Constants.num_rounds,1))
-            self.player.payoff = self.player.in_round(payround).round_payoff
+            self.player.payround = random.choice(range(2,Constants.num_rounds,1))
+            self.player.payoff = self.player.in_round(self.player.payround).round_payoff
         else:
-            payround = 2
-            self.player.payoff = self.player.in_round(payround).round_payoff
+            self.player.payround = 2
+            self.player.payoff = self.player.in_round(self.player.payround).round_payoff
 
 
         ## FF valuation here
         ## determine if the player is allowed to play FF one last time or if he has to watch the screen
-        ## depending on his
+        ## depending on his ff_valuation
         self.player.random_ff_valuation = random.choice(range(600))/100
-
-
 
         if self.player.random_ff_valuation > float(self.player.ff_valuation):
             self.player.plays = False
         else:
-            # Player plays again, subtract the computer number his overall payoff
+            # Player plays again, subtract the computer number from his overall payoff
             # First recalculate to points
             self.player.payoff = self.player.payoff - (1/ float(self.session.config['real_world_currency_per_point'])* float(self.player.random_ff_valuation))
 
@@ -355,7 +350,42 @@ class Questionnaire(Page):
             return False
         else:    
             return Constants.num_rounds == self.round_number
-            
+
+
+
+class ShowPayoffDetails(Page):
+
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+
+    def vars_for_template(self):
+
+        random_ff_valuation = self.player.random_ff_valuation
+        ff_valuation = float(self.player.ff_valuation)
+        taler = self.player.in_round(self.player.payround).round_payoff
+        part_fee = self.session.config['participation_fee']
+
+        # if the player did play the bonus round of FF then the random_ff_valuation will be subtracted
+        # here we show him this in the 2nd last page of the experiment
+        if random_ff_valuation < ff_valuation:
+
+            return{'payoff_in_payround_taler':taler ,
+                   'euro': taler * self.session.config['real_world_currency_per_point'],
+                   'part_fee':part_fee,
+                   'diff': self.player.random_ff_valuation,
+                   'all': part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point']}
+        else:
+
+            return {'payoff_in_payround_taler': taler,
+                    'euro': taler * self.session.config['real_world_currency_per_point'],
+                    'part_fee': part_fee,
+                    'diff': 0,
+                    'all':part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point']}
+
+
+
+
+
 
 class EndPage(Page):
     def is_displayed(self):
@@ -372,8 +402,8 @@ class EndPage(Page):
 
 
 page_sequence = [
-    Instructions,
-    ControlQuestions,#After this page there will be the FamilyFeud page and this has a group waitpage before
+    #Instructions,
+    #ControlQuestions,#After this page there will be the FamilyFeud page and this has a group waitpage before
     Contribution,
     FirstWaitPage,
     ResultsPG,
@@ -384,10 +414,11 @@ page_sequence = [
     #WaitAfterValuateFFSelect,  #I think, we don't need this
     ValuateFFResult,
     BeforeFamilyFeudWaitPage,
-    FamilyFeud,
+    #FamilyFeud,
     AfterFamilyFeudWaitPage,
     FamilyFeudResults,
-    RateYourExperience,
-    Questionnaire,
+    #RateYourExperience,
+    #Questionnaire,
+    ShowPayoffDetails,
     EndPage,
 ]
