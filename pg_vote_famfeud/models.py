@@ -5,7 +5,7 @@ from otree.api import (
 from otree_redwood.models import Group as RedwoodGroup
 import csv,random
 import difflib as dif
-from decimal import Decimal
+import codecs
 
 author = 'Your name here'
 
@@ -35,7 +35,7 @@ class Constants(BaseConstants):
     wait_between_question = 4 #4
 
 
-    with open('data.csv', errors="ignore") as f:
+    with codecs.open('data.csv', 'r', 'utf-8') as f:
         questions = list(csv.reader(f))
 
 
