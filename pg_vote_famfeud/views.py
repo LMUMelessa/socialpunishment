@@ -8,8 +8,6 @@ import random
 class Instructions(Page):
 
 
-    timeout_seconds = Constants.timeoutsecs
-    timer_text = "Verbleibende Zeit auf dieser Seite "
 
 
     def is_displayed(self):
