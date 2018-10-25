@@ -16,7 +16,7 @@
 
         <br>
         Der Computer hat die Runde gezogen, welche für Sie ausbezahlt wird. <br>
-        Es wird Runde {{ player.payround }} ausbezahlt. <br>
+        Es wird Runde {{ payround }} ausbezahlt. <br>
         In dieser Runde war ihr Verdienst {{ payoff_in_payround_taler }} Taler.<br>
         Dies entspricht €{{ euro }}<br>
         Ihre Prämie für pünktliches erscheinen ist {{ part_fee }}.<br>
@@ -24,7 +24,7 @@
         {% if diff == 0 %}
             Insgesamt erhalten Sie {{all}} für die Teilnahme am Experiment.
         {% else %}
-            Davon werden {{diff}} abgezogen, da Sie die Bonusrunde des Gruppenspiels gespielt haben.<br>
+            Davon werden €{{diff}} abgezogen, da Sie die Bonusrunde des Gruppenspiels gespielt haben.<br>
             Insgesamt erhalten Sie {{all}} für die Teilnahme am Experiment.
         {% endif %}
 

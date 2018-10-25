@@ -13,10 +13,19 @@ class Instructions(Page):
 
 
     def is_displayed(self):
-        if self.player.treatment == 'FF' or self.player.round_number == Constants.num_rounds:
+        if self.player.treatment == 'FF':
             return False
         else:
             return True
+
+    def vars_for_template(self):
+        if self.player.round_number == Constants.num_rounds:
+            if self.player.plays:
+                return {'last_round':'plays'}
+            else:
+                return {'last_round': 'doesnt'}
+        else:
+            return {'last_round':'false'}
 
 
 class ControlQuestions(Page):
@@ -192,45 +201,27 @@ class ValuateFFSelect(Page):
     form_model = models.Player
     form_fields = ['ff_valuation']
 
-
     def vars_for_template(self):
         return {'time':Constants.questions_per_round * Constants.secs_per_question}
 
     def is_displayed(self):
         if self.player.treatment == "FF":
             return False
-        if self.round_number == Constants.num_rounds:
+        if self.round_number == 1:
             return True
         else:
             return False
 
     def before_next_page(self):
-
-        ## I also do the complete payoff calculation here
-        ## Determine from which round the payoff will be taken randomly for every player
-        ## Then set the payoff to this particular round_payoff
-
-        # Select a round from the 10 playing rounds (e.g. cut off the practice round and the valuation_ff round)
-        if Constants.num_rounds > 3:
-            self.player.payround = random.choice(range(2,Constants.num_rounds,1))
-            self.player.payoff = self.player.in_round(self.player.payround).round_payoff
-        else:
-            self.player.payround = 2
-            self.player.payoff = self.player.in_round(self.player.payround).round_payoff
-
-
         ## FF valuation here
         ## determine if the player is allowed to play FF one last time or if he has to watch the screen
         ## depending on his ff_valuation
         self.player.random_ff_valuation = random.choice(range(600))/100
 
         if self.player.random_ff_valuation > float(self.player.ff_valuation):
-            self.player.plays = False
-        else:
-            # Player plays again, subtract the computer number from his overall payoff
-            # First recalculate to points
-            self.player.payoff = self.player.payoff - (1/ float(self.session.config['real_world_currency_per_point'])* float(self.player.random_ff_valuation))
-
+            self.player.plays_bonusFF = False
+            # Actually this would be enough
+            self.player.in_round(Constants.num_rounds).plays = False
 
 
 class WaitAfterValuateFFSelect(WaitPage):
@@ -238,7 +229,7 @@ class WaitAfterValuateFFSelect(WaitPage):
     def is_displayed(self):
         if self.player.treatment=="FF":
             return False
-        if self.round_number == Constants.num_rounds:
+        if self.round_number == 1:
             return True
         else:
             return False
@@ -254,7 +245,7 @@ class ValuateFFResult(Page):
     def is_displayed(self):
         if self.player.treatment=="FF":
             return False
-        if self.round_number == Constants.num_rounds:
+        if self.round_number == 1:
             return True
         else:
             return False
@@ -279,7 +270,6 @@ class FamilyFeudResults(Page):
     timeout_seconds = 30
     timer_text = "Verbleibende Zeit auf dieser Seite "
 
-
     # Don't display in the valuation round (last round) and practice round (first round)
     # Don't show to players which did not play the game
     def is_displayed(self):
@@ -289,8 +279,6 @@ class FamilyFeudResults(Page):
             return False
         else:
             return True
-
-
 
     def vars_for_template(self):
 
@@ -323,22 +311,18 @@ class RateYourExperience(Page):
     def is_displayed(self):
         if self.player.treatment=="FF":
             return False
-
         #don't show in the valuation round and in the practice round
         if self.player.round_number == Constants.num_rounds or self.player.round_number == 1:
             return False
         else:
             return True
-
     form_model = models.Player
     form_fields = ['ff_experience']
 
 
 
 class Questionnaire(Page):
-
     form_model = 'player'
-
     def get_form_fields(self):
         if self.player.treatment == 'exclude':
             return ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8','q9','q10']
@@ -352,39 +336,61 @@ class Questionnaire(Page):
             return Constants.num_rounds == self.round_number
 
 
+# Do payoff calculation here
+class AfterQuestionnaireWaitPage(WaitPage):
 
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+
+    def after_all_players_arrive(self):
+
+        for player in self.group.get_players():
+            # Select a round from the 10 playing rounds (e.g. cut off the practice round and the bonusFF round)
+            if Constants.num_rounds > 3:
+                ## Note: Payround is the oTree round not the experiment round!
+                player.payround = random.choice(range(2, Constants.num_rounds, 1))
+                player.payoff = player.in_round(player.payround).round_payoff
+            else:
+                player.payround = 2
+                player.payoff = player.in_round(player.payround).round_payoff
+
+            # Note the in_round(1) because this variable is set in round 1 only
+            if player.in_round(1).plays_bonusFF:
+                player.payoff = player.payoff - (1 /float(self.session.config['real_world_currency_per_point']) * float(player.in_round(1).random_ff_valuation))
+
+
+
+# Use to display the payoff informations to the player
 class ShowPayoffDetails(Page):
+
+    timeout_seconds = Constants.timeoutsecs
+    timer_text = "Verbleibende Zeit auf dieser Seite "
 
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
 
     def vars_for_template(self):
-
-        random_ff_valuation = self.player.random_ff_valuation
-        ff_valuation = float(self.player.ff_valuation)
+        random_ff_valuation = self.player.in_round(1).random_ff_valuation
+        ff_valuation = float(self.player.in_round(1).ff_valuation)
         taler = self.player.in_round(self.player.payround).round_payoff
         part_fee = self.session.config['participation_fee']
 
         # if the player did play the bonus round of FF then the random_ff_valuation will be subtracted
         # here we show him this in the 2nd last page of the experiment
         if random_ff_valuation < ff_valuation:
-
             return{'payoff_in_payround_taler':taler ,
-                   'euro': taler * self.session.config['real_world_currency_per_point'],
-                   'part_fee':part_fee,
-                   'diff': self.player.random_ff_valuation,
-                   'all': part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point']}
+                    'euro': taler * self.session.config['real_world_currency_per_point'],
+                    'part_fee':part_fee,
+                    'diff': self.player.in_round(1).random_ff_valuation,
+                    'all': part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],
+                   'payround': self.player.payround-1}
         else:
-
             return {'payoff_in_payround_taler': taler,
                     'euro': taler * self.session.config['real_world_currency_per_point'],
                     'part_fee': part_fee,
                     'diff': 0,
-                    'all':part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point']}
-
-
-
-
+                    'all':part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],
+                    'payround':self.player.payround-1}
 
 
 class EndPage(Page):
@@ -395,30 +401,25 @@ class EndPage(Page):
             return False
 
 
-
-
-
-
-
-
 page_sequence = [
-    #Instructions,
-    #ControlQuestions,#After this page there will be the FamilyFeud page and this has a group waitpage before
+    Instructions,
+    ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
     Contribution,
     FirstWaitPage,
     ResultsPG,
     Vote,
     VoteWaitPage,
     VoteResults,
-    ValuateFFSelect,
-    #WaitAfterValuateFFSelect,  #I think, we don't need this
-    ValuateFFResult,
     BeforeFamilyFeudWaitPage,
-    #FamilyFeud,
+    FamilyFeud,
+    ValuateFFSelect,
+    # WaitAfterValuateFFSelect,  #I think, we don't need this
+    ValuateFFResult,
     AfterFamilyFeudWaitPage,
     FamilyFeudResults,
-    #RateYourExperience,
-    #Questionnaire,
+    RateYourExperience,
+    Questionnaire,
+    AfterQuestionnaireWaitPage, #Payoff calculation is done here
     ShowPayoffDetails,
     EndPage,
 ]

@@ -38,7 +38,7 @@
 
 
     <br><br>
-    {% next_button %}
+    <button id="next" class="otree-btn-next btn btn-primary" disabled="true">Next</button>
 {% endblock %}
 
 
@@ -126,6 +126,7 @@
      // show the input of the slider
      function showinput() {
          document.getElementById("Input").textContent = "Ihr Wert: " +  (document.getElementById("id_ff_experience").value).toString();
+         document.getElementById("next").disabled = false;
      }
     document.getElementById("id_ff_experience").addEventListener("input", showinput);
 

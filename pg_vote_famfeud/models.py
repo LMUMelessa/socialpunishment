@@ -17,7 +17,7 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 4 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
@@ -427,6 +427,11 @@ class Player(BasePlayer):
         default = True
     )
 
+    # does the player plays the bonus FF round after all rounds of the experiment
+    # depends on the valuationFF results
+    plays_bonusFF = models.BooleanField(initial=True)
+
+
     round_payoff = models.IntegerField(initial=0)
 
     # Variables where player can vote to exclude/invite one player from the social arena game
@@ -448,12 +453,12 @@ class Player(BasePlayer):
 
 
     # RateYourExperience after every FamilyFeud game
-    ff_experience = models.IntegerField(verbose_name="Bitte zeigen Sie auf der Skala unten an, wie Sie Ihre Erfahrung in der letzten Phase dieser Runde bewerten würden. 1 bedeutet schlecht und 5 gut.",
+    ff_experience = models.IntegerField(verbose_name="Bitte klicken Sie auf die Skala, um Ihre Erfahrung während des letzten Gruppenspiels zu bewerten. 1 bedeutet schlecht und 5 gut.",
                                         widget=widgets.Slider(show_value=False) , min=1, max=5)
 
 
     # the valuation variable before the end of the experiment
-    ff_valuation = models.DecimalField(verbose_name="Bitte wählen Sie Ihre Zahlungsbereitschaft aus.",
+    ff_valuation = models.DecimalField(verbose_name="Bitte klicken Sie auf die Skala, um ihre Zahlungsbereitschaft auszuwählen.",
                                        widget=widgets.Slider(show_value=False),
                                        min=0, max=6,
                                        decimal_places=1,
@@ -470,6 +475,9 @@ class Player(BasePlayer):
 
     ## the round number that will be payed out for the player
     payround = models.IntegerField()
+
+
+
 
 
     ######################################################################################################################
