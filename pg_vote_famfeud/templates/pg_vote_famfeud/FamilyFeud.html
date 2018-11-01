@@ -123,7 +123,7 @@
          var guessingChan = document.getElementById("guessingChannel");
 
         if (guessed.length < 1) {
-            message.textContent = 'Ihr Wort';
+            message.textContent = 'Bitte geben Sie etwas ein.';
 
         } else {
             guessingChan.send({guess: guessed, id: oTree.idInGroup})
@@ -181,7 +181,7 @@
             // if the player is the who guessed correctly, tell him good job, increment his points
             if (oTree.idInGroup == event.detail.payload.idInGroup){
                 var message = document.getElementById('message');
-                message.textContent = 'That was correct. Good job!';
+                message.textContent = 'Das war richtig!';
                 // increment player points
                 player_points += 1;
                 document.getElementById('player_points').textContent = "Ihre Punkte: " + player_points
