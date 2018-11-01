@@ -141,7 +141,7 @@ SESSION_CONFIGS = [
         'display_name': 'Control Treatment No Vote (T0)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'city': 'heidelberg',
+        'city': 'Munich',
         'treatment': 'control'  # #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
     },
 
@@ -150,7 +150,7 @@ SESSION_CONFIGS = [
 #         'display_name': 'Feedback Treatment (T1)',
 #         'num_demo_participants': 5,
 #         'app_sequence': ['pg_vote_famfeud'],
-#         'city': 'heidelberg',
+#         'city': 'Munich',
 #         'treatment': 'feedback' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
 #     },
 
@@ -161,7 +161,7 @@ SESSION_CONFIGS = [
         'display_name': 'Exclude Treatment (T2)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'city': 'heidelberg',
+        'city': 'Munich',
         'treatment': 'exclude' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
     },
 
@@ -170,7 +170,7 @@ SESSION_CONFIGS = [
 #         'display_name': 'Include Treatment (T3)',
 #         'num_demo_participants': 5,
 #         'app_sequence': ['pg_vote_famfeud'],
-#         'city': 'heidelberg',
+#         'city': 'Munich',
 #         'treatment': 'include' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
 #     },
 
@@ -179,7 +179,7 @@ SESSION_CONFIGS = [
         'display_name': 'Family Feud only',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'city': 'heidelberg',
+        'city': 'Munich',
         'treatment': 'FF' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include' #
     },
 

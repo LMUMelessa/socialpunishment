@@ -7,9 +7,6 @@ import random
 
 class Instructions(Page):
 
-
-
-
     def is_displayed(self):
         if self.player.treatment == 'FF':
             return False
@@ -64,6 +61,7 @@ class Contribution(Page):
 
 class FirstWaitPage(WaitPage):
     def after_all_players_arrive(self):
+        # Function specificly for updating payoff after the public good game
         self.group.set_round_payoffs()
 
     def is_displayed(self):
@@ -121,12 +119,11 @@ class Vote(Page):
                 return 'Sie können nur für einen Teilnehmer abstimmen.'
         elif self.player.treatment == 'include':
             if vote_count == 0:
-                return 'Please invite at least one player.'
+                return 'Bitte treffen Sie eine Wahl.'
 
 
     def vars_for_template(self):
         data = {'round_number': self.player.round_number-1}
-        # TODO: Note Vars for template cannot be tested, therefore this has to be safe and doublechecked
         for player in self.group.get_players():
             # Remove whitespace from label so that it can be displayed in the template
             data[(player.playerlabel).replace(' ', '')] = player.contribution
@@ -150,9 +147,11 @@ class VoteWaitPage(WaitPage):
         # Assign for each player if he plays the social game
         self.group.set_social_game()
         # Update the payoffs as voting is costly in feedback and exclusion treatment
+        # Note: in Constants there is a parameter cost_for_vote ... you can set this to 0 then this function here has no effect when running,
+        # so you don't have to change anything else
         if self.group.get_players()[0].treatment == "feedback" or self.group.get_players()[0].treatment == "exclude":
             for player in self.group.get_players():
-                player.update_round_payoff()
+                player.update_round_payoff() # Specificly for updating round payoffs in regard to the costly votes
 
     def is_displayed(self):
         if self.player.treatment == 'FF' or self.player.treatment == 'control':
@@ -194,6 +193,10 @@ class VoteResults(Page):
            self.player.plays = True
 
 
+# Willingness to pay for bonus Family Feud Round
+# Determines if the player plays the Bonus Family Feud round
+# player.plays_in round(11 /last round is set) this is after Experiment round 10 (or last experiment round)!
+# Also, player.plays_bonusFF is set, but this is only done for convenience player.in_round(11).plays would be sufficient
 class ValuateFFSelect(Page):
 
     form_model = models.Player
@@ -352,13 +355,17 @@ class AfterQuestionnaireWaitPage(WaitPage):
                 player.payround = 2
                 player.payoff = player.in_round(player.payround).round_payoff
 
-            # Note the in_round(1) because this variable is set in round 1 only
+            # If player plays the bonus FF round then substract the computer number from the players payoff
+            # Note: the computer number is in Euro, but oTree expects points because it later converts Points to Euro in the Admin-Mak
+            # Therefore, the computer number has to be converted to Points by 1/c/p
+            # Note: the in_round(1) because this variable is set in round 1 only
             if player.in_round(1).plays_bonusFF:
                 player.payoff = player.payoff - (1 /float(self.session.config['real_world_currency_per_point']) * float(player.in_round(1).random_ff_valuation))
 
 
 
 # Use to display the payoff informations to the player
+# Payoff calculation has been done (in After Questionnaire) if players arrive here
 class ShowPayoffDetails(Page):
 
     timeout_seconds = Constants.timeoutsecs
@@ -373,14 +380,15 @@ class ShowPayoffDetails(Page):
         taler = self.player.in_round(self.player.payround).round_payoff
         part_fee = self.session.config['participation_fee']
 
-        # if the player did play the bonus round of FF then the random_ff_valuation will be subtracted
-        # here we show him this in the 2nd last page of the experiment
+        # If the player did play the bonus round of FF then the random_ff_valuation will be subtracted
+        # Here we show him this in the 2nd last page of the experiment
+        # You cannot just use the payoff because we want to show the player the different elements that determine the overall payoff
         if random_ff_valuation < ff_valuation:
             return{'payoff_in_payround_taler':taler ,
                     'euro': taler * self.session.config['real_world_currency_per_point'],
                     'part_fee':part_fee,
-                    'diff': self.player.in_round(1).random_ff_valuation,
-                    'all': part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],
+                    'diff': self.player.in_round(1).random_ff_valuation, # Will be subtracted if he played bouns FF
+                    'all': part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'], # Note you have to calc this because self.payoff does not regard the participation fee
                    'payround': self.player.payround-1}
         else:
             return {'payoff_in_payround_taler': taler,
@@ -397,6 +405,10 @@ class EndPage(Page):
             return True
         else:
             return False
+
+    def vars_for_template(self):
+        return {'number':self.player.participant.label}
+
 
 
 page_sequence = [

@@ -7,10 +7,10 @@ import csv,random
 import difflib as dif
 import codecs
 
-author = 'Your name here'
+author = 'Natcoop'
 
 doc = """
-Your app description
+Public Good + Family Feud
 """
 
 
@@ -29,8 +29,8 @@ class Constants(BaseConstants):
     ### The overall time for one FF round is questions_per_round * secs_per_questions
     ### The players will receive new questions until: overall time is up  OR all questions_per_round + extra_questions are answered
 
-    questions_per_round = 2 #2
-    extra_questions = 1 #1
+    questions_per_round = 2 #2 in the real experiment
+    extra_questions = 1 #1 in the real experiment
     secs_per_question = 30 #30
     wait_between_question = 4 #4
 
@@ -70,6 +70,9 @@ class Subsession(BaseSubsession):
         for player in self.get_players():
             player.treatment = self.session.config['treatment']
             player.city = self.session.config['city']
+            player.participant.label = self.get_players().index(player)
+
+
 
         self.group_randomly()
         # Assign the labels
@@ -146,7 +149,6 @@ class Group(RedwoodGroup):
         ## update the question sequence, to have the question in the database
         # string sentence of the question
         question = self.session.vars['ql_' + str(self.round_number) + str(self.current_quest_num)]['question']
-        # TODO: use a better string operation
         #self.question_sequence = self.question_sequence + str(self.current_quest_num) + ':' + question + ';'
         #self.save()
 
@@ -176,10 +178,6 @@ class Group(RedwoodGroup):
         # sends processed information back to the players in javascript
 
     def _on_guessingChannel_event(self, event=None):
-        # TODO Delete me
-        #print('I went into "_on_guessing_Channel_events_" function...')
-        #print('I received the guess of the player, the guess is: %s' % (event.value['guess']))
-
         # the guess of the player
         guess = event.value['guess'].lower()
         # id of the guessing player
@@ -192,7 +190,6 @@ class Group(RedwoodGroup):
         question = self.session.vars['ql_' + str(self.round_number) + str(self.current_quest_num)]
 
         # update the guess sequence of the player
-        # TODO: Use a better string operation
         #player.guess_sequence = player.guess_sequence + str(self.current_quest_num) + ':' + str(guess) + ';'
         #player.save()
 
@@ -223,7 +220,6 @@ class Group(RedwoodGroup):
                     self.save()
 
                     # update, so that the question cannot be answered again
-                    # TODO make this assignment nice, please!
                     if questionindex == 0:
                         self.s1_answered = True
                         self.save()
@@ -240,8 +236,6 @@ class Group(RedwoodGroup):
                         self.s5_answered = True
                         self.save()
 
-                    # Todo Delete me
-                    #print([self.s1_answered, self.s2_answered, self.s3_answered, self.s4_answered, self.s5_answered])
                     # determine, if now all possible answers have been found
                     finished = all(
                         [self.s1_answered, self.s2_answered, self.s3_answered, self.s4_answered, self.s5_answered])
@@ -271,12 +265,10 @@ class Group(RedwoodGroup):
                                             'idInGroup': player_id_in_group,
                                             'correct': False})
 
-            # TODO can you just leave out the period length function?
-
+    # TODO can you just leave out the period length function?
     def period_length(self):
         # take overall time * 10 so that oTree redwood, cannot abort the game, page submission is done in javascript
         # the reason is that, with multible rounds the overall time taken for the family feud game might not been exactly the same
-        # TODO why not just putting an infinitely large number in here?
         return (
                (Constants.questions_per_round) * ((Constants.secs_per_question + Constants.wait_between_question))) * 10
 
@@ -395,7 +387,7 @@ class Player(BasePlayer):
 
     ### Public Good Variables
 
-    germanplayerlabel = models.StringField()
+    germanplayerlabel = models.StringField(doc="See player label.")
 
     playerlabel = models.CharField(
         doc='The player name. Player A - Player E',
@@ -403,7 +395,7 @@ class Player(BasePlayer):
 
     treatment = models.CharField(
         doc='Defines the treatment of the session. The treatment is the same for all players in one session.'
-            'In "voting" player can exclude players. In "novoting" no voting stage exists',
+            'In "exclude", player can vote exclude players. In "control", no voting exists',
         choices=['voting', 'novoting'])
 
     city = models.CharField(
@@ -411,7 +403,7 @@ class Player(BasePlayer):
         choices=['münchen', 'heidelberg'])
 
     contribution = models.IntegerField(
-        doc='The players contribution in the public good game',
+        doc='The players contribution in the public good game in Taler',
         verbose_name='Ihr Betrag',
         min=0,
         max=Constants.endowment)
@@ -420,61 +412,74 @@ class Player(BasePlayer):
     myvotes = models.IntegerField(
         doc='The number of votes the player got after the public good game.')
 
-    ivoted = models.IntegerField(doc='The number of votes the player distributed to other players.', initial=0)
+    ivoted = models.IntegerField(doc='The number of votes the player distributed to other players. This could be in {0,1} depending on the implementation.', initial=0)
 
     plays = models.BooleanField(
-        doc='Determines if the player is allowed to play the guessing game.',
+        doc='Determines if the player is allowed to play the guessing game in a particular round.',
         default = True
     )
 
     # does the player plays the bonus FF round after all rounds of the experiment
     # depends on the valuationFF results
-    plays_bonusFF = models.BooleanField(initial=True)
+    plays_bonusFF = models.BooleanField(initial=True,
+                                        doc="This determines if the player plays the bonus guessing game round at the end of the experiment. \
+                                             This is true if the players willingness to pay (ff_valuation) is higher than the computer (number random_ff_valuation)")
 
 
-    round_payoff = models.IntegerField(initial=0)
+    round_payoff = models.IntegerField(initial=0, doc="The amount of Taler of the player in a particular round.")
 
     # Variables where player can vote to exclude/invite one player from the social arena game
     vote_A = models.BooleanField(
         widget=widgets.CheckboxInput(),
-        verbose_name='Teilnehmer A')
+        verbose_name='Teilnehmer A',
+        doc="The player voted for Player A")
     vote_B = models.BooleanField(
         widget=widgets.CheckboxInput(),
-        verbose_name='Teilnehmer B')
+        verbose_name='Teilnehmer B',
+        doc="The player voted for Player B")
     vote_C = models.BooleanField(
         widget=widgets.CheckboxInput(),
-        verbose_name='Teilnehmer C')
+        verbose_name='Teilnehmer C',
+        doc="The player voted for Player C")
     vote_D = models.BooleanField(
         widget=widgets.CheckboxInput(),
-        verbose_name='Teilnehmer D')
+        verbose_name='Teilnehmer D',
+        doc="The player voted for Player D")
     vote_E = models.BooleanField(
         widget=widgets.CheckboxInput(),
-        verbose_name='Teilnehmer E')
+        verbose_name='Teilnehmer E',
+        doc="The player voted for Player E")
+
+    # In exclude treatment and feedback treatment
+    exclude_none = models.BooleanField(widget=widgets.CheckboxInput(),
+                                       verbose_name="Ich möchte kein Gruppenmitglied ausschließen.",
+                                       doc = "The player wanted not to vote for any other player.")
 
 
     # RateYourExperience after every FamilyFeud game
     ff_experience = models.IntegerField(verbose_name="Bitte klicken Sie auf die Skala, um Ihre Erfahrung während des letzten Gruppenspiels zu bewerten. 1 bedeutet schlecht und 5 gut.",
-                                        widget=widgets.Slider(show_value=False) , min=1, max=5)
+                                        widget=widgets.Slider(show_value=False) , min=1, max=5,
+                                        doc="After the guessing game the players have to rate their experience on a scale from 1(bad) to 5(good)")
 
 
-    # the valuation variable before the end of the experiment
+    # the willingness to pay for the bonus family feud round
     ff_valuation = models.DecimalField(verbose_name="Bitte klicken Sie auf die Skala, um ihre Zahlungsbereitschaft auszuwählen.",
                                        widget=widgets.Slider(show_value=False),
                                        min=0, max=6,
                                        decimal_places=1,
-                                       max_digits = 2)
+                                       max_digits = 2,
+                                       doc="The players' willingness to pay for the bonus round of the guessing game.")
 
-    random_ff_valuation = models.FloatField()
+    random_ff_valuation = models.FloatField(doc="The computer number which will be to compared with ff_valuation to determine if the player plays the bonus round.")
 
-    # In exclude treatment and feedback treatment
-    exclude_none = models.BooleanField(widget=widgets.CheckboxInput(), verbose_name="Ich möchte kein Gruppenmitglied ausschließen.")
+
 
     def update_round_payoff(self):
         self.round_payoff = self.round_payoff - (self.ivoted * Constants.cost_for_vote)
 
 
     ## the round number that will be payed out for the player
-    payround = models.IntegerField()
+    payround = models.IntegerField(doc="The round number that will be payed out for the player. Note: this is an oTree round e. g. experiment_round+1.")
 
 
 
@@ -523,7 +528,8 @@ class Player(BasePlayer):
 
     ##how often did the participant try to submit the control questions when some answers were still wrong
     # if the participant was correct on the first try, than this will be 1
-    control_tries = models.IntegerField(initial=0)
+    control_tries = models.IntegerField(initial=0, doc="How often did the player try to submit the control questions page when answers were still wrong. \
+                                                       1 if the player had everything correct on the first try.")
 
 
     #exlude + control
@@ -598,7 +604,7 @@ class Player(BasePlayer):
     guess_sequence = models.CharField(initial='')
 
     # Number of correctly answered questions
-    ff_points = models.IntegerField(initial=0)
+    ff_points = models.IntegerField(initial=0, doc="The number of correct answers which the player found overall in the guessing game in one round.")
 
     # Number of tries (guesses) of a player
     num_guesses = models.IntegerField(initial=0)
