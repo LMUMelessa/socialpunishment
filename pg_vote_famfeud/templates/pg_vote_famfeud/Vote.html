@@ -29,8 +29,13 @@
 
 
             Sie können jetzt abstimmen, welches Gruppenmitglied von dem Gruppenspiel in dieser Runde ausgeschlossen werden soll.<br>
-            Welches Mitglied möchten Sie ausschließen? Sie können für ein Mitglied stimmen. Eine Stimme kostet 1 Taler.<br>
-            Bitte klicken Sie die entsprechende Box an.
+            Welches Mitglied möchten Sie ausschließen? Sie können für ein Mitglied stimmen.
+
+                {% if player.treatment == 'excludemany' %}
+                Jede abgegebene Stimme kostet 1 Taler.
+                {% endif %}
+                <br>
+                Bitte klicken Sie die entsprechende Box an.
 
 
 
@@ -41,6 +46,7 @@
                 {% if player.playerlabel != 'Player D' %}{% formfield player.vote_D %}{% endif %}
                 {% if player.playerlabel != 'Player E' %}{% formfield player.vote_E %}{% endif %}
                 {% if player.treatment == 'exclude' %} {% formfield player.exclude_none %}{% endif %}
+                {% if player.treatment == 'excludemany' %} {% formfield player.exclude_none %}{% endif %}
                 {% if player.treatment == 'feedback' %} {% formfield player.exclude_none %}{% endif %}
 
             </div>
@@ -118,7 +124,7 @@
         document.getElementById("softTO").style.display = "block"
     },
     //soft timeout seconds * 1000
-    90*1000
+    60*1000
 );
 
     </script>

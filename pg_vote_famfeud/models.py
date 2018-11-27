@@ -17,12 +17,13 @@ Public Good + Family Feud
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 4 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 12 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
-    timeoutsecs = 90
-    cost_for_vote = 1
+    timeoutsecs = 60
+    cost_for_vote = 0
+    cost_for_vote_many = 1
 
     ### Familyfeud
 
@@ -70,7 +71,7 @@ class Subsession(BaseSubsession):
         for player in self.get_players():
             player.treatment = self.session.config['treatment']
             player.city = self.session.config['city']
-            player.participant.label = self.get_players().index(player)
+            player.participant.label = str(self.get_players().index(player))
 
 
 
@@ -139,7 +140,7 @@ class Group(RedwoodGroup):
 
         # increment the current question number
         # TODO: You need save() for all database operations ingame, otherwise the changes have no effect on the database
-        # TODO: see the oTree Redwood doc Group.save()
+        # TODO: see the oTree Redwood doc group.save() note changed spelling from Gruppe zu gruppe weil es sonst einen fehler gab
         self.current_quest_num += 1
         self.save()
 
@@ -330,7 +331,7 @@ class Group(RedwoodGroup):
     # Assign if the second game/social game/family feud will be played with all players in the group
     # Sets group.all_play and player.plays
     def set_social_game(self):
-        if self.get_players()[0].treatment == "exclude" or self.get_players()[0].treatment == 'feedback':
+        if self.get_players()[0].treatment == "exclude" or self.get_players()[0].treatment == 'feedback' or self.get_players()[0].treatment == 'excludemany':
             for player in self.get_players():
                 if player.myvotes >= 3:
                     player.plays = False
@@ -475,7 +476,11 @@ class Player(BasePlayer):
 
 
     def update_round_payoff(self):
-        self.round_payoff = self.round_payoff - (self.ivoted * Constants.cost_for_vote)
+
+        if self.treatment == 'exclude':
+            self.round_payoff = self.round_payoff - (self.ivoted * Constants.cost_for_vote)
+        elif self.treatment == 'excludemany':
+            self.round_payoff = self.round_payoff - (self.ivoted * Constants.cost_for_vote_many)
 
 
     ## the round number that will be payed out for the player
@@ -537,7 +542,7 @@ class Player(BasePlayer):
                                    min=0)
 
     # exlude + control
-    control2 = models.IntegerField(verbose_name="20 Taler liegen auf dem Gruppenkonto. Wie viele Taler erhalten Sie daraus?",
+    control2 = models.IntegerField(verbose_name="20 Taler wurden insgesamt in das Gruppenkonto eingezahlt. Wie viele Taler erhalten Sie am Ende aus dem Gruppenkonto?",
                                    min=0)
 
     # exlude + control

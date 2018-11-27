@@ -12,7 +12,9 @@
             <div id="header-right">Dies ist <b>Runde {{round_number}}</b> </div>
         </div>
 
-
+    <div id="softTO" class="otree-timer alert alert-warning">
+    <p>Bitte klicken Sie weiter.</p>
+    </div>
 
     <div id="main">
         <br>
@@ -76,4 +78,17 @@
 
 
     </style>
+
+    <script>
+
+    setTimeout(
+    function () {
+        document.getElementById("softTO").style.display = "block"
+    },
+    //soft timeout seconds * 1000
+    30*1000
+);
+
+    </script>
+
 {% endblock %}

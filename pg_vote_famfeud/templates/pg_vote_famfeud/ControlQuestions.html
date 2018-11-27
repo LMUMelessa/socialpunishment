@@ -22,7 +22,7 @@
             <div id="info-text">
 
 
-                {% if player.treatment == 'exclude' %}
+                {% if player.treatment == 'exclude' or player.treatment == 'excludemany' %}
 
                     <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control1 %}
@@ -313,6 +313,27 @@
                    err_message.style.color = corr_color;
                }}
 
+        if (treatment=="excludemany"){
+                controlme = document.getElementById("id_control3d_1");
+                err_message = document.getElementById("error_control3d");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
 
                  // control4
         if (treatment=="exclude"){
@@ -337,9 +358,52 @@
                    err_message.style.color = corr_color;
                }}
 
+        if (treatment=="excludemany"){
+                controlme = document.getElementById("id_control4_many");
+                err_message = document.getElementById("error_control4");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
 
                 // control5
         if (treatment=="exclude"){
+                controlme = document.getElementById("id_control5");
+                err_message = document.getElementById("error_control5");
+
+               if (controlme.value != 0){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
+
+        if (treatment=="excludemany"){
                 controlme = document.getElementById("id_control5");
                 err_message = document.getElementById("error_control5");
 
@@ -384,6 +448,29 @@
                    err_message.style.color = corr_color;
                }}
 
+
+        if (treatment=="excludemany"){
+                // control6
+                controlme = document.getElementById("id_control6_0");
+                err_message = document.getElementById("error_control6");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
 
                if (treatment=="exclude"){
                // control7exclude
@@ -508,7 +595,8 @@
                 ["_control3c","wahr"],
                 ["_control3d","falsch"],
                 ["_control4_1",1],
-                ["_control5",1],
+                ["_control4_many",4],
+                ["_control5",0],
                 ["_control6","ja"],
                 ["_control7exclude","2"],
                 ["_control8","2"]];

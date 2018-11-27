@@ -7,11 +7,14 @@
 {% block content %}
 
 
+      <div id="softTO" class="otree-timer alert alert-warning">
+    <p>Bitte klicken Sie weiter.</p>
+    </div>
+
      <div id="header">
             <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
             <div id="header-right">Dies ist <b>Runde {{round_number }}</b> </div>
         </div>
-
 
 
 
@@ -146,4 +149,19 @@
         .page-header {padding-top: 0px;padding-bottom: 0px}
         .otree-title{font-size: 20px}
     </style>
+
+
+    <script>
+
+    setTimeout(
+    function () {
+        document.getElementById("softTO").style.display = "block"
+    },
+    //soft timeout seconds * 1000
+    20*1000
+);
+
+    </script>
+
+
 {% endblock %}

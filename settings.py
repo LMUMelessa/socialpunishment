@@ -127,7 +127,7 @@ ROOMS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = {
-    'real_world_currency_per_point': 2.00,
+    'real_world_currency_per_point': .80,
     'participation_fee': 6.00,
     'doc': "",
     'mturk_hit_settings': mturk_hit_settings,
@@ -154,6 +154,14 @@ SESSION_CONFIGS = [
 #         'treatment': 'feedback' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
 #     },
 
+    {
+        'name': 'pgvoteff2many',
+        'display_name': 'Exclude Treatment (many)',
+        'num_demo_participants': 5,
+        'app_sequence': ['pg_vote_famfeud'],
+        'city': 'Munich',
+        'treatment': 'excludemany'  # T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
+    },
 
 
     {

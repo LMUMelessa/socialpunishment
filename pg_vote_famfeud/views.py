@@ -75,9 +75,6 @@ class FirstWaitPage(WaitPage):
 
 class ResultsPG(Page):
 
-    timeout_seconds = Constants.timeoutsecs
-    timer_text = "Verbleibende Zeit auf dieser Seite "
-
     def vars_for_template(self):
         data = {'round_number':self.player.round_number - 1 , 'left_on_account': Constants.endowment - self.player.contribution}
         for player in self.group.get_players():
@@ -99,7 +96,7 @@ class Vote(Page):
     form_model = models.Player
 
     def get_form_fields(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'feedback':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'feedback' or self.player.treatment == 'excludemany':
             return ['vote_A', 'vote_B', 'vote_C', 'vote_D', 'vote_E', 'exclude_none']
         elif self.player.treatment == 'include':
             return ['vote_A', 'vote_B','vote_C','vote_D','vote_E']
@@ -117,9 +114,17 @@ class Vote(Page):
             # Enforce that the player can only vote for one other player
             if vote_count > 1:
                 return 'Sie können nur für einen Teilnehmer abstimmen.'
+        elif self.player.treatment == 'excludemany':
+            if vote_count > 0 and values['exclude_none'] == True:
+                return 'Sie können nicht für keinen und einen Teilnehmer abstimmen.'
+            # Enforce the player to choose an option
+            if vote_count == 0 and values['exclude_none'] == False:
+                return 'Bitte stimmen Sie ab.'
         elif self.player.treatment == 'include':
             if vote_count == 0:
                 return 'Bitte treffen Sie eine Wahl.'
+
+
 
 
     def vars_for_template(self):
@@ -163,9 +168,6 @@ class VoteWaitPage(WaitPage):
 
 
 class VoteResults(Page):
-
-   timeout_seconds = Constants.timeoutsecs
-   timer_text = "Verbleibende Zeit auf dieser Seite "
 
    def vars_for_template(self):
        data = {'round_number':self.player.round_number-1}
@@ -268,8 +270,8 @@ class AfterFamilyFeudWaitPage(WaitPage):
 
 class FamilyFeudResults(Page):
 
-    timeout_seconds = 30
-    timer_text = "Verbleibende Zeit auf dieser Seite "
+    #timeout_seconds = 30
+    #timer_text = "Verbleibende Zeit auf dieser Seite "
 
     # Don't display in the valuation round (last round) and practice round (first round)
     # Don't show to players which did not play the game
