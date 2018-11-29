@@ -28,7 +28,7 @@ class ControlQuestions(Page):
     form_model = 'player'
 
     def get_form_fields(self):
-        if self.player.treatment=='exclude':
+        if self.player.treatment=='exclude' or self.player.treatment=='excludemany':
             return ['control_tries','control1','control2','control3a','control3b', 'control3c', 'control3d', 'control4', 'control5', 'control6' ,'control7exclude','control8']
         elif self.player.treatment=='control':
             return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
@@ -327,7 +327,7 @@ class RateYourExperience(Page):
 class Questionnaire(Page):
     form_model = 'player'
     def get_form_fields(self):
-        if self.player.treatment == 'exclude':
+        if self.player.treatment == 'exclude' or self.player.treatment == 'excludemany':
             return ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8','q9','q10']
         elif self.player.treatment == 'control':
             return ['q1','q2','q5','q6','q7','q8','q9','q10']
