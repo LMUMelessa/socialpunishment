@@ -17,9 +17,18 @@
         <br>
         Der Computer hat die Runde gezogen, welche für Sie ausbezahlt wird. <br>
         Es wird Runde {{ payround }} ausbezahlt. <br>
+
+        {% if player.treatment == 'exclude' %}
         In dieser Runde war ihr Verdienst {{ payoff_in_payround_taler }} Taler.<br>
-        Dies entspricht €{{ euro }}<br>
-        Ihre Prämie für pünktliches erscheinen ist {{ part_fee }}.<br>
+        Dies entspricht {{ euro }} Euro.<br>
+        {% endif %}
+
+        {% if player.treatment == 'excludemany' %}
+        In dieser Runde war ihr Verdienst {{ payoff_in_payround_taler }} Taler (nach Abzug der Kosten für die evtl abgegebenen Stimmen).<br>
+        Dies entspricht {{ euro }} Euro.<br>
+        {% endif %}
+
+        Ihre Prämie für pünktliches Erscheinen ist {{ part_fee }}.<br>
 
         {% if diff == 0 %}
             Insgesamt erhalten Sie {{all}} für die Teilnahme am Experiment.

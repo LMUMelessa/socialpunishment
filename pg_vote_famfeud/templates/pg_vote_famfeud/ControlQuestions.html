@@ -22,7 +22,7 @@
             <div id="info-text">
 
 
-                {% if player.treatment == 'exclude' or player.treatment == 'excludemany' %}
+                {% if player.treatment == 'exclude' %}
 
                     <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control1 %}
@@ -57,6 +57,40 @@
                     <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control8 %}
 
+                {% elif player.treatment == 'excludemany' %}
+
+                    <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control1 %}
+                    <br>
+                    <div id="error_control2" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control2 %}
+                    <br>
+                    <div id="error_control3a" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control3a %}
+                    <br>
+                    <div id="error_control3b" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control3b %}
+                    <br>
+                    <div id="error_control3c" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control3c %}
+                    <br>
+                    <div id="error_control3d" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control3d %}
+                    <br>
+                    <div id="error_control4m" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control4m %}
+                    <br>
+                    <div id="error_control5" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control5 %}
+                    <br>
+                    <div id="error_control6" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control6 %}
+                    <br>
+                    <div id="error_control7exclude" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control7exclude %}
+                    <br>
+                    <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control8 %}
 
                 {% elif player.treatment == 'control' %}
 
@@ -335,7 +369,7 @@
                    err_message.style.color = corr_color;
                }}
 
-                 // control4
+        // control4
         if (treatment=="exclude"){
                 controlme = document.getElementById("id_control4_1");
                 err_message = document.getElementById("error_control4");
@@ -358,9 +392,10 @@
                    err_message.style.color = corr_color;
                }}
 
+             // control4m
         if (treatment=="excludemany"){
-                controlme = document.getElementById("id_control4_1");
-                err_message = document.getElementById("error_control4");
+                controlme = document.getElementById("id_control4m_4");
+                err_message = document.getElementById("error_control4m");
 
                if (!(controlme.checked)){
 
@@ -472,7 +507,7 @@
                    err_message.style.color = corr_color;
                }}
 
-               if (treatment=="exclude"){
+               if (treatment=="exclude" || treatment=="excludemany"){
                // control7exclude
                 controlme = document.getElementById("id_control7exclude_2");
                 err_message = document.getElementById("error_control7exclude");

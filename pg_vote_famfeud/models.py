@@ -565,6 +565,12 @@ class Player(BasePlayer):
     #exclude
     control4 = models.IntegerField(widget=widgets.RadioSelectHorizontal(),verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
                                   choices=[0,1,2,3,4,5])
+
+    # excludemany
+    control4m = models.IntegerField(widget=widgets.RadioSelectHorizontal(),
+                                   verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
+                                   choices=[0, 1, 2, 3, 4, 5])
+
     #exclude
     control5 = models.IntegerField(
         verbose_name="Wie viele Taler kostet es Sie, wenn Sie ein Gruppenmitglied ausschließen?",

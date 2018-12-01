@@ -28,8 +28,11 @@ class ControlQuestions(Page):
     form_model = 'player'
 
     def get_form_fields(self):
-        if self.player.treatment=='exclude' or self.player.treatment=='excludemany':
+        if self.player.treatment=='exclude':
             return ['control_tries','control1','control2','control3a','control3b', 'control3c', 'control3d', 'control4', 'control5', 'control6' ,'control7exclude','control8']
+        elif self.player.treatment == 'excludemany':
+            return ['control_tries', 'control1', 'control2', 'control3a', 'control3b', 'control3c', 'control3d',
+                    'control4m', 'control5', 'control6', 'control7exclude', 'control8']
         elif self.player.treatment=='control':
             return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
 
@@ -154,7 +157,7 @@ class VoteWaitPage(WaitPage):
         # Update the payoffs as voting is costly in feedback and exclusion treatment
         # Note: in Constants there is a parameter cost_for_vote ... you can set this to 0 then this function here has no effect when running,
         # so you don't have to change anything else
-        if self.group.get_players()[0].treatment == "feedback" or self.group.get_players()[0].treatment == "exclude":
+        if self.group.get_players()[0].treatment == "feedback" or self.group.get_players()[0].treatment == "exclude"  or self.group.get_players()[0].treatment == "excludemany":
             for player in self.group.get_players():
                 player.update_round_payoff() # Specificly for updating round payoffs in regard to the costly votes
 
@@ -389,7 +392,7 @@ class ShowPayoffDetails(Page):
             return{'payoff_in_payround_taler':taler ,
                     'euro': taler * self.session.config['real_world_currency_per_point'],
                     'part_fee':part_fee,
-                    'diff': self.player.in_round(1).random_ff_valuation, # Will be subtracted if he played bouns FF
+                    'diff': self.player.in_round(1).random_ff_valuation, # Will be subtracted if he played bonus FF
                     'all': part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'], # Note you have to calc this because self.payoff does not regard the participation fee
                    'payround': self.player.payround-1}
         else:
