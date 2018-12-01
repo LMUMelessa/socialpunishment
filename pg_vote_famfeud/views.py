@@ -371,13 +371,20 @@ class AfterQuestionnaireWaitPage(WaitPage):
 
 # Use to display the payoff informations to the player
 # Payoff calculation has been done (in After Questionnaire) if players arrive here
-class ShowPayoffDetails(Page):
+# class ShowPayoffDetails(Page):
+class EndPage(Page):
 
-    timeout_seconds = Constants.timeoutsecs
-    timer_text = "Verbleibende Zeit auf dieser Seite "
+    #timeout_seconds = Constants.timeoutsecs
+    #timer_text = "Verbleibende Zeit auf dieser Seite "
+
+    #def is_displayed(self):
+    #    return self.round_number == Constants.num_rounds
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds
+        if self.player.round_number == Constants.num_rounds:
+            return True
+        else:
+            return False
 
     def vars_for_template(self):
         random_ff_valuation = self.player.in_round(1).random_ff_valuation
@@ -394,25 +401,27 @@ class ShowPayoffDetails(Page):
                     'part_fee':part_fee,
                     'diff': self.player.in_round(1).random_ff_valuation, # Will be subtracted if he played bonus FF
                     'all': part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'], # Note you have to calc this because self.payoff does not regard the participation fee
-                   'payround': self.player.payround-1}
+                   'payround': self.player.payround-1,
+                   'number': self.player.participant.label}
         else:
             return {'payoff_in_payround_taler': taler,
                     'euro': taler * self.session.config['real_world_currency_per_point'],
                     'part_fee': part_fee,
                     'diff': 0,
                     'all':part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],
-                    'payround':self.player.payround-1}
+                    'payround':self.player.payround-1,
+                    'number': self.player.participant.label}
 
 
-class EndPage(Page):
-    def is_displayed(self):
-        if self.player.round_number == Constants.num_rounds:
-            return True
-        else:
-            return False
-
-    def vars_for_template(self):
-        return {'number':self.player.participant.label}
+# class EndPage(Page):
+#     def is_displayed(self):
+#         if self.player.round_number == Constants.num_rounds:
+#             return True
+#         else:
+#             return False
+#
+#     def vars_for_template(self):
+#         return {'number':self.player.participant.label}
 
 
 
@@ -435,6 +444,6 @@ page_sequence = [
     RateYourExperience,
     Questionnaire,
     AfterQuestionnaireWaitPage, #Payoff calculation is done here
-    ShowPayoffDetails,
+    # ShowPayoffDetails,
     EndPage,
 ]
