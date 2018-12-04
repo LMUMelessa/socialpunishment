@@ -44,10 +44,6 @@
                     <br>
                     <div id="error_control4" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control4 %}
-                    <br>
-                    <div id="error_control5" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control5 %}
-                    <br>
                     <div id="error_control6" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control6 %}
                     <br>
@@ -416,33 +412,11 @@
                }}
 
                 // control5
-        if (treatment=="exclude"){
-                controlme = document.getElementById("id_control5");
-                err_message = document.getElementById("error_control5");
-
-               if (controlme.value != 0){
-
-                   err_message.style.backgroundColor = wrong_bg;
-                   err_message.style.borderColor = wrong_bc;
-                   err_message.style.color = wrong_color;
-
-                   err_message.textContent = wrong_text;
-                   err_message.style.display = "Block";
-                   allCorrect = false;
-               }else{
-
-                   err_message.textContent = corr_text;
-                   err_message.style.display = "Block";
-                   err_message.style.backgroundColor = corr_bg;
-                   err_message.style.borderColor = corr_bc;
-                   err_message.style.color = corr_color;
-               }}
-
         if (treatment=="excludemany"){
-                controlme = document.getElementById("id_control5");
+                controlme = document.getElementById("id_control5_1");
                 err_message = document.getElementById("error_control5");
 
-               if (controlme.value != 1){
+               if (!(controlme.checked)){
 
                    err_message.style.backgroundColor = wrong_bg;
                    err_message.style.borderColor = wrong_bc;

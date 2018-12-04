@@ -23,7 +23,7 @@ class Constants(BaseConstants):
     multiplier = 2
     timeoutsecs = 60
     cost_for_vote = 0
-    cost_for_vote_many = 1
+    cost_for_vote_many = 0.5
 
     ### Familyfeud
 
@@ -563,7 +563,8 @@ class Player(BasePlayer):
         choices=["wahr", "falsch"])
 
     #exclude
-    control4 = models.IntegerField(widget=widgets.RadioSelectHorizontal(),verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
+    control4 = models.IntegerField(widget=widgets.RadioSelectHorizontal(),
+                                   verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
                                   choices=[0,1,2,3,4,5])
 
     # excludemany
@@ -571,10 +572,10 @@ class Player(BasePlayer):
                                    verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
                                    choices=[0, 1, 2, 3, 4, 5])
 
-    #exclude
-    control5 = models.IntegerField(
+    #excludemany
+    control5 = models.StringField(widget=widgets.RadioSelectHorizontal(),
         verbose_name="Wie viele Taler kostet es Sie, wenn Sie ein Gruppenmitglied ausschließen?",
-        min=0)
+        choices=["0 Taler  ", "0,5 Taler  ", "1 Taler  ", "1,5 Taler  ", "2 Taler  "])
 
     #exclude
     control6 = models.StringField(widget=widgets.RadioSelect(),

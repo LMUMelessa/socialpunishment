@@ -29,7 +29,7 @@ class ControlQuestions(Page):
 
     def get_form_fields(self):
         if self.player.treatment=='exclude':
-            return ['control_tries','control1','control2','control3a','control3b', 'control3c', 'control3d', 'control4', 'control5', 'control6' ,'control7exclude','control8']
+            return ['control_tries','control1','control2','control3a','control3b', 'control3c', 'control3d', 'control4', 'control6' ,'control7exclude','control8']
         elif self.player.treatment == 'excludemany':
             return ['control_tries', 'control1', 'control2', 'control3a', 'control3b', 'control3c', 'control3d',
                     'control4m', 'control5', 'control6', 'control7exclude', 'control8']
@@ -400,7 +400,7 @@ class EndPage(Page):
                     'euro': taler * self.session.config['real_world_currency_per_point'],
                     'part_fee':part_fee,
                     'diff': self.player.in_round(1).random_ff_valuation, # Will be subtracted if he played bonus FF
-                    'all': part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'], # Note you have to calc this because self.payoff does not regard the participation fee
+                    'all': round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],1), # Note you have to calc this because self.payoff does not regard the participation fee
                    'payround': self.player.payround-1,
                    'number': self.player.participant.label}
         else:
@@ -408,7 +408,7 @@ class EndPage(Page):
                     'euro': taler * self.session.config['real_world_currency_per_point'],
                     'part_fee': part_fee,
                     'diff': 0,
-                    'all':part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],
+                    'all':round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],1),
                     'payround':self.player.payround-1,
                     'number': self.player.participant.label}
 

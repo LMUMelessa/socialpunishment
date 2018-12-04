@@ -166,7 +166,7 @@ SESSION_CONFIGS = [
 
     {
         'name': 'pgvoteff2',
-        'display_name': 'Exclude Treatment (T2)',
+        'display_name': 'Exclude Treatment (one)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'Munich',
