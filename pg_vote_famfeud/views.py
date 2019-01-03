@@ -372,7 +372,7 @@ class AfterQuestionnaireWaitPage(WaitPage):
 # Use to display the payoff informations to the player
 # Payoff calculation has been done (in After Questionnaire) if players arrive here
 # class ShowPayoffDetails(Page):
-class EndPage(Page):
+class ShowPayoffDetails(Page):
 
     #timeout_seconds = Constants.timeoutsecs
     #timer_text = "Verbleibende Zeit auf dieser Seite "
@@ -413,15 +413,15 @@ class EndPage(Page):
                     'number': self.player.participant.label}
 
 
-# class EndPage(Page):
-#     def is_displayed(self):
-#         if self.player.round_number == Constants.num_rounds:
-#             return True
-#         else:
-#             return False
-#
-#     def vars_for_template(self):
-#         return {'number':self.player.participant.label}
+class EndPage(Page):
+    def is_displayed(self):
+        if self.player.round_number == Constants.num_rounds:
+            return True
+        else:
+            return False
+
+    def vars_for_template(self):
+        return {'number':self.player.participant.label}
 
 
 
