@@ -28,14 +28,15 @@
         Dies entspricht {{ euro }} Euro.<br>
         {% endif %}
 
-        Ihre Prämie für pünktliches Erscheinen ist {{ part_fee }}.<br>
+        Ihre Prämie für pünktliches Erscheinen ist {{ part_fee }} Euro.<br>
 
         {% if diff == 0 %}
-            Insgesamt erhalten Sie {{all}} für die Teilnahme am Experiment.
+            Insgesamt erhalten Sie den gerundeten Betrag von {{all}} Euro für die Teilnahme am Experiment.
         {% else %}
-            Davon werden €{{diff}} abgezogen, da Sie die Bonusrunde des Gruppenspiels gespielt haben.<br>
-            Insgesamt erhalten Sie {{all}} für die Teilnahme am Experiment.
+            Davon werden {{diff}} Euro abgezogen, da Sie die Bonusrunde des Gruppenspiels gespielt haben.<br>
+            Insgesamt erhalten Sie {{all}} Euro für die Teilnahme am Experiment.
         {% endif %}
+
 
 
 

@@ -444,6 +444,6 @@ page_sequence = [
     RateYourExperience,
     Questionnaire,
     AfterQuestionnaireWaitPage, #Payoff calculation is done here
-    # ShowPayoffDetails,
+    ShowPayoffDetails,
     EndPage,
 ]

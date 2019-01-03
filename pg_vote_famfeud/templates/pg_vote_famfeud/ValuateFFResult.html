@@ -24,11 +24,11 @@
 
                 {% if  player.plays_bonusFF == False %}
                     Die Zahl des Computers ist höher als Ihre <b>{{ player.ff_valuation }}</b>.<br>
-                    Es wird nichts von Ihrer Prämie für pünktliches erscheinen abgezogen und Sie werden am Ende des Experiments den Screenshot betrachten.<br>
+                    Es wird nichts von Ihrer Prämie für pünktliches Erscheinen abgezogen und Sie werden am Ende des Experiments den Screenshot betrachten.<br>
 
                 {% else %}
                     Ihre <b>{{ player.ff_valuation }}</b> ist höher als die Zahl des Computers.<br>
-                    <b>{{ player.random_ff_valuation }}</b> Euro werden von Ihrer Prämie für pünkliches erscheinen abgezogen und Sie werden das Gruppenspiel am Ende des Experiments noch einmal spielen.<br>
+                    <b>{{ player.random_ff_valuation }}</b> Euro werden von Ihrer Prämie für pünkliches Erscheinen abgezogen und Sie werden das Gruppenspiel am Ende des Experiments noch einmal spielen.<br>
 
                 {% endif %}
 
