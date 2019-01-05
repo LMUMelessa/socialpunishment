@@ -17,13 +17,13 @@ Public Good + Family Feud
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 12 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
     timeoutsecs = 60
-    cost_for_vote = 0
-    cost_for_vote_many = 0.5
+    cost_for_vote = 0.5
+
 
     ### Familyfeud
 
@@ -32,7 +32,7 @@ class Constants(BaseConstants):
 
     questions_per_round = 2 #2 in the real experiment
     extra_questions = 1 #1 in the real experiment
-    secs_per_question = 30 #30
+    secs_per_question = 5 #30
     wait_between_question = 4 #4
 
 
@@ -326,7 +326,6 @@ class Group(RedwoodGroup):
 
 
     # New version of the function after 08.09.2018
-    # Find out if there is a majority after the voting
     # Assign for all players if they play in the second game (social game, familyfeud)
     # Assign if the second game/social game/family feud will be played with all players in the group
     # Sets group.all_play and player.plays
@@ -335,10 +334,7 @@ class Group(RedwoodGroup):
             for player in self.get_players():
                 if player.myvotes >= 3:
                     player.plays = False
-        elif self.get_players()[0].treatment == "include":
-            for player in self.get_players():
-                if player.myvotes < 1:
-                    player.plays = False
+
 
     # # Version of the function before 08.09.2018 - after that the exclusion mechanism changed, at least in exclusion treatment
     # # Find out if there is a majority after the voting
@@ -413,7 +409,8 @@ class Player(BasePlayer):
     myvotes = models.IntegerField(
         doc='The number of votes the player got after the public good game.')
 
-    ivoted = models.IntegerField(doc='The number of votes the player distributed to other players. This could be in {0,1} depending on the implementation.', initial=0)
+    ivoted = models.IntegerField(doc='The number of votes the player distributed to other players. This could be in {0,4} depending on the implementation.',
+                                 initial=0)
 
     plays = models.BooleanField(
         doc='Determines if the player is allowed to play the guessing game in a particular round.',
@@ -469,18 +466,11 @@ class Player(BasePlayer):
                                        min=0, max=6,
                                        decimal_places=1,
                                        max_digits = 2,
-                                       doc="The players' willingness to pay for the bonus round of the guessing game.")
+                                       doc="The players' willingness to pay for the bonus round of the guessing game.",
+                                       initial=0)
 
-    random_ff_valuation = models.FloatField(doc="The computer number which will be to compared with ff_valuation to determine if the player plays the bonus round.")
-
-
-
-    def update_round_payoff(self):
-
-        if self.treatment == 'exclude':
-            self.round_payoff = self.round_payoff - (self.ivoted * Constants.cost_for_vote)
-        elif self.treatment == 'excludemany':
-            self.round_payoff = self.round_payoff - (self.ivoted * Constants.cost_for_vote_many)
+    random_ff_valuation = models.FloatField(doc="The computer number which will be to compared with ff_valuation to determine if the player plays the bonus round.",
+                                            initial=0.0)
 
 
     ## the round number that will be payed out for the player

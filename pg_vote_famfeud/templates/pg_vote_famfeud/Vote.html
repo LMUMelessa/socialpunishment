@@ -32,7 +32,7 @@
             Welches Mitglied möchten Sie ausschließen?
 
                 {% if player.treatment == 'excludemany' %}
-                Sie können mehrere Stimmen vergeben, jede Stimme kostet 0,5 Taler.
+                Sie können mehrere Stimmen vergeben, jede Stimme kostet {{ Constants.cost_for_vote }} Taler.
                 {% endif %}
                 <br>
                 Bitte klicken Sie die entsprechende Box an.

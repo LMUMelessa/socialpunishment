@@ -154,12 +154,8 @@ class VoteWaitPage(WaitPage):
         self.group.set_myvotes()
         # Assign for each player if he plays the social game
         self.group.set_social_game()
-        # Update the payoffs as voting is costly in feedback and exclusion treatment
-        # Note: in Constants there is a parameter cost_for_vote ... you can set this to 0 then this function here has no effect when running,
-        # so you don't have to change anything else
-        if self.group.get_players()[0].treatment == "feedback" or self.group.get_players()[0].treatment == "exclude"  or self.group.get_players()[0].treatment == "excludemany":
-            for player in self.group.get_players():
-                player.update_round_payoff() # Specificly for updating round payoffs in regard to the costly votes
+
+        ##Note the round payoff was updated here in regard to cost of voting. I shift this to overall payoff calculation at the end
 
     def is_displayed(self):
         if self.player.treatment == 'FF' or self.player.treatment == 'control':
@@ -354,13 +350,15 @@ class AfterQuestionnaireWaitPage(WaitPage):
             # Select a round from the 10 playing rounds (e.g. cut off the practice round and the bonusFF round)
             if Constants.num_rounds > 3:
                 ## Note: Payround is the oTree round not the experiment round!
-                player.payround = random.choice(range(2, Constants.num_rounds, 1))
-                player.payoff = player.in_round(player.payround).round_payoff
+                payround = random.choice(range(2, Constants.num_rounds, 1))
+                player.payround = payround #is accessed at showpayoffdetails
+                player.payoff = player.in_round(payround).round_payoff - player.in_round(payround).ivoted * Constants.cost_for_vote
             else:
-                player.payround = 2
-                player.payoff = player.in_round(player.payround).round_payoff
+                payround = 2
+                player.payround = payround
+                player.payoff = player.in_round(payround).round_payoff - player.in_round(payround).ivoted * Constants.cost_for_vote
 
-            # If player plays the bonus FF round then substract the computer number from the players payoff
+            # If player plays the bonus FF round then subtract the computer number from the players payoff
             # Note: the computer number is in Euro, but oTree expects points because it later converts Points to Euro in the Admin-Mak
             # Therefore, the computer number has to be converted to Points by 1/c/p
             # Note: the in_round(1) because this variable is set in round 1 only
@@ -377,19 +375,14 @@ class ShowPayoffDetails(Page):
     #timeout_seconds = Constants.timeoutsecs
     #timer_text = "Verbleibende Zeit auf dieser Seite "
 
-    #def is_displayed(self):
-    #    return self.round_number == Constants.num_rounds
-
     def is_displayed(self):
-        if self.player.round_number == Constants.num_rounds:
-            return True
-        else:
-            return False
+        return self.round_number == Constants.num_rounds
 
     def vars_for_template(self):
         random_ff_valuation = self.player.in_round(1).random_ff_valuation
         ff_valuation = float(self.player.in_round(1).ff_valuation)
-        taler = self.player.in_round(self.player.payround).round_payoff
+        #you have to do this here again because in player.payoff the valuation casts are already subtracted; also for debugging purpose
+        taler = self.player.in_round(self.player.payround).round_payoff - self.player.in_round(self.player.payround).ivoted * Constants.cost_for_vote
         part_fee = self.session.config['participation_fee']
 
         # If the player did play the bonus round of FF then the random_ff_valuation will be subtracted
@@ -397,18 +390,18 @@ class ShowPayoffDetails(Page):
         # You cannot just use the payoff because we want to show the player the different elements that determine the overall payoff
         if random_ff_valuation < ff_valuation:
             return{'payoff_in_payround_taler':taler ,
-                    'euro': taler * self.session.config['real_world_currency_per_point'],
+                    'euro': '{0:.2f}'.format(round(taler * self.session.config['real_world_currency_per_point'],2)),
                     'part_fee':part_fee,
                     'diff': self.player.in_round(1).random_ff_valuation, # Will be subtracted if he played bonus FF
-                    'all': round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],1), # Note you have to calc this because self.payoff does not regard the participation fee
+                    'all': round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],2), # Note you have to calc this because self.payoff does not regard the participation fee
                    'payround': self.player.payround-1,
                    'number': self.player.participant.label}
         else:
             return {'payoff_in_payround_taler': taler,
-                    'euro': taler * self.session.config['real_world_currency_per_point'],
+                    'euro': '{0:.2f}'.format(round(taler * self.session.config['real_world_currency_per_point'],2)),
                     'part_fee': part_fee,
                     'diff': 0,
-                    'all':round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],1),
+                    'all':round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],2),
                     'payround':self.player.payround-1,
                     'number': self.player.participant.label}
 
@@ -426,23 +419,23 @@ class EndPage(Page):
 
 
 page_sequence = [
-    Instructions,
-    ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
+    #Instructions,
+    #ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
     Contribution,
     FirstWaitPage,
     ResultsPG,
     Vote,
     VoteWaitPage,
     VoteResults,
-    BeforeFamilyFeudWaitPage,
-    FamilyFeud,
-    ValuateFFSelect,
-    # WaitAfterValuateFFSelect,  #I think, we don't need this
-    ValuateFFResult,
-    AfterFamilyFeudWaitPage,
-    FamilyFeudResults,
-    RateYourExperience,
-    Questionnaire,
+    #BeforeFamilyFeudWaitPage,
+    #FamilyFeud,
+    #ValuateFFSelect,
+    #WaitAfterValuateFFSelect,  #I think, we don't need this
+    #ValuateFFResult,
+    #AfterFamilyFeudWaitPage,
+    #FamilyFeudResults,
+    #RateYourExperience,
+    #Questionnaire,
     AfterQuestionnaireWaitPage, #Payoff calculation is done here
     ShowPayoffDetails,
     EndPage,
