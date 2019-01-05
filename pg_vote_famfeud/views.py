@@ -29,11 +29,14 @@ class ControlQuestions(Page):
 
     def get_form_fields(self):
         if self.player.treatment=='exclude':
-            return ['control_tries','control1','control2','control3a','control3b', 'control3c', 'control3d', 'control4', 'control6' ,'control7exclude','control8']
-        elif self.player.treatment == 'excludemany':
-            return ['control_tries', 'control1', 'control2', 'control3a', 'control3b', 'control3c', 'control3d',
-                    'control4m', 'control5', 'control6', 'control7exclude', 'control8']
-        elif self.player.treatment=='control':
+            return ['control_tries','control1','control2','control3a','control3b', 'control3c', 'control3d', 'control4','control5', 'control6' ,'control7exclude','control8']
+        elif self.player.treatment=='only':
+            return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c']
+        elif self.player.treatment=='nosanction':
+            return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
+        elif self.player.treatment=='dislike':
+            return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
+        elif self.player.treatment=='punish':
             return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
 
     def is_displayed(self):
@@ -97,38 +100,22 @@ class ResultsPG(Page):
 class Vote(Page):
 
     form_model = models.Player
-
     def get_form_fields(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'feedback' or self.player.treatment == 'excludemany':
+        #TODO still uses the same novote-variable in all treatments. But e. g. the verbose-name is wrong in non-exclude treatments
+        if self.player.treatment == 'exclude':
             return ['vote_A', 'vote_B', 'vote_C', 'vote_D', 'vote_E', 'exclude_none']
-        elif self.player.treatment == 'include':
-            return ['vote_A', 'vote_B','vote_C','vote_D','vote_E']
+        if self.player.treatment == 'dislike':
+            return ['vote_A', 'vote_B', 'vote_C', 'vote_D', 'vote_E', 'exclude_none']
+        if self.player.treatment == 'punish':
+            return ['vote_A', 'vote_B', 'vote_C', 'vote_D', 'vote_E', 'exclude_none']
 
 
-    #TODO: Be cautious, if the initial values of the vote_X are changed
     def error_message(self, values):
         vote_count = sum([values['vote_A'], values['vote_B'], values['vote_C'], values['vote_D'],values['vote_E']])
-        if self.player.treatment == 'exclude':
-            if vote_count > 0 and values['exclude_none'] == True:
-                return 'Sie können nicht für keinen und einen Teilnehmer abstimmen.'
-            # Enforce the player to choose an option
-            if vote_count == 0 and values['exclude_none'] == False:
-                return 'Bitte stimmen Sie ab.'
-            # Enforce that the player can only vote for one other player
-            if vote_count > 1:
-                return 'Sie können nur für einen Teilnehmer abstimmen.'
-        elif self.player.treatment == 'excludemany':
-            if vote_count > 0 and values['exclude_none'] == True:
-                return 'Sie können nicht für keinen und einen Teilnehmer abstimmen.'
-            # Enforce the player to choose an option
-            if vote_count == 0 and values['exclude_none'] == False:
-                return 'Bitte stimmen Sie ab.'
-        elif self.player.treatment == 'include':
-            if vote_count == 0:
-                return 'Bitte treffen Sie eine Wahl.'
-
-
-
+        if vote_count > 0 and values['exclude_none'] == True:
+            return 'Sie können nicht für keinen und einen Teilnehmer abstimmen'
+        if vote_count == 0 and values['exclude_none'] == False:
+            return 'Bitte treffen Sie zuerst eine Entscheidung.'
 
     def vars_for_template(self):
         data = {'round_number': self.player.round_number-1}
@@ -138,9 +125,9 @@ class Vote(Page):
         return data
 
     def is_displayed(self):
-        if self.player.treatment == 'FF' or self.player.treatment == 'control':
-            return False
         if self.round_number == 1 or self.round_number == Constants.num_rounds:
+            return False
+        if self.player.treatment == "FF" or self.player.treatment == "nosanction" or self.player.treatment == "only":
             return False
         else:
             return True
@@ -158,9 +145,9 @@ class VoteWaitPage(WaitPage):
         ##Note the round payoff was updated here in regard to cost of voting. I shift this to overall payoff calculation at the end
 
     def is_displayed(self):
-        if self.player.treatment == 'FF' or self.player.treatment == 'control':
-            return False
         if self.round_number == 1 or self.round_number == Constants.num_rounds:
+            return False
+        if self.player.treatment == "FF" or self.player.treatment == "nosanction" or self.player.treatment == "only":
             return False
         else:
             return True
@@ -179,18 +166,18 @@ class VoteResults(Page):
        return data
 
    def is_displayed(self):
-       if self.player.treatment == 'FF' or self.player.treatment == 'control':
-           return False
        if self.round_number == 1 or self.round_number == Constants.num_rounds:
+           return False
+       if self.player.treatment == "FF" or self.player.treatment == "nosanction" or self.player.treatment == "only":
            return False
        else:
            return True
 
    def before_next_page(self):
-       # In the feedback treatment, player.plays is used to determine which player got the most negative feedback.
+       # In the punish/dislike treatment, player.plays is used to determine which player got the most negative feedback.
        # The FF game uses this to prevent players from playing in the other treatments. Instead, in the feedback treatment all players play FF.
        # Therefore, reset the variable here s. t. all can play FF in the Feedback treatment.
-       if self.player.treatment == 'feedback':
+       if self.player.treatment == 'dislike' or self.player.treatment=='punish' :
            self.player.plays = True
 
 
@@ -207,7 +194,7 @@ class ValuateFFSelect(Page):
         return {'time':Constants.questions_per_round * Constants.secs_per_question}
 
     def is_displayed(self):
-        if self.player.treatment == "FF":
+        if self.player.treatment == "FF" or self.player.treatment == "only":
             return False
         if self.round_number == 1:
             return True
@@ -229,7 +216,7 @@ class ValuateFFSelect(Page):
 class WaitAfterValuateFFSelect(WaitPage):
 
     def is_displayed(self):
-        if self.player.treatment=="FF":
+        if self.player.treatment=="FF" or self.player.treatment == "only":
             return False
         if self.round_number == 1:
             return True
@@ -245,7 +232,7 @@ class ValuateFFResult(Page):
     timer_text = "Sie werden weitergeleitet in "
 
     def is_displayed(self):
-        if self.player.treatment=="FF":
+        if self.player.treatment=="FF" or self.player.treatment=="only":
             return False
         if self.round_number == 1:
             return True
@@ -256,14 +243,23 @@ class ValuateFFResult(Page):
 
 class BeforeFamilyFeudWaitPage(WaitPage):
     wait_for_all_groups = True
+    def is_displayed(self):
+        if self.player.treatment == "only":
+            return False
 
 
 class FamilyFeud(Page):
-    pass
+    def is_displayed(self):
+        if self.player.treatment=="only":
+            return False
 
 # Defo need this because the results are displayed over all groups
 class AfterFamilyFeudWaitPage(WaitPage):
     wait_for_all_groups = True
+    def is_displayed(self):
+        if self.player.treatment == "only":
+            return False
+
 
 
 
@@ -275,7 +271,7 @@ class FamilyFeudResults(Page):
     # Don't display in the valuation round (last round) and practice round (first round)
     # Don't show to players which did not play the game
     def is_displayed(self):
-        if self.player.plays == False:
+        if self.player.plays == False or self.player.treatment=="only":
             return False
         if self.player.round_number == Constants.num_rounds or self.player.round_number == 1:
             return False
@@ -305,32 +301,13 @@ class FamilyFeudResults(Page):
 
 
 
-class RateYourExperience(Page):
-
-    def vars_for_template(self):
-        return {'round_number':self.player.round_number -1}
-
-    def is_displayed(self):
-        if self.player.treatment=="FF":
-            return False
-        #don't show in the valuation round and in the practice round
-        if self.player.round_number == Constants.num_rounds or self.player.round_number == 1:
-            return False
-        else:
-            return True
-    form_model = models.Player
-    form_fields = ['ff_experience']
-
-
-
 class Questionnaire(Page):
     form_model = 'player'
     def get_form_fields(self):
-        if self.player.treatment == 'exclude' or self.player.treatment == 'excludemany':
-            return ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8','q9','q10']
-        elif self.player.treatment == 'control':
-            return ['q1','q2','q5','q6','q7','q8','q9','q10']
-
+        if self.player.treatment == 'exclude':
+            return ['q1', 'q2', 'q3', 'q4', 'q5', 'q7','q8','q9','q10']
+        else:
+            return ['q1','q2','q5','q7','q8','q9','q10']
     def is_displayed(self):
         if self.player.treatment == "FF":
             return False
@@ -421,21 +398,20 @@ class EndPage(Page):
 page_sequence = [
     #Instructions,
     #ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
-    Contribution,
-    FirstWaitPage,
-    ResultsPG,
+    #Contribution,
+    #FirstWaitPage,
+    #ResultsPG,
     Vote,
     VoteWaitPage,
     VoteResults,
-    #BeforeFamilyFeudWaitPage,
-    #FamilyFeud,
-    #ValuateFFSelect,
-    #WaitAfterValuateFFSelect,  #I think, we don't need this
-    #ValuateFFResult,
-    #AfterFamilyFeudWaitPage,
-    #FamilyFeudResults,
-    #RateYourExperience,
-    #Questionnaire,
+    BeforeFamilyFeudWaitPage,
+    FamilyFeud,
+    ValuateFFSelect,
+    WaitAfterValuateFFSelect,  #I think, we don't need this
+    ValuateFFResult,
+    AfterFamilyFeudWaitPage,
+    FamilyFeudResults,
+    Questionnaire,
     AfterQuestionnaireWaitPage, #Payoff calculation is done here
     ShowPayoffDetails,
     EndPage,

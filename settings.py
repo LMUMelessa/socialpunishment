@@ -137,50 +137,50 @@ SESSION_CONFIG_DEFAULTS = {
 SESSION_CONFIGS = [
 
     {
-        'name': 'pgvoteff0',
-        'display_name': 'Control Treatment No Vote (T0)',
+        'name': 'only',
+        'display_name': 'Only PGG (only)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'Munich',
-        'treatment': 'control'  # #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
+        'treatment': 'only'  # only;nosanction;exclude;dislike;punish
     },
 
-# {
-#         'name': 'pgvoteff1',
-#         'display_name': 'Feedback Treatment (T1)',
-#         'num_demo_participants': 5,
-#         'app_sequence': ['pg_vote_famfeud'],
-#         'city': 'Munich',
-#         'treatment': 'feedback' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
-#     },
+{
+        'name': 'nosanction',
+        'display_name': 'PGG-GG (nosanction)',
+        'num_demo_participants': 5,
+        'app_sequence': ['pg_vote_famfeud'],
+        'city': 'Munich',
+        'treatment': 'nosanction' # only;nosanction;exclude;dislike;punish
+    },
 
     {
-        'name': 'pgvoteff2many',
-        'display_name': 'Exclude Treatment (many)',
+        'name': 'exclude',
+        'display_name': 'PGG-exclude-GG (exclude)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'Munich',
-        'treatment': 'excludemany'  # T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
+        'treatment': 'exclude'  # only;nosanction;exclude;dislike;punish
     },
 
 
     {
-        'name': 'pgvoteff2',
-        'display_name': 'Exclude Treatment (one)',
+        'name': 'dislike',
+        'display_name': 'PGG-dislike-GG',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'Munich',
-        'treatment': 'exclude' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
+        'treatment': 'dislike' # only;nosanction;exclude;dislike;punish
     },
 
-# {
-#         'name': 'pgvoteff3',
-#         'display_name': 'Include Treatment (T3)',
-#         'num_demo_participants': 5,
-#         'app_sequence': ['pg_vote_famfeud'],
-#         'city': 'Munich',
-#         'treatment': 'include' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include'
-#     },
+{
+        'name': 'punish',
+        'display_name': 'PGG-punish-GG',
+        'num_demo_participants': 5,
+        'app_sequence': ['pg_vote_famfeud'],
+        'city': 'Munich',
+        'treatment': 'punish' # only;nosanction;exclude;dislike;punish
+    },
 
 {
         'name': 'pgvoteff4',
@@ -188,7 +188,7 @@ SESSION_CONFIGS = [
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'Munich',
-        'treatment': 'FF' #T0: 'control'; T1: 'feedback'; T2: 'exclude' T3: 'include' #
+        'treatment': 'FF' # only;nosanction;exclude;dislike;punish
     },
 
 ]

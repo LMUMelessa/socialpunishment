@@ -448,9 +448,9 @@ class Player(BasePlayer):
         verbose_name='Teilnehmer E',
         doc="The player voted for Player E")
 
-    # In exclude treatment and feedback treatment
+
     exclude_none = models.BooleanField(widget=widgets.CheckboxInput(),
-                                       verbose_name="Ich möchte kein Gruppenmitglied ausschließen.",
+                                       verbose_name="Ich möchte für kein Gruppenmitglied stimmen.",
                                        doc = "The player wanted not to vote for any other player.")
 
 
@@ -508,8 +508,7 @@ class Player(BasePlayer):
                  "Sie wollten andere von der Last des Gruppenspiels befreien",
                  "Sie wollten ausprobieren was passiert"])
 
-    q5 = models.IntegerField(verbose_name="Bitte geben Sie ihr Alter an", min=0, max=300)
-    q6 = models.StringField(widget=widgets.RadioSelect(),verbose_name="Bitte geben Sie ihr Geschlecht an", choices=["männlich", "weiblich", "keine Angabe"])
+    q5 = models.IntegerField(verbose_name="Bitte geben Sie ihr Alter an", min=0, max=99)
     q7 = models.StringField(verbose_name="Bitte geben Sie ihr Studienfach an")
     q8 = models.IntegerField(min=0,verbose_name="Wie oft haben Sie bereits an einer ökonomischen Laborstudie teilgenommen (auch außerhalb dieses Labors)?")
     q9 = models.StringField(verbose_name="Wie viele Teilnehmerinnen oder Teilnehmer in diesem Raum haben Sie schon vor dem Experiment gekannt?")
@@ -527,42 +526,39 @@ class Player(BasePlayer):
                                                        1 if the player had everything correct on the first try.")
 
 
-    #exlude + control
+    # only + nosanction + exlude + dislike + punish
     control1 = models.IntegerField(verbose_name="Wie viele Taler haben Sie auf Ihrem privaten Konto, wenn Sie 3 Taler auf das Gruppenkonto einzahlen?",
                                    min=0)
 
-    # exlude + control
+    # only + nosanction + exlude + dislike + punish
     control2 = models.IntegerField(verbose_name="20 Taler wurden insgesamt in das Gruppenkonto eingezahlt. Wie viele Taler erhalten Sie am Ende aus dem Gruppenkonto?",
                                    min=0)
 
-    # exlude + control
+    # only + nosanction + exlude + dislike + punish
     control3a = models.StringField(widget=widgets.RadioSelect(),verbose_name="Es kann sein, dass verschiedene Gruppenmitglieder unterschiedlich viele Taler aus dem Gruppenkonto erhalten.",
                                    choices=["wahr", "falsch"])
-    # exlude + control
+
+    # only + nosanction + exlude + dislike + punish
     control3b = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Am Ende der ersten Stufe einer jeweiligen Runde wissen Sie, wie viel jedes Gruppenmitglied ins Gruppenkonto eingezahlt hat.",
         choices=["wahr", "falsch"])
-    # exlude + control
+
+    # only + nosanction + exlude + dislike + punish
     control3c = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Sie spielen in jeder Runde in einer neuen Gruppe mit anderen Personen",
         choices=["wahr", "falsch"])
 
-    #exclude
+    # exclude
     control3d = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Sollten Sie in einer Runde vom Gruppenspiel ausgeschlossen werden, so können Sie in der nächsten Runde nicht an der Aufteilungsentscheidung teilnehmen.",
         choices=["wahr", "falsch"])
 
-    #exclude
+    # exclude
     control4 = models.IntegerField(widget=widgets.RadioSelectHorizontal(),
-                                   verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
-                                  choices=[0,1,2,3,4,5])
-
-    # excludemany
-    control4m = models.IntegerField(widget=widgets.RadioSelectHorizontal(),
                                    verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
                                    choices=[0, 1, 2, 3, 4, 5])
 
-    #excludemany
+    #exclude
     control5 = models.StringField(widget=widgets.RadioSelectHorizontal(),
         verbose_name="Wie viele Taler kostet es Sie, wenn Sie ein Gruppenmitglied ausschließen?",
         choices=["0 Taler  ", "0,5 Taler  ", "1 Taler  ", "1,5 Taler  ", "2 Taler  "])
@@ -572,7 +568,7 @@ class Player(BasePlayer):
         verbose_name="Sie erhalten zwei Stimmen. Dürfen Sie an dem Gruppenspiel teilnehmen?",
         choices=["ja", "nein"])
 
-    #control
+    # nosanction + dislike + punishment
     control7control = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Mit wem spielen Sie das Gruppenspiel?",
         choices=["Alleine",
@@ -587,7 +583,7 @@ class Player(BasePlayer):
                  "Mit den Teilnehmern meiner Gruppe, die nicht ausgeschlossen wurden",
                  "Mit den ausgeschlossenen Gruppenmitgliedern aus dieser Runde"])
 
-    #exclude + control
+    # nosanction + exclude + dislike + punishment
     control8 = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Was passiert, wenn Sie einen richtigen Begriff im Gruppenspiel eingeben?",
         choices=["Nichts",

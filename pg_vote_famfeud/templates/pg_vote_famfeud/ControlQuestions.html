@@ -22,59 +22,30 @@
             <div id="info-text">
 
 
-                {% if player.treatment == 'exclude' %}
+                 <!-- control questions in all treatments-->
+                <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
+                {% formfield player.control1 %}
+                <br>
+                <div id="error_control2" class="otree-timer alert alert-warning" style="display: none;"></div>
+                {% formfield player.control2 %}
+                <br>
+                <div id="error_control3a" class="otree-timer alert alert-warning" style="display: none;"></div>
+                {% formfield player.control3a %}
+                <br>
+                <div id="error_control3b" class="otree-timer alert alert-warning" style="display: none;"></div>
+                {% formfield player.control3b %}
+                <br>
+                <div id="error_control3c" class="otree-timer alert alert-warning" style="display: none;"></div>
+                {% formfield player.control3c %}
 
-                    <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control1 %}
-                    <br>
-                    <div id="error_control2" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control2 %}
-                    <br>
-                    <div id="error_control3a" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3a %}
-                    <br>
-                    <div id="error_control3b" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3b %}
-                    <br>
-                    <div id="error_control3c" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3c %}
-                    <br>
+
+                {% if player.treatment == 'exclude'  %}
+
                     <div id="error_control3d" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control3d %}
-                    <br>
+
                     <div id="error_control4" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control4 %}
-                    <div id="error_control6" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control6 %}
-                    <br>
-                    <div id="error_control7exclude" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control7exclude %}
-                    <br>
-                    <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control8 %}
-
-                {% elif player.treatment == 'excludemany' %}
-
-                    <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control1 %}
-                    <br>
-                    <div id="error_control2" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control2 %}
-                    <br>
-                    <div id="error_control3a" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3a %}
-                    <br>
-                    <div id="error_control3b" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3b %}
-                    <br>
-                    <div id="error_control3c" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3c %}
-                    <br>
-                    <div id="error_control3d" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3d %}
-                    <br>
-                    <div id="error_control4m" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control4m %}
                     <br>
                     <div id="error_control5" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control5 %}
@@ -88,29 +59,29 @@
                     <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control8 %}
 
-                {% elif player.treatment == 'control' %}
+                {% elif player.treatment == 'nosanction' %}
 
-                    <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control1 %}
-                    <br>
-                    <div id="error_control2" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control2 %}
-                    <br>
-                    <div id="error_control3a" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3a %}
-                    <br>
-                    <div id="error_control3b" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3b %}
-                    <br>
-                    <div id="error_control3c" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3c %}
-                    <br>
                     <div id="error_control7control" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control7control %}
                     <br>
                     <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
                     {% formfield player.control8 %}
 
+                {% elif player.treatment == 'dislike' %}
+
+                    <div id="error_control7control" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control7control %}
+                    <br>
+                    <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control8 %}
+
+                {% elif player.treatment == 'punish' %}
+
+                    <div id="error_control7control" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control7control %}
+                    <br>
+                    <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
+                    {% formfield player.control8 %}
 
                 {% endif %}
 
@@ -319,8 +290,7 @@
                    err_message.style.color = corr_color;
                }
 
-                 //control3d
-
+        //control3d
         if (treatment=="exclude"){
                 controlme = document.getElementById("id_control3d_1");
                 err_message = document.getElementById("error_control3d");
@@ -343,31 +313,10 @@
                    err_message.style.color = corr_color;
                }}
 
-        if (treatment=="excludemany"){
-                controlme = document.getElementById("id_control3d_1");
-                err_message = document.getElementById("error_control3d");
-
-               if (!(controlme.checked)){
-
-                   err_message.style.backgroundColor = wrong_bg;
-                   err_message.style.borderColor = wrong_bc;
-                   err_message.style.color = wrong_color;
-
-                   err_message.textContent = wrong_text;
-                   err_message.style.display = "Block";
-                   allCorrect = false;
-               }else{
-
-                   err_message.textContent = corr_text;
-                   err_message.style.display = "Block";
-                   err_message.style.backgroundColor = corr_bg;
-                   err_message.style.borderColor = corr_bc;
-                   err_message.style.color = corr_color;
-               }}
 
         // control4
         if (treatment=="exclude"){
-                controlme = document.getElementById("id_control4_1");
+                controlme = document.getElementById("id_control4_4");
                 err_message = document.getElementById("error_control4");
 
                if (!(controlme.checked)){
@@ -388,31 +337,9 @@
                    err_message.style.color = corr_color;
                }}
 
-             // control4m
-        if (treatment=="excludemany"){
-                controlme = document.getElementById("id_control4m_4");
-                err_message = document.getElementById("error_control4m");
 
-               if (!(controlme.checked)){
-
-                   err_message.style.backgroundColor = wrong_bg;
-                   err_message.style.borderColor = wrong_bc;
-                   err_message.style.color = wrong_color;
-
-                   err_message.textContent = wrong_text;
-                   err_message.style.display = "Block";
-                   allCorrect = false;
-               }else{
-
-                   err_message.textContent = corr_text;
-                   err_message.style.display = "Block";
-                   err_message.style.backgroundColor = corr_bg;
-                   err_message.style.borderColor = corr_bc;
-                   err_message.style.color = corr_color;
-               }}
-
-                // control5
-        if (treatment=="excludemany"){
+        // control5
+        if (treatment=="exclude"){
                 controlme = document.getElementById("id_control5_1");
                 err_message = document.getElementById("error_control5");
 
@@ -433,9 +360,8 @@
                    err_message.style.borderColor = corr_bc;
                    err_message.style.color = corr_color;
                }}
-
+        // control6
         if (treatment=="exclude"){
-                // control6
                 controlme = document.getElementById("id_control6_0");
                 err_message = document.getElementById("error_control6");
 
@@ -458,30 +384,7 @@
                }}
 
 
-        if (treatment=="excludemany"){
-                // control6
-                controlme = document.getElementById("id_control6_0");
-                err_message = document.getElementById("error_control6");
-
-               if (!(controlme.checked)){
-
-                   err_message.style.backgroundColor = wrong_bg;
-                   err_message.style.borderColor = wrong_bc;
-                   err_message.style.color = wrong_color;
-
-                   err_message.textContent = wrong_text;
-                   err_message.style.display = "Block";
-                   allCorrect = false;
-               }else{
-
-                   err_message.textContent = corr_text;
-                   err_message.style.display = "Block";
-                   err_message.style.backgroundColor = corr_bg;
-                   err_message.style.borderColor = corr_bc;
-                   err_message.style.color = corr_color;
-               }}
-
-               if (treatment=="exclude" || treatment=="excludemany"){
+               if (treatment=="exclude"){
                // control7exclude
                 controlme = document.getElementById("id_control7exclude_2");
                 err_message = document.getElementById("error_control7exclude");
@@ -505,7 +408,7 @@
                }
                }
 
-               if (treatment=="control"){
+               if (treatment=="nosanction" || treatment=="dislike" || treatment=="punish" ){
                // control7control
                 controlme = document.getElementById("id_control7control_2");
                 err_message = document.getElementById("error_control7control");
@@ -529,7 +432,9 @@
                }
                }
 
-               //control8
+          //control8
+
+          if (!(treatment=="only")){
                 controlme = document.getElementById("id_control8_2");
                 err_message = document.getElementById("error_control8");
 
@@ -549,7 +454,7 @@
                    err_message.style.backgroundColor = corr_bg;
                    err_message.style.borderColor = corr_bc;
                    err_message.style.color = corr_color;
-               }
+               }}
 
 
 
@@ -567,120 +472,6 @@
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // I wante to make this in efficient loops but the evaluation differs between the different button types
-
-    function evaluate_answers2(){
-
-
-        var treatment = "{{ player.treatment }}";
-        var allCorrect = true;
-
-
-        if (treatment == "exclude"){
-
-            var questions = [
-                ["_control1",7],
-                ["_control2",8],
-                ["_control3a","falsch"],
-                ["_control3b", "wahr"],
-                ["_control3c","wahr"],
-                ["_control3d","falsch"],
-                ["_control4_1",1],
-                ["_control5",0],
-                ["_control6","ja"],
-                ["_control7exclude","1"],
-                ["_control8","2"]];
-
-
-            for (var i = 0; i < questions.length; i++) {
-
-
-               // get the "id_controlX" input field
-               var controlme = document.getElementById("id" + questions[i][0]);
-               alert("id" + questions[i][0]);
-               alert(controlme.value)
-
-               //get the "error_controlX message field
-                var err_message = document.getElementById("error" + questions[i][0]);
-
-
-
-
-               if (typeof(controlme.value) == "undefined"){
-
-                   err_message.textContent = "Bei dieser Eingabe stimmt etwas nicht.";
-                   err_message.style.display = "Block";
-
-                // there was an input of the user
-               }else {
-
-                   // input was false
-                   if (controlme.value.toString() != questions[i][1].toString()) {
-
-                       err_message.textContent = "Bei dieser Eingabe stimmt etwas nicht.";
-                       err_message.style.display = "Block";
-
-                   } else {
-
-                       err_message.textContent = "Korrekt.";
-                       err_message.style.display = "Block";
-                       err_message.style.backgroundColor = "lightgreen";
-                       err_message.style.borderColor = "green";
-                   }
-               }
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-    }
-
-
-
-{#        var control1 = document.getElementById('id_control1').value;#}
-{#        if (control1 != 7){#}
-{#            document.getElementById("error_control1").textContent = "Bei dieser Eingabe stimmt etwas nicht.";#}
-{#            document.getElementById("error_control1").style.display = "block";#}
-{#        }#}
-
-
-
-
-{#        var control1 = document.getElementById('id_control1').value;#}
-{#        if (control1 != 7){#}
-{#            document.getElementById("error_control1").textContent = "Bei dieser Eingabe stimmt etwas nicht.";#}
-{#            document.getElementById("error_control1").style.display = "block";#}
-{#        }#}
-{##}
-{##}
-{#        alert(control1)#}
-{#        alert(treatment)#}
-
 
 
     </script>

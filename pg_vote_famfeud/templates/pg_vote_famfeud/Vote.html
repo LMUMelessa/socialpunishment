@@ -20,22 +20,32 @@
         </div>
 
 
-
-
     <div id="main">
          <div id="info">
             <div id="info-text">
+            
+
+                {% if player.treatment == 'exclude' %}
+
+                    Sie können jetzt abstimmen, welches Gruppenmitglied von dem Gruppenspiel dieser Runde ausgeschlossen werden soll.
+                    Welches Mitglied möchten Sie ausschließen?
+                    Sie können mehrere Stimmen vergeben, jede Stimme kostet {{ Constants.cost_for_vote }} Taler.
+
+                {% elif player.treatment == 'dislike' %}
+
+                    Sie können jetzt abstimmen, welches Gruppenmitglied von dem Gruppenspiel dieser Runde gerügt werden soll.
+                    Welches Mitglied möchten sie rügen?
+                    Sie können mehrere Stimmen vergeben, jede Stimme kostet {{ Constants.cost_for_vote }} Taler.
+
+                {% elif player.treatment == 'punish' %}
+                    Sie können jetzt abstimmen, welches Gruppenmitglied einen Punktabzug erhalten soll.
+                    Welchem Mitglied möchten Sie Punkte abziehen?
+                    Sie können mehrere Stimmen vergeben, jede Stimme kostet {{ Constants.cost_for_vote }} Taler.
 
 
-
-            Sie können jetzt abstimmen, welches Gruppenmitglied von dem Gruppenspiel dieser Runde ausgeschlossen werden soll.
-            Welches Mitglied möchten Sie ausschließen?
-
-                {% if player.treatment == 'excludemany' %}
-                Sie können mehrere Stimmen vergeben, jede Stimme kostet {{ Constants.cost_for_vote }} Taler.
                 {% endif %}
-                <br>
-                Bitte klicken Sie die entsprechende Box an.
+                <br><br>
+
 
 
 
@@ -45,9 +55,7 @@
                 {% if player.playerlabel != 'Player C' %}{% formfield player.vote_C %}{% endif %}
                 {% if player.playerlabel != 'Player D' %}{% formfield player.vote_D %}{% endif %}
                 {% if player.playerlabel != 'Player E' %}{% formfield player.vote_E %}{% endif %}
-                {% if player.treatment == 'exclude' %} {% formfield player.exclude_none %}{% endif %}
-                {% if player.treatment == 'excludemany' %} {% formfield player.exclude_none %}{% endif %}
-                {% if player.treatment == 'feedback' %} {% formfield player.exclude_none %}{% endif %}
+               {% formfield player.exclude_none %}
 
             </div>
          </div>
