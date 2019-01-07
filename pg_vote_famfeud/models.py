@@ -22,7 +22,7 @@ class Constants(BaseConstants):
     endowment = 10
     multiplier = 2
     timeoutsecs = 60
-    cost_for_vote = 0.5
+    cost_for_vote = 0.2
 
 
     ### Familyfeud

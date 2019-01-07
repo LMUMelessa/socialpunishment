@@ -18,20 +18,13 @@
         Der Computer hat die Runde gezogen, welche für Sie ausbezahlt wird. <br>
         Es wird Runde {{ payround }} ausbezahlt. <br>
 
-        {% if player.treatment == 'exclude' %}
-        In dieser Runde war ihr Verdienst {{ payoff_in_payround_taler }} Taler.<br>
+        In dieser Runde war ihr Verdienst {{ payoff_in_payround_taler }} Taler {% if player.treatment == 'exclude' or player.treatment == 'dislike' or player.treatment == 'punish' %}(nach Abzug der Kosten für die eventuell abgegebenen Stimmen){% endif %}.<br>
         Dies entspricht {{ euro }} €.<br>
-        {% endif %}
-
-        {% if player.treatment == 'excludemany' %}
-        In dieser Runde war ihr Verdienst {{ payoff_in_payround_taler }} Taler (nach Abzug der Kosten für die evtl abgegebenen Stimmen).<br>
-        Dies entspricht {{ euro }} €.<br>
-        {% endif %}
 
         Ihre Prämie für pünktliches Erscheinen ist {{ part_fee }}.<br>
 
         {% if diff == 0 %}
-            Insgesamt erhalten Sie den gerundeten Betrag von {{all}} € für die Teilnahme am Experiment.
+            Insgesamt erhalten Sie den Betrag von {{all}} € für die Teilnahme am Experiment.
         {% else %}
             Davon werden {{diff}} € abgezogen, da Sie die Bonusrunde des Gruppenspiels gespielt haben.<br>
             Insgesamt erhalten Sie {{all}} € für die Teilnahme am Experiment.

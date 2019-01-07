@@ -28,26 +28,12 @@
                 {% formfield player.q3 %}
                 {% formfield player.q4 %}
                 {% formfield player.q5 %}
-                {% formfield player.q6 %}
                 {% formfield player.q7 %}
                 {% formfield player.q8 %}
                 {% formfield player.q9 %}
                 {% formfield player.q10%}
 
-             {% elif player.treatment == "excludemany"%}
-
-                {% formfield player.q1 %}
-                {% formfield player.q2 %}
-                {% formfield player.q3 %}
-                {% formfield player.q4 %}
-                {% formfield player.q5 %}
-                {% formfield player.q6 %}
-                {% formfield player.q7 %}
-                {% formfield player.q8 %}
-                {% formfield player.q9 %}
-                {% formfield player.q10%}
-
-             {% elif player.treatment == "control"%}
+            {% else %}
 
                 {% formfield player.q1 %}
                 {% formfield player.q2 %}
@@ -58,7 +44,7 @@
                 {% formfield player.q9 %}
                 {% formfield player.q10%}
 
-             {% endif %}
+            {% endif %}
 
                 <br>
 
