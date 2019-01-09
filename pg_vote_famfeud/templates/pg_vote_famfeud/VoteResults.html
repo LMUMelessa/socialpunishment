@@ -26,19 +26,43 @@
 
 
 
-                {% if  player.plays == True%}
+                {% if  player.sanctioned == False %}
 
 
-                    {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie auszuschließen. <br>
-                    Damit sind Sie NICHT vom Gruppenspiel in dieser Runde ausgeschlossen und dürfen mitspielen.<br>
-                    In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben und wer das Spiel mit Ihnen spielen wird. <br>
+                    {% if player.treatment == 'exclude' %}
+                          {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie auszuschließen. <br>
+                          Damit sind Sie NICHT vom Gruppenspiel in dieser Runde ausgeschlossen und dürfen mitspielen.<br>
+                          In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben und wer das Spiel mit Ihnen spielen wird.
 
+                    {% elif player.treatment == 'dislike' %}
+                       {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie zu rügen.<br>
+                        Damit erhalten Sie KEINE Rüge. <br>
+                        In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.<br>
+
+                    {% elif player.treatment == 'punish' %}
+                        {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.<br>
+                        Damit werden KEINE Punkte abgezogen.<br>
+                        In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.
+                    {% endif %}
 
                 {% else %}
 
-                    {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie auszuschließen.<br>
-                    Damit sind Sie vom Gruppenspiel in dieser Runde ausgeschlossen und dürfen NICHT mitspielen.<br>
-                    In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben und wer das Spiel spielen wird.
+                    {% if player.treatment == 'exclude' %}
+                        {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie auszuschließen.<br>
+                        Damit sind Sie vom Gruppenspiel in dieser Runde ausgeschlossen und dürfen NICHT mitspielen.<br>
+                        In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben und wer das Spiel spielen wird.<br>
+
+                    {% elif player.treatment == 'dislike' %}
+                        {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie zu rügen.<br>
+                        Damit erhalten Sie EINE Rüge.<br>
+                        In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.
+
+                    {% elif player.treatment == 'punish' %}
+                        {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.<br>
+                        Damit werden {{ Constants.punishment_value }} Punkte abgezogen.<br>
+                        In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.
+
+                    {% endif %}
 
                 {% endif %}
 
@@ -90,37 +114,43 @@
                 <tr style="background-color: black; color: white">
                     <th>Teilnehmer</th>
                     <th>{% if player.treatment == 'exclude'%}Stimmen{% endif%}
-                        {% if player.treatment == 'excludemany'%}Stimmen{% endif%}
-                        {% if player.treatment == 'include' %}Invitation Votes{% endif %}
-                       {% if player.treatment == 'feedback'%}Feedback Votes{% endif%}   </th>
+                        {% if player.treatment == 'dislike' %}Stimmen{% endif %}
+                       {% if player.treatment == 'punish'%}Stimmen{% endif%}   </th>
 
 
-               {% if player.treatment != 'feedback' %} <th> Spielt Gruppenspiel</th> {% endif %}
+               {% if player.treatment == 'exclude' %} <th> Spielt Gruppenspiel</th> {% endif %}
+                {% if player.treatment == 'dislike' %} <th> Erhält Rüge</th> {% endif %}
+                {% if player.treatment == 'punish' %} <th> Erhält Punktabzug</th> {% endif %}
                 </tr>
                 </tr>
                 <tr>
                     {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer A</td>{% endif %}
                     {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>{{ PlayerA_votes }}</b></td> {% else %}<td>{{ PlayerA_votes }}</td>{% endif %}
-                     {% if player.treatment != 'feedback' %}{% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>{{ PlayerA_plays }}</b></td> {% else %}<td>{{ PlayerA_plays }}</td>{% endif %}{% endif %}
+                     {% if player.treatment == 'exclude' %}{% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>{{ PlayerA_plays }}</b></td> {% else %}<td>{{ PlayerA_plays }}</td>{% endif %}
+                     {% else %}{% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>{{ PlayerA_sanctioned }}</b></td> {% else %}<td>{{ PlayerA_sanctioned }}</td>{% endif %}{% endif %}
                 </tr>
                 <tr>
                     {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer B</td>{% endif %}
                     {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>{{ PlayerB_votes }}</b></td> {% else %}<td>{{ PlayerB_votes }}</td>{% endif %}
-                     {% if player.treatment != 'feedback' %}{% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>{{ PlayerB_plays }}</b></td> {% else %}<td>{{ PlayerB_plays }}</td>{% endif %}{% endif %}
+                     {% if player.treatment == 'exclude' %}{% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>{{ PlayerB_plays }}</b></td> {% else %}<td>{{ PlayerB_plays }}</td>{% endif %}
+                    {% else %}{% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>{{ PlayerB_sanctioned }}</b></td> {% else %}<td>{{ PlayerB_sanctioned }}</td>{% endif %}{% endif %}
                 <tr>
                     {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer C</td>{% endif %}
                     {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>{{ PlayerC_votes }}</b></td> {% else %}<td>{{ PlayerC_votes }}</td>{% endif %}
-                     {% if player.treatment != 'feedback' %}{% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>{{ PlayerC_plays }}</b></td> {% else %}<td>{{ PlayerC_plays }}</td>{% endif %}{% endif %}
+                     {% if player.treatment == 'exclude' %}{% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>{{ PlayerC_plays }}</b></td> {% else %}<td>{{ PlayerC_plays }}</td>{% endif %}
+                {% else %}{% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>{{ PlayerC_sanctioned }}</b></td> {% else %}<td>{{ PlayerC_sanctioned }}</td>{% endif %}{% endif %}
                 </tr>
                 <tr>
                     {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer D</td>{% endif %}
                     {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>{{ PlayerD_votes }}</b></td> {% else %}<td>{{ PlayerD_votes }}</td>{% endif %}
-                     {% if player.treatment != 'feedback' %}{% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>{{ PlayerD_plays }}</b></td> {% else %}<td>{{ PlayerD_plays }}</td>{% endif %}{% endif %}
+                     {% if player.treatment == 'exclude' %}{% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>{{ PlayerD_plays }}</b></td> {% else %}<td>{{ PlayerD_plays }}</td>{% endif %}
+                 {% else %}{% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>{{ PlayerD_sanctioned }}</b></td> {% else %}<td>{{ PlayerD_sanctioned }}</td>{% endif %}{% endif %}
                 </tr>
                 <tr>
                     {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer E</td>{% endif %}
                     {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>{{ PlayerE_votes }}</b></td> {% else %}<td>{{ PlayerE_votes }}</td>{% endif %}
-                     {% if player.treatment != 'feedback' %}{% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>{{ PlayerE_plays }}</b></td> {% else %}<td>{{ PlayerE_plays }}</td>{% endif %}{% endif %}
+                     {% if player.treatment == 'exclude' %}{% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>{{ PlayerE_plays }}</b></td> {% else %}<td>{{ PlayerE_plays }}</td>{% endif %}
+                {% else %}{% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>{{ PlayerE_sanctioned }}</b></td> {% else %}<td>{{ PlayerE_sanctioned }}</td>{% endif %}{% endif %}
                 </tr>
             </table>
          </div>

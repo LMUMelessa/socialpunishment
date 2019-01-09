@@ -6,21 +6,28 @@ import random
 
 
 class Instructions(Page):
-
     def is_displayed(self):
         if self.player.treatment == 'FF':
             return False
         else:
+            return self.player.round_number == 1
+
+
+# in ordering after the control question
+# monitors information before a round depending on the current state of the experiment and treatment
+# distinct from Instructions to allow for differnt types of timeouts
+class InfosBeforeRound(Page):
+    timeout_seconds = 30
+    timer_text = "Sie werden weitergeleitet"
+
+    def is_displayed(self):
+        if self.player.treatment == 'only' and self.round_number == 1:
+            return False
+        else:
             return True
 
-    def vars_for_template(self):
-        if self.player.round_number == Constants.num_rounds:
-            if self.player.plays:
-                return {'last_round':'plays'}
-            else:
-                return {'last_round': 'doesnt'}
-        else:
-            return {'last_round':'false'}
+
+
 
 
 class ControlQuestions(Page):
@@ -159,26 +166,27 @@ class VoteResults(Page):
        data = {'round_number':self.player.round_number-1}
        for player in self.group.get_players():
            data[(player.playerlabel).replace(' ', '') + '_votes'] = player.myvotes
-           if player.plays == True:
-                data[(player.playerlabel).replace(' ', '') + '_plays'] = "Ja"
-           elif player.plays == False:
-               data[(player.playerlabel).replace(' ', '') + '_plays'] = "Nein"
+
+           if player.treatment == 'exclude':
+               if player.plays == True:
+                    data[(player.playerlabel).replace(' ', '') + '_plays'] = "Ja"
+               elif player.plays == False:
+                   data[(player.playerlabel).replace(' ', '') + '_plays'] = "Nein"
+           else: #in other treatments all play GG, show the sanctioning
+               if player.sanctioned == True:
+                   data[(player.playerlabel).replace(' ', '') + '_sanctioned'] = "Ja"
+               else:
+                   data[(player.playerlabel).replace(' ', '') + '_sanctioned'] = "Nein"
+
        return data
 
    def is_displayed(self):
        if self.round_number == 1 or self.round_number == Constants.num_rounds:
            return False
-       if self.player.treatment == "FF" or self.player.treatment == "nosanction" or self.player.treatment == "only":
+       if self.player.treatment == 'FF' or self.player.treatment == 'nosanction' or self.player.treatment == 'only':
            return False
        else:
            return True
-
-   def before_next_page(self):
-       # In the punish/dislike treatment, player.plays is used to determine which player got the most negative feedback.
-       # The FF game uses this to prevent players from playing in the other treatments. Instead, in the feedback treatment all players play FF.
-       # Therefore, reset the variable here s. t. all can play FF in the Feedback treatment.
-       if self.player.treatment == 'dislike' or self.player.treatment=='punish' :
-           self.player.plays = True
 
 
 # Willingness to pay for bonus Family Feud Round
@@ -205,7 +213,7 @@ class ValuateFFSelect(Page):
         ## FF valuation here
         ## determine if the player is allowed to play FF one last time or if he has to watch the screen
         ## depending on his ff_valuation
-        self.player.random_ff_valuation = random.choice(range(600))/100
+        self.player.random_ff_valuation = random.choice(range(60))/10
 
         if self.player.random_ff_valuation > float(self.player.ff_valuation):
             self.player.plays_bonusFF = False
@@ -246,12 +254,14 @@ class BeforeFamilyFeudWaitPage(WaitPage):
     def is_displayed(self):
         if self.player.treatment == "only":
             return False
+        else: return True
 
 
 class FamilyFeud(Page):
     def is_displayed(self):
         if self.player.treatment=="only":
             return False
+        else: return True
 
 # Defo need this because the results are displayed over all groups
 class AfterFamilyFeudWaitPage(WaitPage):
@@ -259,6 +269,7 @@ class AfterFamilyFeudWaitPage(WaitPage):
     def is_displayed(self):
         if self.player.treatment == "only":
             return False
+        else: return True
 
 
 
@@ -316,7 +327,7 @@ class Questionnaire(Page):
 
 
 # Do payoff calculation here
-class AfterQuestionnaireWaitPage(WaitPage):
+class CalculatePayoffAfterQuestionnaireWaitPage(WaitPage):
 
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
@@ -329,11 +340,19 @@ class AfterQuestionnaireWaitPage(WaitPage):
                 ## Note: Payround is the oTree round not the experiment round!
                 payround = random.choice(range(2, Constants.num_rounds, 1))
                 player.payround = payround #is accessed at showpayoffdetails
-                player.payoff = player.in_round(payround).round_payoff - player.in_round(payround).ivoted * Constants.cost_for_vote
+                punish_costs = 0
+                if player.treatment == 'punish':
+                    if player.in_round(payround).sanctioned:
+                        punish_costs = Constants.punishment_value
+                player.payoff = player.in_round(payround).round_payoff - (player.in_round(payround).ivoted * Constants.cost_for_vote) - punish_costs
             else:
                 payround = 2
                 player.payround = payround
-                player.payoff = player.in_round(payround).round_payoff - player.in_round(payround).ivoted * Constants.cost_for_vote
+                punish_costs = 0
+                if player.treatment == 'punish':
+                    if player.in_round(payround).sanctioned:
+                        punish_costs = Constants.punishment_value
+                player.payoff = player.in_round(payround).round_payoff - (player.in_round(payround).ivoted * Constants.cost_for_vote) - punish_costs
 
             # If player plays the bonus FF round then subtract the computer number from the players payoff
             # Note: the computer number is in Euro, but oTree expects points because it later converts Points to Euro in the Admin-Mak
@@ -358,8 +377,12 @@ class ShowPayoffDetails(Page):
     def vars_for_template(self):
         random_ff_valuation = self.player.in_round(1).random_ff_valuation
         ff_valuation = float(self.player.in_round(1).ff_valuation)
-        #you have to do this here again because in player.payoff the valuation casts are already subtracted; also for debugging purpose
-        taler = self.player.in_round(self.player.payround).round_payoff - self.player.in_round(self.player.payround).ivoted * Constants.cost_for_vote
+        #you have to do this here again because in player.payoff the valuation costs are already subtracted; also for debugging purpose
+        punish_costs = 0
+        if self.player.treatment == 'punish':
+            if self.player.in_round(self.player.payround).sanctioned:
+                punish_costs = Constants.punishment_value
+        taler = self.player.in_round(self.player.payround).round_payoff - (self.player.in_round(self.player.payround).ivoted * Constants.cost_for_vote) - punish_costs
         part_fee = self.session.config['participation_fee']
 
         # If the player did play the bonus round of FF then the random_ff_valuation will be subtracted
@@ -367,7 +390,7 @@ class ShowPayoffDetails(Page):
         # You cannot just use the payoff because we want to show the player the different elements that determine the overall payoff
         if random_ff_valuation < ff_valuation:
             return{'payoff_in_payround_taler':taler ,
-                    'euro': '{0:.2f}'.format(round(taler * self.session.config['real_world_currency_per_point'],2)),
+                    'euro': (round(c(taler).to_real_world_currency(self.session),2)),
                     'part_fee':part_fee,
                     'diff': self.player.in_round(1).random_ff_valuation, # Will be subtracted if he played bonus FF
                     'all': round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],2), # Note you have to calc this because self.payoff does not regard the participation fee
@@ -375,7 +398,7 @@ class ShowPayoffDetails(Page):
                    'number': self.player.participant.label}
         else:
             return {'payoff_in_payround_taler': taler,
-                    'euro': '{0:.2f}'.format(round(taler * self.session.config['real_world_currency_per_point'],2)),
+                    'euro':(round(c(taler).to_real_world_currency(self.session),2)),
                     'part_fee': part_fee,
                     'diff': 0,
                     'all':round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],2),
@@ -398,21 +421,22 @@ class EndPage(Page):
 page_sequence = [
     #Instructions,
     #ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
-    Contribution,
-    FirstWaitPage,
-    ResultsPG,
-    Vote,
-    VoteWaitPage,
-    VoteResults,
-    #BeforeFamilyFeudWaitPage,
-    #FamilyFeud,
-    #ValuateFFSelect,
-    #WaitAfterValuateFFSelect,  #I think, we don't need this
-    #ValuateFFResult,
+    InfosBeforeRound,
+    #Contribution,
+    #FirstWaitPage,
+    #ResultsPG,
+    #Vote,
+    #VoteWaitPage,
+    #VoteResults,
+    BeforeFamilyFeudWaitPage,
+    FamilyFeud,
+    ValuateFFSelect,
+    WaitAfterValuateFFSelect,  #I think, we don't need this
+    ValuateFFResult,
     AfterFamilyFeudWaitPage,
-    #FamilyFeudResults,
+    FamilyFeudResults,
     #Questionnaire,
-    AfterQuestionnaireWaitPage, #Payoff calculation is done here
+    CalculatePayoffAfterQuestionnaireWaitPage, #Payoff calculation is done here
     ShowPayoffDetails,
     EndPage,
 ]

@@ -1,0 +1,92 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+
+      <div id="header">
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+{#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
+        </div>
+
+    <div id="main">
+
+
+        <div id="info" >
+            <div id="info-text">
+
+            <br><br>
+
+                {% if player.round_number == 1 and player.treatment != 'only' %}
+
+                   Die Übungsrunde des Gruppenspiels startet auf der nächsten Seite.
+
+                {% elif player.round_number == 2 %}
+
+                   Die erste Runde des Experiments startet auf der nächsten Seite.
+
+                {% elif player.round_number != Constants.num_rounds %}
+
+                    Ende der Runde. Die Gruppen werden neu zusammengesetzt. Die nächste Runde des Experiments startet auf der nächsten Seite.
+
+                {% elif player.round_number == Constants.num_rounds %}
+
+                    {% if player.treatment == 'only' %}
+
+                        Die letzte Runde des Experiments ist beendet. Sie werden nun zum abschließenden Fragebogen gelangen.
+
+                     {#  Change here if you want to shut off the valuation #}
+                    {% else %}
+                        {% if player.plays %}
+
+                            Die letzte Runde des Experiments ist beendet. Sie werden nun die Bonusrunde des Gruppenspiels spielen, bevor Sie zum abschließenden Fragebogen gelangen.
+                        {% else %}
+
+                            Die letzte Runde des Experiments ist beendet. Sie werden nun den Screenshot betrachten, bevor Sie zum abschließenden Fragebogen gelangen.
+
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+
+
+
+           </div>
+        </div>
+
+
+        <div id="tables"></div>
+
+
+
+    </div>
+    <br>
+    {% next_button %}
+{% endblock %}
+
+
+{% block scripts %}
+
+    <style type="text/css">
+
+
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:200px; border-color: lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+
+
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+    </style>
+
+{% endblock %}

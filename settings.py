@@ -127,7 +127,7 @@ ROOMS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = {
-    'real_world_currency_per_point': .80,
+    'real_world_currency_per_point': 1,
     'participation_fee': 6.00,
     'doc': "",
     'mturk_hit_settings': mturk_hit_settings,
@@ -166,7 +166,7 @@ SESSION_CONFIGS = [
 
     {
         'name': 'dislike',
-        'display_name': 'PGG-dislike-GG',
+        'display_name': 'PGG-dislike-GG (dislike)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'Munich',
@@ -175,7 +175,7 @@ SESSION_CONFIGS = [
 
 {
         'name': 'punish',
-        'display_name': 'PGG-punish-GG',
+        'display_name': 'PGG-punish-GG (punish)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'city': 'Munich',

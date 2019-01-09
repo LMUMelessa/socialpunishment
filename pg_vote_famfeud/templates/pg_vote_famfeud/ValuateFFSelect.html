@@ -24,12 +24,16 @@
         <div id="info" >
             <div id="info-text">
 
-                Das war die Übungsrunde des Gruppenspiels. Nach Abschluss aller Runden des Experiments können Sie entweder {{ time }} Sekunden auf einen Screenshot schauen oder das Gruppenspiel ein letztes Mal spielen.
-                Bitte geben Sie unten an, wie viele Euro Sie maximal bereit sind für die Teilnahme am Gruppenspiel zu zahlen. Sie können jede Zahl zwischen 0,0 und 6,0 mit einer Nachkommastelle angeben.<br><br>
 
-                Der Computer wird dann zufällig eine Zahl zwischen 0,0 und 6,0 ziehen. Ist diese Zufallszahl höher als Ihre maximale Zahlungsbereitschaft, so können Sie das Gruppenspiel nicht spielen, sondern werden {{ time }} Sekunden den Screenshot anschauen.<br>
-                Wenn die Zufallszahl niedriger als Ihre maximale Zahlungsbereitschaft ist, können Sie in den {{ time }} Sekunden das Gruppenspiel spielen und es wird ein Eurobetrag in Höhe der Zufallszahl von Ihrer Prämie für pünktliches Erscheinen abgezogen.<br>
-                <br>
+                Das war die Übungsrunde des Gruppenspiels. Nach Abschluss aller Runden des Experiments wird es eine Wartephase von {{ time }} Sekunden geben. Anstatt zu warten,  können Sie während dieser Zeit auch das Gruppenspiel spielen.<br>
+                Wie viele Euro würden Sie maximal zahlen, um während der Wartephase das Gruppenspiel zu spielen?<br><br>
+
+                Der Computer zieht eine Zufallszahl zwischen 0,0 und 6,0.<br>
+                Wenn Ihre maximale Zahlungsbereitschaft unter der Zufallszahl liegt, schauen Sie während der Wartephase einen Screenshot an. <br>
+                Wenn Ihre maximale Zahlungsbereitschaft über der Zufallszahl liegt, können Sie während der Wartephase das Gruppenspiel spielen und es wird ein Eurobetrag in Höhe der Zufallszahl von Ihrer Prämie für pünktliches Erscheinen abgezogen.<br>
+
+                Ihre beste Strategie ist es, einfach ihre maximale Zahlungsbereitschaft auf der Skala ehrlich anzugeben.<br><br>
+
 
         {% formfield player.ff_valuation %}
 
@@ -44,7 +48,7 @@
 
     <br><br>
 
-    <button id="next" class="otree-btn-next btn btn-primary" disabled="true">Next</button>
+    <button id="next" class="otree-btn-next btn btn-primary" disabled="true">Weiter</button>
 
 {% endblock %}
 

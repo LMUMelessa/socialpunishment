@@ -24,27 +24,6 @@
 
                    Ich bin mit der Teilnahme am Experiment einverstanden.
 
-
-                {% elif player.round_number == 2 %}
-
-                   Die erste Runde des Experiments startet auf der nächsten Seite.
-
-                 {% else %}
-
-
-
-                    {% if last_round == 'false' %}
-
-                    Ende der Runde. Die Gruppen werden neu zusammengesetzt.
-
-                        {% elif last_round == 'plays' %}
-                            Die letzte Runde des Experiments ist beendet. Sie werden nun die Bonusrunde des Gruppenspiels spielen, bevor Sie zum abschließenden Fragebogen gelangen.
-
-                        {% elif last_round == 'doesnt' %}
-
-                            Die letzte Runde des Experiments ist beendet. Sie werden nun den Screenshot betrachten, bevor Sie zum abschließenden Fragebogen gelangen.
-                        {% endif %}
-
                 {% endif %}
            </div>
         </div>

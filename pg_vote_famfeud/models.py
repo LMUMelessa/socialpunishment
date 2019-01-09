@@ -17,14 +17,13 @@ Public Good + Family Feud
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 4 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
     timeoutsecs = 60
     cost_for_vote = 0.2
-
-
+    punishment_value = 1
     ### Familyfeud
 
     ### The overall time for one FF round is questions_per_round * secs_per_questions
@@ -303,7 +302,7 @@ class Group(RedwoodGroup):
 
     # Assigns for all the players how many votes they had
     # The variable updated is player.myvotes
-    # Note: later votes can have different meanings e.g. invitation or exclusion, this depends on the treatment
+    # Note: votes have different meanings, this depends on the treatment
     def set_myvotes(self):
         # Set the votes a player received from the other players
         for set_player in self.get_players():
@@ -320,7 +319,7 @@ class Group(RedwoodGroup):
                     vote_count += 1
             set_player.myvotes = vote_count
 
-        # Set the votes a player distributed towards the other players (they cost)
+        # Set the votes a player distributed towards the other players (they impose costs)
         for player in self.get_players():
             player.ivoted = sum([player.vote_A, player.vote_B, player.vote_C, player.vote_D, player.vote_E])
 
@@ -330,10 +329,11 @@ class Group(RedwoodGroup):
     # Assign if the second game/social game/family feud will be played with all players in the group
     # Sets group.all_play and player.plays
     def set_social_game(self):
-        if self.get_players()[0].treatment == "exclude" or self.get_players()[0].treatment == 'feedback' or self.get_players()[0].treatment == 'excludemany':
             for player in self.get_players():
                 if player.myvotes >= 3:
-                    player.plays = False
+                    player.sanctioned = True
+                    if player.treatment == 'exclude':
+                        player.plays = False
 
 
     # # Version of the function before 08.09.2018 - after that the exclusion mechanism changed, at least in exclusion treatment
@@ -417,7 +417,11 @@ class Player(BasePlayer):
         default = True
     )
 
-    # does the player plays the bonus FF round after all rounds of the experiment
+    #set in set_socialgame()
+    sanctioned = models.BooleanField(doc='Determines if the player was sanctioned after the vote. Sanctioning means Exclusion, Rüge or monitary punishment.',
+                                     default=False)
+
+    # does the player play the bonus FF round after all rounds of the experiment according to the evaluation mechanism
     # depends on the valuationFF results
     plays_bonusFF = models.BooleanField(initial=True,
                                         doc="This determines if the player plays the bonus guessing game round at the end of the experiment. \
