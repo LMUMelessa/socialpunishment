@@ -23,12 +23,10 @@ class InfosBeforeRound(Page):
     def is_displayed(self):
         if self.player.treatment == 'only' and self.round_number == 1:
             return False
+        elif self.player.treatment == 'FF':
+            return False
         else:
             return True
-
-
-
-
 
 class ControlQuestions(Page):
 
