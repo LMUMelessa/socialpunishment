@@ -76,25 +76,17 @@
          var guessed = document.getElementById('guessfield')
          var text = "";
          var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
          var ran = Math.random();
          if (ran < 0.03){
-
-
          var answers = [a1 ,a2 ,a3, a4, a5];
-
          var answeridx = Math.floor(Math.random() * 6)
-
-
          guessed.placeholder = answers[answeridx];
          guessed.value = answers[answeridx];
-
          }else{
 
               for (var i = 0; i < 5; i++){
                 text += possible.charAt(Math.floor(Math.random() * possible.length));
             }
-
          guessed.placeholder = text;
          guessed.value = text;
          }
@@ -141,13 +133,13 @@
         if (event.detail.payload.correct == true){
 
 
-             // all words have been found, still, wait until the time is up
+
             if (event.detail.payload.finished == true){
                 // if there is a bot: shut it off
                 if (botmode =="on"){
                clearInterval(intID);
                 }
-                // set answered_early = true s. t. in run_round the round will be restarted
+                // set answered_early = true s. t. in run_round the next question will be triggered
                 answered_early = true;
             }
 
@@ -158,17 +150,51 @@
             correctguess.style.background = 'linear-gradient(lightgreen, limegreen)'
 
             // display message about the guess for all players on the message board
-            var node = document.createElement("Li");
-            var span1 = document.createElement("span")
-            var textnode=document.createTextNode("Jemand fand ");
-            span1.appendChild(textnode)
-            var span2 = document.createElement("span")
-            span2.style.color = "blue"
-            var textnode2 = document.createTextNode(event.detail.payload.guess)
-            span2.appendChild(textnode2)
-            span1.appendChild(span2)
-            node.appendChild(span1);
-            document.getElementById("guesslist").appendChild(node);
+            // distinguish if the guess was from the actual player or from some other player
+            if (event.detail.payload.idInGroup==oTree.idInGroup){
+
+                //display on group board
+                var node = document.createElement("Li");
+                var span1 = document.createElement("span")
+                var textnode=document.createTextNode("Sie fanden ");
+                span1.appendChild(textnode)
+                span1.style.color = "blue"
+                var span2 = document.createElement("span")
+                span2.style.color = "blue"
+                span2.style.fontWeight = "bold"
+                span2.style.fontStyle = "italic"
+                var textnode2 = document.createTextNode(event.detail.payload.guess)
+                span2.appendChild(textnode2)
+                span1.appendChild(span2)
+                node.appendChild(span1);
+                document.getElementById("guesslist").appendChild(node);
+
+                //tell the player good job on message board
+                var message = document.getElementById('message');
+                message.textContent = 'Das war richtig!';
+                // increment player points
+                player_points += 1;
+                document.getElementById('player_points').textContent = "Ihre Punkte: " + player_points
+
+
+            }else{
+
+                var node = document.createElement("Li");
+                var span1 = document.createElement("span")
+                var textnode=document.createTextNode("Jemand fand ");
+                span1.appendChild(textnode)
+                span1.style.color = "black"
+                var span2 = document.createElement("span")
+                span2.style.color = "black"
+                span2.style.fontWeight = "bold"
+                span2.style.fontStyle = "italic"
+                var textnode2 = document.createTextNode(event.detail.payload.guess)
+                span2.appendChild(textnode2)
+                span1.appendChild(span2)
+                node.appendChild(span1);
+                document.getElementById("guesslist").appendChild(node);
+                }
+
 
             // scroll the div holding the guesslist to the end, so always the newewst guess is displayed
             var scrollme = document.getElementById('aroundguesslist');
@@ -178,41 +204,56 @@
             group_points += 1;
             document.getElementById('group_points').textContent = "Gruppen Punkte: " + group_points
 
-            // if the player is the who guessed correctly, tell him good job, increment his points
-            if (oTree.idInGroup == event.detail.payload.idInGroup){
-                var message = document.getElementById('message');
-                message.textContent = 'Das war richtig!';
-                // increment player points
-                player_points += 1;
-                document.getElementById('player_points').textContent = "Ihre Punkte: " + player_points
-
-            }
 
         // if the guess was wrong
         } else {
-            // display message for all players on message board
-            var node = document.createElement("Li");
-            var span1 = document.createElement("span")
-            var textnode=document.createTextNode("Jemand versuchte ");
-            span1.appendChild(textnode)
-            var span2 = document.createElement("span")
-            span2.style.color = "red"
-            var textnode2 = document.createTextNode(event.detail.payload.guess)
-            span2.appendChild(textnode2)
-            span1.appendChild(span2)
-            node.appendChild(span1);
-            document.getElementById("guesslist").appendChild(node);
+
+
+            if(event.detail.payload.idInGroup==oTree.idInGroup){
+
+                //display on group board
+                var node = document.createElement("Li");
+                var span1 = document.createElement("span")
+                var textnode=document.createTextNode("Sie versuchten ");
+                span1.appendChild(textnode)
+                span1.style.color = "red"
+                var span2 = document.createElement("span")
+                span2.style.color = "red"
+                span2.style.fontWeight = "bold"
+                span2.style.fontStyle = "italic"
+                var textnode2 = document.createTextNode(event.detail.payload.guess)
+                span2.appendChild(textnode2)
+                span1.appendChild(span2)
+                node.appendChild(span1);
+                document.getElementById("guesslist").appendChild(node);
+
+                //tell him on message board to try again
+                var message = document.getElementById('message')
+                message.textContent = 'Dein Begriff ist ' + event.detail.payload.guess + '. Versuchs nochmal!'
+
+
+            }else{
+
+                var node = document.createElement("Li");
+                var span1 = document.createElement("span")
+                var textnode=document.createTextNode("Jemand versuchte ");
+                span1.appendChild(textnode)
+                span1.style.color = "red"
+                var span2 = document.createElement("span")
+                span2.style.color = "red"
+                span2.style.fontWeight = "bold"
+                span2.style.fontStyle = "italic"
+                var textnode2 = document.createTextNode(event.detail.payload.guess)
+                span2.appendChild(textnode2)
+                span1.appendChild(span2)
+                node.appendChild(span1);
+                document.getElementById("guesslist").appendChild(node);
+            }
 
             // scroll the div around the guesslist to the end, so always the newewst guess is displayed
             var scrollme = document.getElementById('aroundguesslist');
             scrollme.scrollTop = scrollme.scrollHeight;
 
-
-            // if the player is the who guessed correctly, tell him try again
-            if (oTree.idInGroup == event.detail.payload.idInGroup){
-                var message = document.getElementById('message')
-                message.textContent = 'Dein Begriff ist ' + event.detail.payload.guess + '. Versuchs nochmal!'
-            }
         }
     }
 
@@ -339,7 +380,7 @@
                bonus_seconds = n;
            // current question is a normal question
            }else{
-               // accumulate the bonus questions
+               // accumulate the bonus seconds
                bonus_seconds = bonus_seconds + n;
            }
 

@@ -31,8 +31,8 @@ class Constants(BaseConstants):
 
     questions_per_round = 2 #2 in the real experiment
     extra_questions = 1 #1 in the real experiment
-    secs_per_question = 5 #30
-    wait_between_question = 4 #4
+    secs_per_question = 60 #30 in the "
+    wait_between_question = 4 #4 in the "
 
 
     with codecs.open('data.csv', 'r', 'latin-1') as f:
