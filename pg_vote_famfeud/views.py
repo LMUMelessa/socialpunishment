@@ -417,12 +417,12 @@ class EndPage(Page):
 
 
 page_sequence = [
-    #Instructions,
-    #ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
+    Instructions,
+    ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
     InfosBeforeRound,
-    #Contribution,
-    #FirstWaitPage,
-    #ResultsPG,
+    Contribution,
+    FirstWaitPage,
+    ResultsPG,
     Vote,
     VoteWaitPage,
     VoteResults,
@@ -433,7 +433,7 @@ page_sequence = [
     ValuateFFResult,
     AfterFamilyFeudWaitPage,
     FamilyFeudResults,
-    #Questionnaire,
+    Questionnaire,
     CalculatePayoffAfterQuestionnaireWaitPage, #Payoff calculation is done here
     ShowPayoffDetails,
     EndPage,

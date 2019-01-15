@@ -17,12 +17,12 @@ Public Good + Family Feud
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 4 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
     timeoutsecs = 60
-    cost_for_vote = 0.2
+    cost_for_vote = 0.5 #don't change this! It is hardcoded in the ControlQuestions
     punishment_value = 1
     ### Familyfeud
 
@@ -31,7 +31,7 @@ class Constants(BaseConstants):
 
     questions_per_round = 2 #2 in the real experiment
     extra_questions = 1 #1 in the real experiment
-    secs_per_question = 60 #30 in the "
+    secs_per_question = 5 #30 in the "
     wait_between_question = 4 #4 in the "
 
 
@@ -70,8 +70,7 @@ class Subsession(BaseSubsession):
         for player in self.get_players():
             player.treatment = self.session.config['treatment']
             player.city = self.session.config['city']
-            player.participant.label = str(self.get_players().index(player))
-
+           # player.participant.label = str(self.get_players().index(player)) #outcomment when done via participant_label.txt file
 
 
         self.group_randomly()
@@ -79,9 +78,6 @@ class Subsession(BaseSubsession):
         self.define_label()
 
         ### Family feud
-
-
-
         if self.round_number == 1:
 
             quizload = []

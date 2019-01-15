@@ -113,8 +113,9 @@ ROOM_DEFAULTS = {}
 
 ROOMS = [
     {
-        'name': 'munich',
-        'display_name': 'MELESSA Room',
+        'name': 'awi_lab',
+        'display_name': 'AWI Experimentallabor',
+        'participant_label_file':'participant_labels.txt'
      
     }]
 
@@ -127,7 +128,7 @@ ROOMS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = {
-    'real_world_currency_per_point': 1,
+    'real_world_currency_per_point': 0.8,
     'participation_fee': 6.00,
     'doc': "",
     'mturk_hit_settings': mturk_hit_settings,
