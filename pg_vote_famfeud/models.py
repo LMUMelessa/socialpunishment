@@ -66,6 +66,7 @@ class Subsession(BaseSubsession):
                 player.germanplayerlabel = germanlabellist[player.id_in_group-1]
 
     def creating_session(self):
+
         # Assign treatment
         for player in self.get_players():
             player.treatment = self.session.config['treatment']
@@ -237,8 +238,11 @@ class Group(RedwoodGroup):
                         [self.s1_answered, self.s2_answered, self.s3_answered, self.s4_answered, self.s5_answered])
 
                     # send informations back to javascript, this activates 'instructions_after_guess()'
-                    self.send('guessInformations', {'guess': question[answernum][0],
-                                                    # send the exactly correct answer back, which is the 0 element of the list
+                    self.send('guessInformations', {
+                                                    'participant.code': player.participant.code,
+                                                    'session.code':player.subsession.session.code,
+                                                    'subsession.round_number':player.subsession.round_number,
+                                                    'guess': question[answernum][0], # send the exactly correct answer back, which is the 0 element of the list
                                                     'whichword': answernum,
                                                     'idInGroup': player_id_in_group,
                                                     'correct': True,
@@ -257,9 +261,12 @@ class Group(RedwoodGroup):
 
         # guess was not correct, send respective informations back
         if good_guess == False:
-            self.send('guessInformations', {'guess': guess,
-                                            'idInGroup': player_id_in_group,
-                                            'correct': False})
+            self.send('guessInformations', { 'participant.code': player.participant.code,
+                                             'session.code':player.subsession.session.code,
+                                             'subsession.round_number':player.subsession.round_number,
+                                             'guess': guess,
+                                             'idInGroup': player_id_in_group,
+                                             'correct': False})
 
     # TODO can you just leave out the period length function?
     def period_length(self):
@@ -619,6 +626,9 @@ class Player(BasePlayer):
 
     def initial_decision(self):
         return 0.5
+
+
+
 
 
 

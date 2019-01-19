@@ -28,19 +28,18 @@
 
                 {% if  player.sanctioned == False %}
 
-
                     {% if player.treatment == 'exclude' %}
-                          {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie auszuschließen. <br>
+                          {{ player.myvotes }} {% if player.myvotes == 1 %}anderes Gruppenmitglied hat dafür gestimmt, Sie auszuschließen.{% else %}andere Gruppenmitglieder haben dafür gestimmt, Sie auszuschließen.{% endif %}  <br>
                           Damit sind Sie NICHT vom Gruppenspiel in dieser Runde ausgeschlossen und dürfen mitspielen.<br>
                           In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben und wer das Spiel mit Ihnen spielen wird.
 
                     {% elif player.treatment == 'dislike' %}
-                       {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie zu rügen.<br>
+                       {{ player.myvotes }} {% if player.myvotes == 1 %}anderes Gruppenmitglied hat dafür gestimmt, Sie zu rügen.{% else %}andere Gruppenmitglieder haben dafür gestimmt, Sie zu rügen.{% endif %} <br>
                         Damit erhalten Sie KEINE Rüge. <br>
                         In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.<br>
 
                     {% elif player.treatment == 'punish' %}
-                        {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.<br>
+                        {{ player.myvotes }} {% if player.myvotes == 1 %}anderes Gruppenmitglied hat dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.{% else %}andere Gruppenmitglieder haben dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.{% endif %} <br>
                         Damit werden KEINE Punkte abgezogen.<br>
                         In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.
                     {% endif %}
@@ -48,17 +47,17 @@
                 {% else %}
 
                     {% if player.treatment == 'exclude' %}
-                        {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie auszuschließen.<br>
+                        {{ player.myvotes }} {% if player.myvotes == 1 %}anderes Gruppenmitglied hat dafür gestimmt, Sie auszuschließen.{% else %}andere Gruppenmitglieder haben dafür gestimmt, Sie auszuschließen.{% endif %} <br>
                         Damit sind Sie vom Gruppenspiel in dieser Runde ausgeschlossen und dürfen NICHT mitspielen.<br>
                         In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben und wer das Spiel spielen wird.<br>
 
                     {% elif player.treatment == 'dislike' %}
-                        {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Sie zu rügen.<br>
+                        {{ player.myvotes }} {% if player.myvotes == 1 %}anderes Gruppenmitglied hat dafür gestimmt, Sie zu rügen.{% else %}andere Gruppenmitglieder haben dafür gestimmt, Sie zu rügen.{% endif %} <br>
                         Damit erhalten Sie EINE Rüge.<br>
                         In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.
 
                     {% elif player.treatment == 'punish' %}
-                        {{ player.myvotes }} andere Gruppenmitglieder haben dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.<br>
+                        {{ player.myvotes }} {% if player.myvotes == 1 %}anderes Gruppenmitglied hat dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.{% else %}andere Gruppenmitglieder haben dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.{% endif %} <br><br>
                         Damit werden {{ Constants.punishment_value }} Punkte abgezogen.<br>
                         In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.
 

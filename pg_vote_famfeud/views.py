@@ -13,6 +13,7 @@ class Instructions(Page):
             return self.player.round_number == 1
 
 
+
 # in ordering after the control question
 # monitors information before a round depending on the current state of the experiment and treatment
 # distinct from Instructions to allow for differnt types of timeouts
