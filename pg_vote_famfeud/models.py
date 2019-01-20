@@ -17,12 +17,12 @@ Public Good + Family Feud
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 12 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
     timeoutsecs = 60
-    cost_for_vote = 0.5 #don't change this! It is hardcoded in the ControlQuestions
+    cost_for_vote = 0.5 #don't change this! It is hardcoded as 0.5(Taler) the ControlQuestions
     punishment_value = 1
     ### Familyfeud
 
