@@ -298,7 +298,8 @@ class Group(RedwoodGroup):
     # round_payoffs for pg game; function also sets total_cont and indiv_share
     def set_round_payoffs(self):
         self.total_cont = sum([p.contribution for p in self.get_players()])
-        self.indiv_share = (self.total_cont * Constants.multiplier) / Constants.players_per_group
+        #the rounding ensures that 10.8 is 11 and not 10 as indiv_share is an integerField
+        self.indiv_share = round((self.total_cont * Constants.multiplier) / Constants.players_per_group)
         for p in self.get_players():
             p.round_payoff = (Constants.endowment - p.contribution) + self.indiv_share
 
@@ -519,7 +520,7 @@ class Player(BasePlayer):
     q7 = models.StringField(verbose_name="Bitte geben Sie ihr Studienfach an")
     q8 = models.IntegerField(min=0,verbose_name="Wie oft haben Sie bereits an einer ökonomischen Laborstudie teilgenommen (auch außerhalb dieses Labors)?")
     q9 = models.StringField(verbose_name="Wie viele Teilnehmerinnen oder Teilnehmer in diesem Raum haben Sie schon vor dem Experiment gekannt?")
-    q10 = models.StringField(verbose_name="Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!")
+    q10 = models.StringField(verbose_name="Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!", blank=True)
 
 
 

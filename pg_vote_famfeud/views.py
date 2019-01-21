@@ -84,6 +84,10 @@ class FirstWaitPage(WaitPage):
         else:
             return True
 
+# wait_for_all_groups= True in FirstWaitPage results in error because you reference group there
+class SecondWaitPage(WaitPage):
+    wait_for_all_groups = True
+
 
 class ResultsPG(Page):
 
@@ -157,6 +161,19 @@ class VoteWaitPage(WaitPage):
             return False
         else:
             return True
+
+#wait_for_all_groups = True in VoteWaitPage would result in error
+class VoteWaitPage2(WaitPage):
+    wait_for_all_groups = True
+
+    def is_displayed(self):
+        if self.round_number == 1 or self.round_number == Constants.num_rounds:
+            return False
+        if self.player.treatment == "FF" or self.player.treatment == "nosanction" or self.player.treatment == "only":
+            return False
+        else:
+            return True
+
 
 
 class VoteResults(Page):
@@ -246,8 +263,30 @@ class ValuateFFResult(Page):
         else:
             return False
 
+#the following two sites are needed to not surprise participant with the FF game
+# the might have waited for a long time on the BeforeFamilyFeud Wait page, waiting for all the other gruoups and then the game suddenly starts
+# so we tell them here again
+class BeforePrepareFFWaitPage(WaitPage):
+    wait_for_all_groups = True
 
+    def is_displayed(self):
+        if self.player.treatment == "only":
+            return False
+        else:
+            return True
 
+class PrepareFF(Page):
+
+    timeout_seconds = 5
+    timer_text = "Das Gruppenspiel startet in "
+
+    def is_displayed(self):
+        if self.player.treatment == "only":
+            return False
+        else:
+            return True
+
+#TODO is theoreticall not needed anymore because on PrepareFF we don't display the next button
 class BeforeFamilyFeudWaitPage(WaitPage):
     wait_for_all_groups = True
     def is_displayed(self):
@@ -423,10 +462,14 @@ page_sequence = [
     InfosBeforeRound,
     Contribution,
     FirstWaitPage,
+    SecondWaitPage,
     ResultsPG,
     Vote,
     VoteWaitPage,
+    VoteWaitPage2,
     VoteResults,
+    BeforePrepareFFWaitPage,
+    PrepareFF,
     BeforeFamilyFeudWaitPage,
     FamilyFeud,
     ValuateFFSelect,

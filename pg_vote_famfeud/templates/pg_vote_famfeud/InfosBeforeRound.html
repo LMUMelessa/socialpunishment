@@ -22,15 +22,16 @@
 
                 {% if player.round_number == 1 and player.treatment != 'only' %}
 
-                   Die Übungsrunde des Gruppenspiels startet auf der nächsten Seite.
+                   Die Übungsrunde des Gruppenspiels startet auf der nächsten Seite. Bitte drücken Sie weiter.
 
                 {% elif player.round_number == 2 %}
 
-                   Die erste Runde des Experiments startet auf der nächsten Seite.
+                   Die erste Runde des Experiments startet auf der nächsten Seite. Bitte drücken Sie weiter.
 
                 {% elif player.round_number != Constants.num_rounds %}
 
-                    Ende der Runde. Die Gruppen werden neu zusammengesetzt. Die nächste Runde des Experiments startet auf der nächsten Seite.
+                    Ende der Runde. Die Gruppen werden neu zusammengesetzt. Die nächste Runde des Experiments startet auf der nächsten Seite.<br>
+                    Bitte drücken Sie weiter.
 
                 {% elif player.round_number == Constants.num_rounds %}
 
