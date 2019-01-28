@@ -379,10 +379,6 @@ class Group(RedwoodGroup):
     #         self.all_play = True
 
 
-    # Setting the goup level -  excluded player - variable
-
-
-
 class Player(BasePlayer):
 
 

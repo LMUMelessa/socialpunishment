@@ -16,7 +16,7 @@ if environ.get('OTREE_PRODUCTION') not in {None, '', '0'}:
 else:
     DEBUG = True
 
-DEBUG = False
+#DEBUG = False
 
 ADMIN_USERNAME = 'admin'
 

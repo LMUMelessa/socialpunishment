@@ -286,14 +286,6 @@ class PrepareFF(Page):
         else:
             return True
 
-#TODO is theoreticall not needed anymore because on PrepareFF we don't display the next button
-class BeforeFamilyFeudWaitPage(WaitPage):
-    wait_for_all_groups = True
-    def is_displayed(self):
-        if self.player.treatment == "only":
-            return False
-        else: return True
-
 
 class FamilyFeud(Page):
     def is_displayed(self):
@@ -336,6 +328,8 @@ class FamilyFeudResults(Page):
                your_group = 'False'
                if self.player.group.id_in_subsession == player.group.id_in_subsession:
                    your_group = 'True'
+               # this can be used to show more detailed information
+               # corresponds to alternative FFResultsPage (see some older git version)
                thats_you = 'False'
                if (your_group == 'True') and (self.player.id_in_group == player.id_in_group):
                    thats_you = 'True'
@@ -346,6 +340,8 @@ class FamilyFeudResults(Page):
                    pointinfo = 'Was excluded'
                helplist[2].append({ 'player_label':player.playerlabel, 'points':pointinfo, 'your_group':your_group, 'thats_you':thats_you})
             data_dic['alist'].append(helplist)
+
+        data_dic['alist'].sort(key=lambda helplist: helplist[1], reverse=True)
         return data_dic
 
 
@@ -470,7 +466,6 @@ page_sequence = [
     VoteResults,
     BeforePrepareFFWaitPage,
     PrepareFF,
-    BeforeFamilyFeudWaitPage,
     FamilyFeud,
     ValuateFFSelect,
     WaitAfterValuateFFSelect,  #I think, we don't need this
