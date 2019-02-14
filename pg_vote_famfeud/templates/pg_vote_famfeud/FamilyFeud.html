@@ -51,6 +51,8 @@
       oTree.questionsPerRound = {{ Constants.questions_per_round }}
       oTree.extra_questions = {{ Constants.extra_questions }}
       oTree.plays = "{{ player.plays }}";
+      oTree.round_number = {{ subsession.round_number }}
+      oTree.numrounds = {{ Constants.num_rounds }}
       {% if view.is_debug %}
       oTree.debug = true;
       {% else %}
@@ -264,8 +266,8 @@
     document.getElementById('questionChannel').addEventListener('event', receive_question);
     function receive_question(event){
 
+        // decide if the player sees the game or the screenshot
 
-        // don't show the game, if the player was excluded
         var wrapper = document.getElementById("wrapper");
         if (oTree.plays == "True") {
             // don't show the screenshot
@@ -277,11 +279,15 @@
             var wrapper = document.getElementById("wrapper");
             wrapper.style.display = "none";
             var ex = document.getElementById("excluded");
-            ex.textContent = ""
-             var shot = document.getElementById("screenshot");
-            shot.style.display = "block";
+            ex.style.display ="block"
+            if (oTree.round_number == oTree.numrounds){
+             var shot = document.getElementById("screenshot2");
+             shot.style.display = "block";
+            }else{
+                 var shot = document.getElementById("screenshot1");
+                 shot.style.display = "block";
+            }
         }
-
 
         // atm the answers here are only needed for the bot. The design is that after a correct guess the correct guess is sended from oTree.
         if (botmode=="on"){
@@ -291,8 +297,6 @@
             a4 = event.detail.payload.s4[0];
             a5 = event.detail.payload.s5[0];
         }
-
-
         // if multiple family feud subrounds (more then 1 question) are played, turn the shown solutions to placeholders again
         var s1 =  document.getElementById('s1');
         s1.textContent = 'Wort 1'
@@ -629,8 +633,6 @@
 
       <!-- Template of the page -->
 
-      <img id="screenshot" src="{% static "global/screen1.png" %}" style="display: none; height: 570px; width:850px"/>
-
       <div id="wrapper">
 
           <!-- main box on the left -->
@@ -704,7 +706,8 @@
 
        <!-- Only show to excluded player -->
       <div id="excluded">
-        <p id="ex_screen"></p>
+          <img id="screenshot1" src="{% static "global/screen1.png" %}" style="display: none; height: 570px; width:850px"/>
+          <img id="screenshot2" src="{% static "global/screen2.png" %}" style="display: none; height: 570px; width:850px"/>
 
       </div>
 
