@@ -20,6 +20,7 @@
 
             <br><br>
 
+                {#  if treatment=only this site is not displayed anyway, but we have the condition here for the logic #}
                 {% if player.round_number == 1 and player.treatment != 'only' %}
 
                    Die Übungsrunde des Gruppenspiels startet auf der nächsten Seite. Bitte drücken Sie weiter.
@@ -35,11 +36,13 @@
 
                 {% elif player.round_number == Constants.num_rounds %}
 
-                    {% if player.treatment == 'only' %}
+
+                    {# in only treatment or if there is no valuation, there is nothing left instead of the questionnaire #}
+                    {% if player.treatment == 'only' or valuation == "off" %}
 
                         Die letzte Runde des Experiments ist beendet. Sie werden nun zum abschließenden Fragebogen gelangen.
 
-                     {#  Change here if you want to shut off the valuation #}
+                    {# if there is valuation, give player respective information #}
                     {% else %}
                         {% if player.plays %}
 

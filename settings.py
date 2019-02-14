@@ -144,7 +144,6 @@ SESSION_CONFIGS = [
         'display_name': 'Only PGG (only)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'city': 'Munich',
         'treatment': 'only'  # only;nosanction;exclude;dislike;punish
     },
 
@@ -153,7 +152,7 @@ SESSION_CONFIGS = [
         'display_name': 'PGG-GG (nosanction)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'city': 'Munich',
+        'valuation':"on", #on;off
         'treatment': 'nosanction' # only;nosanction;exclude;dislike;punish
     },
 
@@ -162,7 +161,7 @@ SESSION_CONFIGS = [
         'display_name': 'PGG-exclude-GG (exclude)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'city': 'Munich',
+        'valuation': "on",  # on;off
         'treatment': 'exclude'  # only;nosanction;exclude;dislike;punish
     },
 
@@ -172,7 +171,7 @@ SESSION_CONFIGS = [
         'display_name': 'PGG-dislike-GG (dislike)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'city': 'Munich',
+        'valuation': "on",  # on;off
         'treatment': 'dislike' # only;nosanction;exclude;dislike;punish
     },
 
@@ -181,7 +180,7 @@ SESSION_CONFIGS = [
         'display_name': 'PGG-punish-GG (punish)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'city': 'Munich',
+        'valuation': "on",  # on;off
         'treatment': 'punish' # only;nosanction;exclude;dislike;punish
     },
 
@@ -190,7 +189,6 @@ SESSION_CONFIGS = [
         'display_name': 'Family Feud only',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'city': 'Munich',
         'treatment': 'FF' # only;nosanction;exclude;dislike;punish
     },
 

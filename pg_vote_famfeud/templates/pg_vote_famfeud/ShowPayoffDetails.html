@@ -19,7 +19,8 @@
         Es wird Runde {{ payround }} ausbezahlt. <br>
 
         In dieser Runde war ihr Verdienst {{ payoff_in_payround_taler }} Taler
-        {% if player.treatment == 'exclude' or player.treatment == 'dislike' %}(nach Abzug der Kosten für die eventuell abgegebenen Stimmen){% elif player.treatment == 'punish' %}<br>(nach Abzug der Kosten für die eventuell abgegebenen Stimmen und Ihrem möglichen Punktabzug){% endif %}.<br>
+        {% if player.treatment == 'exclude' or player.treatment == 'dislike' %}(nach Abzug der Kosten für die eventuell abgegebenen Stimmen)
+        {% elif player.treatment == 'punish' %}<br>(nach Abzug der Kosten für die eventuell abgegebenen Stimmen und Ihrem möglichen Punktabzug){% endif %}.<br>
         Dies entspricht {{ euro }} €.<br>
 
         Ihre Prämie für pünktliches Erscheinen ist {{ part_fee }}.<br>

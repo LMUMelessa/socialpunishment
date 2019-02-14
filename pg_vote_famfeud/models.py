@@ -17,7 +17,7 @@ Public Good + Family Feud
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 12 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
@@ -31,8 +31,8 @@ class Constants(BaseConstants):
 
     questions_per_round = 2 #2 in the real experiment
     extra_questions = 1 #1 in the real experiment
-    secs_per_question = 30 #30 in the "
-    wait_between_question = 4 #4 in the "
+    secs_per_question = 1 #30 in the real experiment
+    wait_between_question = 4 #4 in the real experiment
 
 
     with codecs.open('data.csv', 'r', 'latin-1') as f:
@@ -70,7 +70,6 @@ class Subsession(BaseSubsession):
         # Assign treatment
         for player in self.get_players():
             player.treatment = self.session.config['treatment']
-            player.city = self.session.config['city']
            # player.participant.label = str(self.get_players().index(player)) #outcomment when done via participant_label.txt file
 
 
@@ -395,10 +394,6 @@ class Player(BasePlayer):
             'In "exclude", player can vote exclude players. In "control", no voting exists',
         choices=['voting', 'novoting'])
 
-    city = models.CharField(
-        doc='Defines the city where the experiment took place ',
-        choices=['münchen', 'heidelberg'])
-
     contribution = models.IntegerField(
         doc='The players contribution in the public good game in Taler',
         verbose_name='Ihr Betrag',
@@ -593,10 +588,6 @@ class Player(BasePlayer):
         choices=["Nichts",
                  "Er wird allen Gruppenmitgliedern gezeigt und ich verdiene einen Taler",
                  "Er wird allen Gruppenmitgliedern gezeigt und die Gruppe bekommt einen Spielpunkt"])
-
-
-
-
 
 
     ######################################################################################################################

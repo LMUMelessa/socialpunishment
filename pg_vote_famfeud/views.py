@@ -14,15 +14,19 @@ class Instructions(Page):
 
 
 
-# in ordering after the control question
 # monitors information before a round depending on the current state of the experiment and treatment
 # distinct from Instructions to allow for differnt types of timeouts
+# don't show in only treatment in round 1 because there is no FF test
 class InfosBeforeRound(Page):
     timeout_seconds = 30
     timer_text = "Sie werden weitergeleitet"
 
+    def vars_for_template(self):
+        return {'valuation': self.session.config['valuation']}
+
     def is_displayed(self):
-        if self.player.treatment == 'only' and self.round_number == 1:
+        # don't show in only treatment in round 1 because there is no FF test round
+        if (self.player.treatment == 'only' and self.round_number == 1):
             return False
         elif self.player.treatment == 'FF':
             return False
@@ -162,6 +166,7 @@ class VoteWaitPage(WaitPage):
         else:
             return True
 
+
 #wait_for_all_groups = True in VoteWaitPage would result in error
 class VoteWaitPage2(WaitPage):
     wait_for_all_groups = True
@@ -173,7 +178,6 @@ class VoteWaitPage2(WaitPage):
             return False
         else:
             return True
-
 
 
 class VoteResults(Page):
@@ -205,6 +209,55 @@ class VoteResults(Page):
            return True
 
 
+#the following two sites are needed to not surprise participant with the FF game
+# the might have waited for a long time on the BeforeFamilyFeud Wait page, waiting for all the other gruoups and then the game suddenly starts
+# so we tell them here again
+class BeforePrepareFFWaitPage(WaitPage):
+    wait_for_all_groups = True
+
+    def is_displayed(self):
+        if self.player.treatment=="only":
+            return False
+        # if valuation is off and you are in the last round (questionnaire round) then you must not show
+        elif self.round_number == Constants.num_rounds and self.session.config['valuation']=='off':
+            return False
+        else: return True
+
+
+# show noting just the timout message and timout hard after 5 seconds
+class PrepareFF(Page):
+
+    timeout_seconds = 5
+    timer_text = "Das Gruppenspiel startet in "
+
+    def is_displayed(self):
+        if self.player.treatment=="only":
+            return False
+        # if valuation is off and you are in the last round (questionnaire round) then you must not show
+        elif self.round_number == Constants.num_rounds and self.session.config['valuation']=='off':
+            return False
+        else: return True
+
+
+class FamilyFeud(Page):
+    def is_displayed(self):
+        if self.player.treatment=="only":
+            return False
+        # if valuation is off and you are in the last round (questionnaire round) then you must not show
+        elif self.round_number == Constants.num_rounds and self.session.config['valuation']=='off':
+            return False
+        else: return True
+
+
+# Defo need this because the results are displayed over all groups
+class AfterFamilyFeudWaitPage(WaitPage):
+    wait_for_all_groups = True
+    def is_displayed(self):
+        if self.player.treatment == "only":
+            return False
+        else: return True
+
+
 # Willingness to pay for bonus Family Feud Round
 # Determines if the player plays the Bonus Family Feud round
 # player.plays_in round(11 /last round is set) this is after Experiment round 10 (or last experiment round)!
@@ -219,6 +272,8 @@ class ValuateFFSelect(Page):
 
     def is_displayed(self):
         if self.player.treatment == "FF" or self.player.treatment == "only":
+            return False
+        if self.session.config["valuation"] == "off":
             return False
         if self.round_number == 1:
             return True
@@ -242,6 +297,8 @@ class WaitAfterValuateFFSelect(WaitPage):
     def is_displayed(self):
         if self.player.treatment=="FF" or self.player.treatment == "only":
             return False
+        if self.session.config["valuation"] == "off":
+            return False
         if self.round_number == 1:
             return True
         else:
@@ -258,50 +315,12 @@ class ValuateFFResult(Page):
     def is_displayed(self):
         if self.player.treatment=="FF" or self.player.treatment=="only":
             return False
+        if self.session.config["valuation"] == "off":
+            return False
         if self.round_number == 1:
             return True
         else:
             return False
-
-#the following two sites are needed to not surprise participant with the FF game
-# the might have waited for a long time on the BeforeFamilyFeud Wait page, waiting for all the other gruoups and then the game suddenly starts
-# so we tell them here again
-class BeforePrepareFFWaitPage(WaitPage):
-    wait_for_all_groups = True
-
-    def is_displayed(self):
-        if self.player.treatment == "only":
-            return False
-        else:
-            return True
-
-class PrepareFF(Page):
-
-    timeout_seconds = 5
-    timer_text = "Das Gruppenspiel startet in "
-
-    def is_displayed(self):
-        if self.player.treatment == "only":
-            return False
-        else:
-            return True
-
-
-class FamilyFeud(Page):
-    def is_displayed(self):
-        if self.player.treatment=="only":
-            return False
-        else: return True
-
-# Defo need this because the results are displayed over all groups
-class AfterFamilyFeudWaitPage(WaitPage):
-    wait_for_all_groups = True
-    def is_displayed(self):
-        if self.player.treatment == "only":
-            return False
-        else: return True
-
-
 
 
 class FamilyFeudResults(Page):
@@ -341,9 +360,10 @@ class FamilyFeudResults(Page):
                helplist[2].append({ 'player_label':player.playerlabel, 'points':pointinfo, 'your_group':your_group, 'thats_you':thats_you})
             data_dic['alist'].append(helplist)
 
-        data_dic['alist'].sort(key=lambda helplist: helplist[1], reverse=True)
+        # data_dic['alist'] has structure [[GroupID, GroupFFpoints, {'player_label': .. }],..]
+        # order these lists by the groupFFpoints
+        data_dic['alist'].sort(key=lambda _helplist: _helplist[1], reverse=True)
         return data_dic
-
 
 
 class Questionnaire(Page):
@@ -389,12 +409,12 @@ class CalculatePayoffAfterQuestionnaireWaitPage(WaitPage):
                 player.payoff = player.in_round(payround).round_payoff - (player.in_round(payround).ivoted * Constants.cost_for_vote) - punish_costs
 
             # If player plays the bonus FF round then subtract the computer number from the players payoff
-            # Note: the computer number is in Euro, but oTree expects points because it later converts Points to Euro in the Admin-Mak
+            # Note: the computer number is in Euro, but oTree expects points because it later converts Points to Euro in the Admin-Mask
             # Therefore, the computer number has to be converted to Points by 1/c/p
             # Note: the in_round(1) because this variable is set in round 1 only
-            if player.in_round(1).plays_bonusFF:
-                player.payoff = player.payoff - (1 /float(self.session.config['real_world_currency_per_point']) * float(player.in_round(1).random_ff_valuation))
-
+            if self.session.config["valuation"]=="on":
+                if player.in_round(1).plays_bonusFF:
+                    player.payoff = player.payoff - (1 /float(self.session.config['real_world_currency_per_point']) * float(player.in_round(1).random_ff_valuation))
 
 
 # Use to display the payoff informations to the player
@@ -422,11 +442,14 @@ class ShowPayoffDetails(Page):
         # If the player did play the bonus round of FF then the random_ff_valuation will be subtracted
         # Here we show him this in the 2nd last page of the experiment
         # You cannot just use the payoff because we want to show the player the different elements that determine the overall payoff
+        #TODO: Note: if valuation=off in session.config, it is all fine! randomffvaluation and ffvaluation are both 0
+        #TODO: ==> diff is 0 then also ==> in the template if diff=0 in ShowPayoffDetails the BonusFF round will not be mentioned.
+        #TODO: This means it is sufficient to shut off valuation, nothing has to be changed in regard to displaying logic
         if random_ff_valuation < ff_valuation:
             return{'payoff_in_payround_taler':taler ,
                     'euro': (round(c(taler).to_real_world_currency(self.session),2)),
                     'part_fee':part_fee,
-                    'diff': self.player.in_round(1).random_ff_valuation, # Will be subtracted if he played bonus FF
+                    'diff': self.player.in_round(1).random_ff_valuation, # Will be subtracted if he played bonus FF, this has happend in player.payoff already
                     'all': round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],2), # Note you have to calc this because self.payoff does not regard the participation fee
                    'payround': self.player.payround-1,
                    'number': self.player.participant.label}
@@ -454,7 +477,7 @@ class EndPage(Page):
 
 page_sequence = [
     Instructions,
-    ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
+    #ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
     InfosBeforeRound,
     Contribution,
     FirstWaitPage,
