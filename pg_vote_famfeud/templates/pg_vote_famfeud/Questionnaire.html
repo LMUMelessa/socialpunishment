@@ -31,7 +31,10 @@
                 {% formfield player.q7 %}
                 {% formfield player.q8 %}
                 {% formfield player.q9 %}
-                {% formfield player.q10%}
+                {# customized inputfield, s.t it is not only a one line input #}
+                <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
+                <textarea id="id_q10" name="q10"></textarea>
+
 
             {% else %}
 
@@ -41,7 +44,9 @@
                 {% formfield player.q7 %}
                 {% formfield player.q8 %}
                 {% formfield player.q9 %}
-                {% formfield player.q10%}
+                {# customized inputfield, s.t it is not only a one line input #}
+                <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
+                <textarea id="id_q10" name="q10"></textarea>
 
             {% endif %}
 
@@ -59,6 +64,23 @@
 
 {% block scripts %}
 
+    <script>
+
+     //this prevents that pressing enter will automatically submit the page and abort the game for a player
+    $(document).on("keypress", 'form', function (e) {
+    var code = e.keyCode || e.which;
+    console.log(code);
+    if (code == 13) {
+        console.log('Inside');
+        e.preventDefault();
+        return false;
+    }
+});
+    </script>
+
+
+
+
     <style type="text/css">
 
 
@@ -66,12 +88,10 @@
         #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
         #header-right {display: inline-block; font-size: 12px; }
 
-
         #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
         #info{ height:100%; border-color: lightgrey;margin-top: 20px}
         #info-text{margin-left: 15px}
-
-
+        #id_q10{height:200px; width:400px}
         .otree-body{margin-top: 0px}
         .otree-body{padding-top: 0px}
         .page-header {padding-top: 0px;padding-bottom: 0px}

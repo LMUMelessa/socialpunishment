@@ -17,7 +17,7 @@ Public Good + Family Feud
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 17 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
@@ -31,25 +31,25 @@ class Constants(BaseConstants):
 
     questions_per_round = 2 #2 in the real experiment
     extra_questions = 1 #1 in the real experiment
-    secs_per_question = 1 #30 in the real experiment
+    secs_per_question = 20 #30 in the real experiment
     wait_between_question = 4 #4 in the real experiment
 
 
-    with codecs.open('data.csv', 'r', 'latin-1') as f:
+    with codecs.open('data.csv', 'r', 'utf-8') as f:
         questions = list(csv.reader(f))
 
 
-        # Questions come as a list and will be formatted in a list of dics in creating session
-        # Example format how to deal with questions in the code:
-        # (The respective first answer is the desired answer, which will be displayed)
-        # quizload = [
-        #             {'question':"Name a Place You Visit Where You Aren't Allowed to Touch Anything",
-        #                's1': ["Museum gallery",'Museum', 'Gallery', 'Museum gallery'],
-        #                's2': ['Zoo', 'Animal'],
-        #                's3': ["Gentleman's club", 'Gentleman club', 'Stripclub', 'Strip club'],
-        #                's4': ['Baseball'],
-        #                's5': ['China shop']},  {...}, ...
-        #              ]
+    # Questions come as a list and will be formatted in a list of dics in creating session
+    # Example format how to deal with questions in the code:
+    # (The respective first answer is the desired answer, which will be displayed)
+    # quizload = [
+    #             {'question':"Name a Place You Visit Where You Aren't Allowed to Touch Anything",
+    #                's1': ["Museum gallery",'Museum', 'Gallery', 'Museum gallery'],
+    #                's2': ['Zoo', 'Animal'],
+    #                's3': ["Gentleman's club", 'Gentleman club', 'Stripclub', 'Strip club'],
+    #                's4': ['Baseball'],
+    #                's5': ['China shop']},  {...}, ...
+    #              ]
 
 
 
@@ -162,17 +162,16 @@ class Group(RedwoodGroup):
         self.save()
 
 
-        # if multiple questions in a round this will be triggered from each first player in the group by the channel; e. g. the player requests a new question
+    # if multiple questions in a round this will be triggered from each first player in the group by the channel; e. g. the player requests a new question
 
     def _on_questionChannel_event(self, event=None):
         # send a new question back
         self.sendquizload_toplayers()
 
 
-        # reveives all the guesses of the players, decides if guess was right and shall calculate ff_points
-        # also checks if a correct guess has been found already, so no ff_points are distributed
-        # sends processed information back to the players in javascript
-
+    # reveives all the guesses of the players, decides if guess was right and shall calculate ff_points
+    # also checks if a correct guess has been found already, so no ff_points are distributed
+    # sends processed information back to the players in javascript
     def _on_guessingChannel_event(self, event=None):
         # the guess of the player
         guess = event.value['guess'].lower()
@@ -181,6 +180,8 @@ class Group(RedwoodGroup):
 
         # player object of the guessing player
         player = self.get_player_by_id(player_id_in_group)
+
+        player.inc_num_guesses()
 
         # the current question quizload (dictionaire)
         question = self.session.vars['ql_' + str(self.round_number) + str(self.current_quest_num)]
@@ -453,12 +454,6 @@ class Player(BasePlayer):
                                        doc = "The player wanted not to vote for any other player.")
 
 
-    # RateYourExperience after every FamilyFeud game
-    ff_experience = models.IntegerField(verbose_name="Bitte klicken Sie auf die Skala, um Ihre Erfahrung während des letzten Gruppenspiels zu bewerten. 1 bedeutet schlecht und 5 gut.",
-                                        widget=widgets.Slider(show_value=False) , min=1, max=5,
-                                        doc="After the guessing game the players have to rate their experience on a scale from 1(bad) to 5(good)")
-
-
     # the willingness to pay for the bonus family feud round
     ff_valuation = models.DecimalField(verbose_name="Bitte klicken Sie auf die Skala, um ihre Zahlungsbereitschaft auszuwählen.",
                                        widget=widgets.Slider(show_value=False),
@@ -592,9 +587,6 @@ class Player(BasePlayer):
 
     ######################################################################################################################
 
-
-    ### Family Feud Variables
-    guess_sequence = models.CharField(initial='')
 
     # Number of correctly answered questions
     ff_points = models.IntegerField(initial=0, doc="The number of correct answers which the player found overall in the guessing game in one round.")
