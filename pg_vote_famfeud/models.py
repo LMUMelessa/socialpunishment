@@ -17,7 +17,7 @@ Public Good + Family Feud
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 17 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
@@ -31,7 +31,7 @@ class Constants(BaseConstants):
 
     questions_per_round = 2 #2 in the real experiment
     extra_questions = 1 #1 in the real experiment
-    secs_per_question = 20 #30 in the real experiment
+    secs_per_question = 30 #30 in the real experiment
     wait_between_question = 4 #4 in the real experiment
 
 
@@ -103,6 +103,10 @@ class Subsession(BaseSubsession):
                     # Save the quizload of the question in session.vars to access later
                     # ql_11 e.g. means quizload for round 1 question 1
                     self.session.vars['ql_' + str(round_num) + str(question_num)] = question
+
+    # don't delete this!
+    def vars_for_admin_report(self):
+        pass
 
 
 

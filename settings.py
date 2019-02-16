@@ -75,7 +75,7 @@ LANGUAGE_CODE = 'de' # de for german
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree', 'django_extensions']
-EXTENSION_APPS = ['otree_redwood']
+EXTENSION_APPS = ['otree_redwood','pg_vote_famfeud']
 
 
 # SENTRY_DSN = ''
@@ -189,6 +189,7 @@ SESSION_CONFIGS = [
         'display_name': 'Family Feud only',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
+        'valuation':'on',
         'treatment': 'FF' # only;nosanction;exclude;dislike;punish
     },
 

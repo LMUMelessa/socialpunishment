@@ -3,6 +3,12 @@ from . import models
 from ._builtin import Page, WaitPage
 from .models import Constants
 import random
+from otree_redwood.models import Event
+import codecs
+import csv
+import time
+import datetime
+from django.http import HttpResponse
 
 
 class Instructions(Page):
@@ -464,6 +470,7 @@ class ShowPayoffDetails(Page):
 
 
 class EndPage(Page):
+
     def is_displayed(self):
         if self.player.treatment == "FF":
             return False
@@ -475,29 +482,45 @@ class EndPage(Page):
         return {'number':self.player.participant.label}
 
 
+# returns the http csv. file response for downloading the guessing game data
+def downloadguess(request):
+    date = str(datetime.datetime.fromtimestamp(time.time()).strftime('%d-%m-%Y_at%H:%M'))
+    response = HttpResponse(content_type='text/csv')
+    # decide the file name
+    response['Content-Disposition'] = 'attachment; filename="{}_guessdata.csv"'.format(date)
+    writer = csv.writer(response, csv.excel)
+    response.write(u'\ufeff'.encode('utf8'))
+    writer.writerow(["participantID", "sessionID", "round_number", "guess", "correct"])
+    for event in Event.objects.all():
+        if event.value.__class__ == dict:
+            datadic = event.value
+            if 'participant.code' in datadic.keys():
+                writer.writerow([datadic['participant.code'], datadic['session.code'],datadic['subsession.round_number'],
+                                 datadic['guess'], datadic['correct']])
+    return response
 
 page_sequence = [
     Instructions,
-    #ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
-    #InfosBeforeRound,
-    #Contribution,
-    #FirstWaitPage,
-    #SecondWaitPage,
-    #ResultsPG,
-    #Vote,
-    #VoteWaitPage,
-    #VoteWaitPage2,
-    #VoteResults,
+    ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
+    InfosBeforeRound,
+    Contribution,
+    FirstWaitPage,
+    SecondWaitPage,
+    ResultsPG,
+    Vote,
+    VoteWaitPage,
+    VoteWaitPage2,
+    VoteResults,
     BeforePrepareFFWaitPage,
     PrepareFF,
     FamilyFeud,
-    #ValuateFFSelect,
-    #WaitAfterValuateFFSelect,  #I think, we don't need this
-    #ValuateFFResult,
-    #AfterFamilyFeudWaitPage,
+    ValuateFFSelect,
+    WaitAfterValuateFFSelect,  #I think, we don't need this
+    ValuateFFResult,
+    AfterFamilyFeudWaitPage,
     FamilyFeudResults,
     Questionnaire,
-    #CalculatePayoffAfterQuestionnaireWaitPage, #Payoff calculation is done here
-    #ShowPayoffDetails,
+    CalculatePayoffAfterQuestionnaireWaitPage, #Payoff calculation is done here
+    ShowPayoffDetails,
     EndPage,
 ]
