@@ -6,101 +6,232 @@
 
 {% block content %}
 
-
-      <div id="header">
-            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
-{#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
-        </div>
-
     <div id="main">
 
-     <br>
-        Bitte beantworten Sie alle Fragen. Sie müssen alle Fragen richtig beantworten.<br><br>
+        <b>Bitte beantworten Sie alle Fragen auf allen Seiten. Alle Fragen müssen richtig beantwortet werden.<br>
+        Klicken Sie unten auf den entsprechenden Knopf, um zwischen den Seiten zu navigieren.</b>
 
 
         <div id="info" >
             <div id="info-text">
 
 
-                 <!-- control questions in all treatments-->
-                <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
-                {% formfield player.control1 %}
-                <br>
-                <div id="error_control2" class="otree-timer alert alert-warning" style="display: none;"></div>
-                {% formfield player.control2 %}
-                <br>
-                <div id="error_control3a" class="otree-timer alert alert-warning" style="display: none;"></div>
-                {% formfield player.control3a %}
-                <br>
-                <div id="error_control3b" class="otree-timer alert alert-warning" style="display: none;"></div>
-                {% formfield player.control3b %}
-                <br>
-                <div id="error_control3c" class="otree-timer alert alert-warning" style="display: none;"></div>
-                {% formfield player.control3c %}
+                {% if player.treatment == 'only' %}
+
+                        <div id="page1" style="display: block;">
+
+                            <div id="error_control1" class="feedback"  style="display: none;"></div>
+                            {% formfield player.control1 %}
+                            <br>
+                            <div id="error_control2"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control2 %}
+                            <br>
+                            <div id="error_control3a"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3a %}
+                            <br>
+                            <div id="error_control3b"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3b %}
+
+                        </div>
+
+                        <div id="page2" style="display: none;">
+                            <div id="error_control3c"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3c %}
+                        </div>
+
+                        <div id="page3" style="display: none">
+
+                        </div>
+
+                        <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
+                        <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
+                        <!-- is not displayed in that treatment   -->
+                        <button id='buttonPage3' class="pageButton" type='button' style=" display:none; color: white">Seite3</button>
+                    
+
+                {% elif player.treatment == 'exclude'  %}
 
 
-                {% if player.treatment == 'exclude'  %}
+                        <div id="page1" style="display: block;">
 
-                    <div id="error_control3d" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control3d %}
+                                <div id="error_control1"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control1 %}
+                                <br>
+                                <div id="error_control2"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control2 %}
+                                <br>
+                                <div id="error_control3a"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control3a %}
+                                <br>
+                                <div id="error_control3b"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control3b %}
 
-                    <div id="error_control4" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control4 %}
-                    <br>
-                    <div id="error_control5" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control5 %}
-                    <br>
-                    <div id="error_control6" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control6 %}
-                    <br>
-                    <div id="error_control7exclude" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control7exclude %}
-                    <br>
-                    <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control8 %}
+                        </div>
+
+                        <div id="page2" style="display: none;">
+                                <div id="error_control3c"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control3c %}
+
+                                <div id="error_control3d"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control3d %}
+
+                                <div id="error_control4"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control4 %}
+                                <br>
+                                <div id="error_control5"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control5 %}
+
+                        </div>
+
+                        <div id="page3" style="display: none;">
+                                <div id="error_control6"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control6 %}
+                                <br>
+                                <div id="error_control7exclude"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control7exclude %}
+                                <br>
+                                <div id="error_control8"  class="feedback"  style="display: none;"></div>
+                                {% formfield player.control8 %}
+                        </div>
+
+
+                        <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
+                        <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
+                        <button id='buttonPage3' class="pageButton" type='button' style=" color: white">Seite3</button>
 
                 {% elif player.treatment == 'nosanction' %}
 
-                    <div id="error_control7control" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control7control %}
-                    <br>
-                    <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control8 %}
+                        <div id="page1" style="display: block;">
+
+                            <div id="error_control1"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control1 %}
+                            <br>
+                            <div id="error_control2"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control2 %}
+                            <br>
+                            <div id="error_control3a"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3a %}
+                            <br>
+                            <div id="error_control3b"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3b %}
+
+
+                        </div>
+
+                        <div id="page2" style="display: none;">
+
+                            <div id="error_control3c"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3c %}
+
+                            <div id="error_control7control"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control7control %}
+                            <br>
+                            <div id="error_control8"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control8 %}
+
+                        </div>
+
+                        <div id="page3" style="display: none">
+
+                        </div>
+
+                        <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
+                        <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
+                        <!-- is not displayed in that treatment   -->
+                        <button id='buttonPage3' class="pageButton" type='button' style=" display:none; color: white">Seite3</button>
 
                 {% elif player.treatment == 'dislike' %}
 
-                    <div id="error_control7control" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control7control %}
-                    <br>
-                    <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control8 %}
+
+                        <div id="page1" style="display: block;">
+
+                            <div id="error_control1"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control1 %}
+                            <br>
+                            <div id="error_control2"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control2 %}
+                            <br>
+                            <div id="error_control3a"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3a %}
+                            <br>
+                            <div id="error_control3b"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3b %}
+
+                        </div>
+
+                        <div id="page2" style="display: none;">
+
+                            <div id="error_control3c"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3c %}
+
+                            <div id="error_control7control"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control7control %}
+                            <br>
+                            <div id="error_control8"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control8 %}
+
+                        </div>
+
+                        <div id="page3" style="display: none">
+                        </div>
+
+                        <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
+                        <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
+                        <!-- is not displayed in that treatment   -->
+                        <button id='buttonPage3' class="pageButton" type='button' style=" display:none; color: white">Seite3</button>
 
                 {% elif player.treatment == 'punish' %}
 
-                    <div id="error_control7control" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control7control %}
-                    <br>
-                    <div id="error_control8" class="otree-timer alert alert-warning" style="display: none;"></div>
-                    {% formfield player.control8 %}
+                        <div id="page1" style="display: block;">
+
+                            <div id="error_control1"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control1 %}
+                            <br>
+                            <div id="error_control2"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control2 %}
+                            <br>
+                            <div id="error_control3a"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3a %}
+                            <br>
+                            <div id="error_control3b"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3b %}
+
+
+                        </div>
+
+                        <div id="page2" style="display: none;">
+
+                            <div id="error_control3c"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control3c %}
+
+                            <div id="error_control7control"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control7control %}
+                            <br>
+                            <div id="error_control8"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control8 %}
+
+                        </div>
+
+                        <div id="page3" style="display: none">
+                        </div>
+
+                        <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
+                        <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
+                        <!-- is not displayed in that treatment   -->
+                        <button id='buttonPage3' class="pageButton" type='button' style=" display:none; color: white">Seite3</button>
 
                 {% endif %}
-
-
-
            </div>
         </div>
     </div>
-    <br>
-    <div id="tellhim" style="color: red; display: none">Bitte überprüfen Sie Ihre Antworten</div>
-    <br>
-    <br>
 
-
+    <br>
     <!-- the button that the player sees, does not submit page-->
-    <button id='checkbutton' type='button' style="color: white">Next</button>
+    <button id='checkbutton' type='button' style="color: white">Antworten auf allen Seiten abschicken</button>
 
     <!-- hidden next button, is clicked when the player has everything correctly -->
     <button class="otree-btn-next btn btn-primary next-button otree-next-button" id="next" style="visibility: hidden" ></button>
+     <div id="tellhim" style="color: red; display: none">Bitte überprüfen Sie Ihre Antworten auf allen Seiten</div>
 
     <!-- count players tries to submit the form, when he has not all answers correctly -->
    <input type="hidden" name="control_tries" id="hidden_counter"/>
@@ -114,6 +245,9 @@
 {% block scripts %}
 
     <style type="text/css">
+
+        .pageButton{background-color:#007bff; border: solid 0px; border-radius: 3px}
+        .feedback{border: solid 1px; border-radius:3px; padding-left: 10px}
 
 
         #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
@@ -152,10 +286,105 @@
     <script>
 
 
+    var button1 = document.getElementById('buttonPage1');
+    button1.addEventListener('click', function() { navigate(1); });
+    var button2 = document.getElementById('buttonPage2');
+    button2.addEventListener('click', function() { navigate(2); });
+    var button3 = document.getElementById('buttonPage3');
+    button3.addEventListener('click', function() { navigate(3); });
+
+
+    button1.addEventListener('mouseover', function() { showlink(1); });
+    button2.addEventListener('mouseover', function() { showlink(2); });
+    button3.addEventListener('mouseover', function() { showlink(3); });
+     button1.addEventListener('mouseout', function() { showlinkout(1); });
+    button2.addEventListener('mouseout', function() { showlinkout(2); });
+    button3.addEventListener('mouseout', function() { showlinkout(3); });
+
+
+    var curr_page = 1;
+
+
+
+
+    function navigate(butnum){
+
+        if (butnum==1){
+            document.getElementById("page1").style.display = "block";
+            document.getElementById("page2").style.display = "none";
+            document.getElementById("page3").style.display = "none";
+
+            document.getElementById("buttonPage1").style.backgroundColor = "lightskyblue";
+            document.getElementById("buttonPage2").style.backgroundColor = "#007bff";
+            document.getElementById("buttonPage3").style.backgroundColor = "#007bff";
+
+            curr_page = 1;
+
+        }else if(butnum==2){
+            document.getElementById("page1").style.display = "none";
+            document.getElementById("page2").style.display = "block";
+            document.getElementById("page3").style.display = "none";
+
+            document.getElementById("buttonPage1").style.backgroundColor = "#007bff";
+            document.getElementById("buttonPage2").style.backgroundColor = "lightskyblue";
+            document.getElementById("buttonPage3").style.backgroundColor = "#007bff";
+
+            curr_page = 2;
+
+        }else if(butnum==3){
+            document.getElementById("page1").style.display = "none";
+            document.getElementById("page2").style.display = "none";
+            document.getElementById("page3").style.display = "block";
+
+            document.getElementById("buttonPage1").style.backgroundColor = "#007bff";
+            document.getElementById("buttonPage2").style.backgroundColor = "#007bff";
+            document.getElementById("buttonPage3").style.backgroundColor = "lightskyblue";
+
+            curr_page = 3;
+        }
+    }
+
+    function showlink(butnum){
+        if (butnum==1){
+            document.getElementById("buttonPage1").style.backgroundColor = "#003bff";
+        }else if(butnum==2){
+            document.getElementById("buttonPage2").style.backgroundColor = "#003bff";
+        }else if(butnum==3){
+            document.getElementById("buttonPage3").style.backgroundColor = "#003bff";
+        }
+    }
+
+     function showlinkout(butnum) {
+         if (butnum == 1) {
+             if (curr_page != 1) {
+                 document.getElementById("buttonPage1").style.backgroundColor = "#007bff";
+             } else {
+                 document.getElementById("buttonPage1").style.backgroundColor = "lightskyblue";
+             }
+         } else if (butnum == 2) {
+             if (curr_page != 2) {
+                 document.getElementById("buttonPage2").style.backgroundColor = "#007bff";
+             } else {
+                 document.getElementById("buttonPage2").style.backgroundColor = "lightskyblue";
+             }
+         } else if (butnum == 3) {
+             if (curr_page != 3) {
+                 document.getElementById("buttonPage3").style.backgroundColor = "#007bff";
+             } else {
+                 document.getElementById("buttonPage3").style.backgroundColor = "lightskyblue";
+             }
+         }
+
+    }
+
+
+
+
+
+
     var checkbutton = document.getElementById('checkbutton');
     checkbutton.addEventListener('click', evaluate_answers);
     var click_counter = 0;
-
 
     //this is super ugly but I have to do it individually because in the loop always something broke
     function evaluate_answers() {
