@@ -501,25 +501,25 @@ def downloadguess(request):
     return response
 
 page_sequence = [
-    Instructions,
-    #ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
-    InfosBeforeRound,
-    Contribution,
-    FirstWaitPage,
-    SecondWaitPage,
-    ResultsPG,
-    Vote,
-    VoteWaitPage,
-    VoteWaitPage2,
-    VoteResults,
-    BeforePrepareFFWaitPage,
-    PrepareFF,
-    FamilyFeud,
-    ValuateFFSelect,
-    WaitAfterValuateFFSelect,  #I think, we don't need this
-    ValuateFFResult,
-    AfterFamilyFeudWaitPage,
-    FamilyFeudResults,
+    # Instructions,
+    # #ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
+    # InfosBeforeRound,
+    # Contribution,
+    # FirstWaitPage,
+    # SecondWaitPage,
+    # ResultsPG,
+    # Vote,
+    # VoteWaitPage,
+    # VoteWaitPage2,
+    # VoteResults,
+    # BeforePrepareFFWaitPage,
+    # PrepareFF,
+    # FamilyFeud,
+    # ValuateFFSelect,
+    # WaitAfterValuateFFSelect,  #I think, we don't need this
+    # ValuateFFResult,
+    # AfterFamilyFeudWaitPage,
+    # FamilyFeudResults,
     Questionnaire,
     CalculatePayoffAfterQuestionnaireWaitPage, #Payoff calculation is done here
     ShowPayoffDetails,
