@@ -595,6 +595,10 @@
 
         #subbutton{width: 200px; border-radius: 6px; background: linear-gradient(#819FF7,#2E64FE); color: white}
 
+        #mcpixel{ position: absolute;top: 0px;
+            left:0px; background-color: rgb(253,254,254);
+            height: 100%; width: 140px}
+
 
 
 
@@ -603,6 +607,8 @@
   {% endblock %}
 
   {% block content %}
+
+      <div id="mcpixel"></div>
 
       <!-- add this then the period_length() function is called in oTree -->
       <redwood-period></redwood-period>

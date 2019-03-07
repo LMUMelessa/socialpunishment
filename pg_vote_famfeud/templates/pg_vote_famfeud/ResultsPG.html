@@ -6,6 +6,8 @@
 
 {% block content %}
 
+    <div id="mcpixel"></div>
+
       <div id="softTO" class="otree-timer alert alert-warning">
     <p>Bitte klicken Sie weiter.</p>
     </div>
@@ -20,10 +22,6 @@
 
 
     <div id="main">
-
-
-
-
 
         <div id="info">
 
@@ -81,6 +79,12 @@
 
 {% block scripts %}
     <style type="text/css">
+
+
+        #mcpixel{
+            position: absolute;top: 0px;
+            left:0px; background-color: rgb(255,255,254);
+             height: 100%; width: 140px}
 
 
         #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }

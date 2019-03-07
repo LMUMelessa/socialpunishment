@@ -29,9 +29,9 @@ class Constants(BaseConstants):
     ### The overall time for one FF round is questions_per_round * secs_per_questions
     ### The players will receive new questions until: overall time is up  OR all questions_per_round + extra_questions are answered
 
-    questions_per_round = 2 #2 in the real experiment
+    questions_per_round = 1 #2 in the real experiment
     extra_questions = 1 #1 in the real experiment
-    secs_per_question = 30 #30 in the real experiment
+    secs_per_question = 10 #30 in the real experiment
     wait_between_question = 4 #4 in the real experiment
 
 

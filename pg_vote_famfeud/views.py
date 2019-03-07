@@ -31,7 +31,7 @@ class InfosBeforeRound(Page):
         return {'valuation': self.session.config['valuation']}
 
     def is_displayed(self):
-        # don't show in only treatment in round 1 because there is no FF test round
+        # don't show in only treatment in round 1 because there is no FF test round, e. g. it directly would appear again in beginning of oTree round 2
         if (self.player.treatment == 'only' and self.round_number == 1):
             return False
         elif self.player.treatment == 'FF':
@@ -173,7 +173,7 @@ class VoteWaitPage(WaitPage):
             return True
 
 
-#wait_for_all_groups = True in VoteWaitPage would result in error
+#wait_for_all_groups = True in VoteWaitPage would result in error because after_all_player_arrive is then only called once
 class VoteWaitPage2(WaitPage):
     wait_for_all_groups = True
 
@@ -473,7 +473,7 @@ class EndPage(Page):
 
     def is_displayed(self):
         if self.player.treatment == "FF":
-            return False
+            return True
         if self.player.round_number == Constants.num_rounds:
             return True
         else:
@@ -483,6 +483,7 @@ class EndPage(Page):
 
 
 # returns the http csv. file response for downloading the guessing game data
+# it is essentially the download response if the download_guess data link is clicked in AdminReport
 def downloadguess(request):
     date = str(datetime.datetime.fromtimestamp(time.time()).strftime('%d-%m-%Y_at%H:%M'))
     response = HttpResponse(content_type='text/csv')
@@ -501,7 +502,7 @@ def downloadguess(request):
 
 page_sequence = [
     Instructions,
-    ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
+    #ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
     InfosBeforeRound,
     Contribution,
     FirstWaitPage,

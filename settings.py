@@ -144,7 +144,8 @@ SESSION_CONFIGS = [
         'display_name': 'Only PGG (only)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'treatment': 'only'  # only;nosanction;exclude;dislike;punish
+        'treatment': 'only',  # only;nosanction;exclude;dislike;punish
+        'valuation':'off' #always off because in this treatment there is no FF
     },
 
 {
@@ -161,10 +162,9 @@ SESSION_CONFIGS = [
         'display_name': 'PGG-exclude-GG (exclude)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'valuation': "on",  # on;off
+        'valuation': "off",  # on;off
         'treatment': 'exclude'  # only;nosanction;exclude;dislike;punish
     },
-
 
     {
         'name': 'dislike',

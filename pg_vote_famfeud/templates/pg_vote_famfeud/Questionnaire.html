@@ -6,11 +6,12 @@
 
 {% block content %}
 
+    <div id="mcpixel"></div>
 
-      <div id="header">
-            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
-            <div id="header-right"></b> </div>
-        </div>
+    <div id="header">
+        <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+        <div id="header-right"></b> </div>
+    </div>
 
     <div id="main">
 
@@ -79,10 +80,12 @@
     </script>
 
 
-
-
     <style type="text/css">
 
+        #mcpixel{
+            position: absolute;top: 0px;
+            left:0px; background-color: rgb(255,254,255);
+             height: 100%; width: 140px}
 
         #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
         #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
@@ -96,6 +99,7 @@
         .otree-body{padding-top: 0px}
         .page-header {padding-top: 0px;padding-bottom: 0px}
         .otree-title{font-size: 20px}
+
     </style>
 
 {% endblock %}
