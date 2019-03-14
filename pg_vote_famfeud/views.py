@@ -490,13 +490,14 @@ def downloadguess(request):
     response['Content-Disposition'] = 'attachment; filename="{}_guessdata.csv"'.format(date)
     writer = csv.writer(response, csv.excel)
     response.write(u'\ufeff'.encode('utf8'))
-    writer.writerow(["participantID", "sessionID", "round_number", "guess", "correct"])
+    writer.writerow(["participantID", "sessionID", "round_number", "guess", "correct", "groupId", "questionText"])
+    # 'Event' is the database table! E. g. database access here
     for event in Event.objects.all():
         if event.value.__class__ == dict:
             datadic = event.value
             if 'participant.code' in datadic.keys():
                 writer.writerow([datadic['participant.code'], datadic['session.code'],datadic['subsession.round_number'],
-                                 datadic['guess'], datadic['correct']])
+                                 datadic['guess'], datadic['correct'], datadic['groupId'], datadic['questionText']])
     return response
 
 page_sequence = [

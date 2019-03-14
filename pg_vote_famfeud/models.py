@@ -131,10 +131,8 @@ class Group(RedwoodGroup):
         self.sendquizload_toplayers()
         return
 
-
-        # this will triger 'receive_question ()' function in javascript and in javascript the timers will be initialized
-        # the function is called at the beginning from when_all_players_ready and under multiple questions when requested from a player through questionChannel
-
+    # this will triger 'receive_question ()' function in javascript and in javascript the timers will be initialized
+    # the function is called at the beginning from when_all_players_ready and under multiple questions when requested from a player through questionChannel
     def sendquizload_toplayers(self):
 
         # increment the current question number
@@ -189,6 +187,10 @@ class Group(RedwoodGroup):
 
         # the current question quizload (dictionaire)
         question = self.session.vars['ql_' + str(self.round_number) + str(self.current_quest_num)]
+
+        questionText = question['question']
+        groupId = player.group.id_in_subsession
+
 
         # update the guess sequence of the player
         #player.guess_sequence = player.guess_sequence + str(self.current_quest_num) + ':' + str(guess) + ';'
@@ -250,7 +252,9 @@ class Group(RedwoodGroup):
                                                     'whichword': answernum,
                                                     'idInGroup': player_id_in_group,
                                                     'correct': True,
-                                                    'finished': finished})
+                                                    'finished': finished,
+                                                    'groupId': groupId,
+                                                    'questionText':questionText})
 
                     #print('thats finished' + str(finished))
 
@@ -270,7 +274,10 @@ class Group(RedwoodGroup):
                                              'subsession.round_number':player.subsession.round_number,
                                              'guess': guess,
                                              'idInGroup': player_id_in_group,
-                                             'correct': False})
+                                             'correct': False,
+                                             'groupId': groupId,
+                                             'questionText': questionText})
+
 
     # TODO can you just leave out the period length function?
     def period_length(self):
