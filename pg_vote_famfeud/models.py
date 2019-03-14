@@ -22,8 +22,8 @@ class Constants(BaseConstants):
     endowment = 10
     multiplier = 2
     timeoutsecs = 60
-    cost_for_vote = 0.5 #don't change this! It is hardcoded as 0.5(Taler) the ControlQuestions
-    punishment_value = 1
+    cost_for_vote = 0.5 #don't change this! It is hardcoded as 0.5(Taler) in the ControlQuestions
+    punishment_value = 2
     ### Familyfeud
 
     ### The overall time for one FF round is questions_per_round * secs_per_questions

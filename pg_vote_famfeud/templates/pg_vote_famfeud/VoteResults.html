@@ -40,8 +40,8 @@
                         In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.<br>
 
                     {% elif player.treatment == 'punish' %}
-                        {{ player.myvotes }} {% if player.myvotes == 1 %}anderes Gruppenmitglied hat dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.{% else %}andere Gruppenmitglieder haben dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.{% endif %} <br>
-                        Damit werden KEINE Punkte abgezogen.<br>
+                        {{ player.myvotes }} {% if player.myvotes == 1 %}anderes Gruppenmitglied hat dafür gestimmt, Ihnen Taler von Ihrem Ertrag in dieser Runde abzuziehen.{% else %}andere Gruppenmitglieder haben dafür gestimmt, Ihnen Taler von Ihrem Ertrag in dieser Runde abzuziehen.{% endif %} <br>
+                        Damit werden KEINE Taler abgezogen.<br>
                         In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.
                     {% endif %}
 
@@ -58,8 +58,8 @@
                         In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.
 
                     {% elif player.treatment == 'punish' %}
-                        {{ player.myvotes }} {% if player.myvotes == 1 %}anderes Gruppenmitglied hat dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.{% else %}andere Gruppenmitglieder haben dafür gestimmt, Ihnen Punkte von Ihrem Ertrag in dieser Runde abzuziehen.{% endif %} <br><br>
-                        Damit werden {{ Constants.punishment_value }} Punkte abgezogen.<br>
+                        {{ player.myvotes }} {% if player.myvotes == 1 %}anderes Gruppenmitglied hat dafür gestimmt, Ihnen Taler von Ihrem Ertrag in dieser Runde abzuziehen.{% else %}andere Gruppenmitglieder haben dafür gestimmt, Ihnen Taler von Ihrem Ertrag in dieser Runde abzuziehen.{% endif %} <br>
+                        {% if Constants.punishment_value == 1%}Damit wird Ihnen 1 Taler abgezogen.{% else %}Damit werden Ihnen {{ Constants.punishment_value }} Taler abgezogen.{% endif %}<br>
                         In der untenstehenden Tabelle sehen Sie, wie viele Stimmen die anderen Gruppenmitglieder erhalten haben.
 
                     {% endif %}
@@ -120,7 +120,7 @@
 
                {% if player.treatment == 'exclude' %} <th> Spielt Gruppenspiel</th> {% endif %}
                 {% if player.treatment == 'dislike' %} <th> Erhält Rüge</th> {% endif %}
-                {% if player.treatment == 'punish' %} <th> Erhält Punktabzug</th> {% endif %}
+                {% if player.treatment == 'punish' %} <th> Erhält Talerabzug</th> {% endif %}
                 </tr>
                 </tr>
                 <tr>

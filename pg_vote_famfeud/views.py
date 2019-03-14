@@ -121,7 +121,6 @@ class Vote(Page):
 
     form_model = models.Player
     def get_form_fields(self):
-        #TODO still uses the same novote-variable in all treatments. But e. g. the verbose-name is wrong in non-exclude treatments
         if self.player.treatment == 'exclude':
             return ['vote_A', 'vote_B', 'vote_C', 'vote_D', 'vote_E', 'exclude_none']
         if self.player.treatment == 'dislike':
@@ -162,7 +161,7 @@ class VoteWaitPage(WaitPage):
         # Assign for each player if he plays the social game
         self.group.set_social_game()
 
-        ##Note the round payoff was updated here in regard to cost of voting. I shift this to overall payoff calculation at the end
+        ##Note the round payoff was updated here in regard to cost of voting. I shifted this to overall payoff calculation at the end
 
     def is_displayed(self):
         if self.round_number == 1 or self.round_number == Constants.num_rounds:
@@ -230,7 +229,7 @@ class BeforePrepareFFWaitPage(WaitPage):
         else: return True
 
 
-# show noting just the timout message and timout hard after 5 seconds
+# show nothing just the timout message and timout hard after 5 seconds
 class PrepareFF(Page):
 
     timeout_seconds = 5
@@ -450,7 +449,7 @@ class ShowPayoffDetails(Page):
         # You cannot just use the payoff because we want to show the player the different elements that determine the overall payoff
         #TODO: Note: if valuation=off in session.config, it is all fine! randomffvaluation and ffvaluation are both 0
         #TODO: ==> diff is 0 then also ==> in the template if diff=0 in ShowPayoffDetails the BonusFF round will not be mentioned.
-        #TODO: This means it is sufficient to shut off valuation, nothing has to be changed in regard to displaying logic
+        #TODO: This means it is sufficient to shut off valuation, nothing has to be changed in regard to display logic here or in the template
         if random_ff_valuation < ff_valuation:
             return{'payoff_in_payround_taler':taler ,
                     'euro': (round(c(taler).to_real_world_currency(self.session),2)),
@@ -501,8 +500,8 @@ def downloadguess(request):
     return response
 
 page_sequence = [
-    Instructions,
-    ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
+    #Instructions,
+    #ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
     InfosBeforeRound,
     Contribution,
     FirstWaitPage,
@@ -516,11 +515,11 @@ page_sequence = [
     PrepareFF,
     FamilyFeud,
     ValuateFFSelect,
-    WaitAfterValuateFFSelect,  #I think, we don't need this
+    WaitAfterValuateFFSelect,  #TODO: I think, we don't need this
     ValuateFFResult,
     AfterFamilyFeudWaitPage,
     FamilyFeudResults,
-    Questionnaire,
+    #Questionnaire,
     CalculatePayoffAfterQuestionnaireWaitPage, #Payoff calculation is done here
     ShowPayoffDetails,
     EndPage,

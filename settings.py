@@ -153,7 +153,7 @@ SESSION_CONFIGS = [
         'display_name': 'PGG-GG (nosanction)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'valuation':"on", #on;off
+        'valuation':'on', #on;off
         'treatment': 'nosanction' # only;nosanction;exclude;dislike;punish
     },
 
@@ -162,7 +162,7 @@ SESSION_CONFIGS = [
         'display_name': 'PGG-exclude-GG (exclude)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'valuation': "off",  # on;off
+        'valuation': 'on',  # on;off
         'treatment': 'exclude'  # only;nosanction;exclude;dislike;punish
     },
 
@@ -171,7 +171,7 @@ SESSION_CONFIGS = [
         'display_name': 'PGG-dislike-GG (dislike)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'valuation': "on",  # on;off
+        'valuation': 'on',  # on;off
         'treatment': 'dislike' # only;nosanction;exclude;dislike;punish
     },
 
@@ -180,7 +180,7 @@ SESSION_CONFIGS = [
         'display_name': 'PGG-punish-GG (punish)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
-        'valuation': "on",  # on;off
+        'valuation': 'on',  # on;off
         'treatment': 'punish' # only;nosanction;exclude;dislike;punish
     },
 
