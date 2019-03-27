@@ -1,9 +1,7 @@
 import os
 from os import environ
-
 import dj_database_url
 #from boto.mturk import qualification
-
 import otree.settings
 
 
@@ -16,7 +14,7 @@ if environ.get('OTREE_PRODUCTION') not in {None, '', '0'}:
 else:
     DEBUG = True
 
-#DEBUG = False
+DEBUG = False
 
 ADMIN_USERNAME = 'admin'
 

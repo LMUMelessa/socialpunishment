@@ -17,7 +17,7 @@ Public Good + Family Feud
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 7 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
@@ -29,9 +29,9 @@ class Constants(BaseConstants):
     ### The overall time for one FF round is questions_per_round * secs_per_questions
     ### The players will receive new questions until: overall time is up  OR all questions_per_round + extra_questions are answered
 
-    questions_per_round = 1 #2 in the real experiment
+    questions_per_round = 2 #2 in the real experiment
     extra_questions = 1 #1 in the real experiment
-    secs_per_question = 10 #30 in the real experiment
+    secs_per_question = 30 #30 in the real experiment
     wait_between_question = 4 #4 in the real experiment
 
 
@@ -185,8 +185,11 @@ class Group(RedwoodGroup):
 
         player.inc_num_guesses()
 
+        #curr quest num
+        current_quest_num = self.current_quest_num
+
         # the current question quizload (dictionaire)
-        question = self.session.vars['ql_' + str(self.round_number) + str(self.current_quest_num)]
+        question = self.session.vars['ql_' + str(self.round_number) + str(current_quest_num)]
 
         questionText = question['question']
         groupId = player.group.id_in_subsession
@@ -254,7 +257,8 @@ class Group(RedwoodGroup):
                                                     'correct': True,
                                                     'finished': finished,
                                                     'groupId': groupId,
-                                                    'questionText':questionText})
+                                                    'questionText':questionText,
+                                                    'questionNumber': current_quest_num })
 
                     #print('thats finished' + str(finished))
 
@@ -276,7 +280,8 @@ class Group(RedwoodGroup):
                                              'idInGroup': player_id_in_group,
                                              'correct': False,
                                              'groupId': groupId,
-                                             'questionText': questionText})
+                                             'questionText': questionText,
+                                             'questionNumber': current_quest_num})
 
 
     # TODO can you just leave out the period length function?

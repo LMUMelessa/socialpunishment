@@ -472,7 +472,7 @@ class EndPage(Page):
 
     def is_displayed(self):
         if self.player.treatment == "FF":
-            return True
+            return False
         if self.player.round_number == Constants.num_rounds:
             return True
         else:
@@ -490,14 +490,14 @@ def downloadguess(request):
     response['Content-Disposition'] = 'attachment; filename="{}_guessdata.csv"'.format(date)
     writer = csv.writer(response, csv.excel)
     response.write(u'\ufeff'.encode('utf8'))
-    writer.writerow(["participantID", "sessionID", "round_number", "guess", "correct", "groupId", "questionText"])
+    writer.writerow(["participantID", "sessionID", "round_number", "guess", "correct", "groupId", "questionText", "question_number"])
     # 'Event' is the database table! E. g. database access here
     for event in Event.objects.all():
         if event.value.__class__ == dict:
             datadic = event.value
             if 'participant.code' in datadic.keys():
                 writer.writerow([datadic['participant.code'], datadic['session.code'],datadic['subsession.round_number'],
-                                 datadic['guess'], datadic['correct'], datadic['groupId'], datadic['questionText']])
+                                 datadic['guess'], datadic['correct'], datadic['groupId'], datadic['questionText'], datadic['questionNumber']])
     return response
 
 page_sequence = [
