@@ -17,12 +17,11 @@ Public Good + Family Feud
 class Constants(BaseConstants):
     name_in_url = 'pg_vote_famfeud'
     players_per_group = 5
-    num_rounds = 7 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
+    num_rounds = 3 #never change to something smaller 3 #note: if you want to play 10 rounds of the experiment you need 12 here!
     #pg - vars
     endowment = 10
     multiplier = 2
     timeoutsecs = 60
-    cost_for_vote = 0.5 #don't change this! It is hardcoded as 0.5(Taler) in the ControlQuestions
     punishment_value = 2
 
     ### Familyfeud
@@ -70,7 +69,8 @@ class Subsession(BaseSubsession):
         # Assign treatment
         for player in self.get_players():
             player.treatment = self.session.config['treatment']
-           # player.participant.label = str(self.get_players().index(player)) #outcomment when done via participant_label.txt file
+            player.cost_for_vote = self.session.config['cost_for_vote']
+           # player.participant.label = str(self.get_players().index(player)) # use this if you don't use a participant label file
 
 
         self.group_randomly()
@@ -407,6 +407,10 @@ class Player(BasePlayer):
     treatment = models.CharField(
         doc='Defines the treatment of the session. The treatment is the same for all players in one session')
 
+
+    # Save cost for vote as a player variable s.t. it appears in the dataset because it is encoded only in session.config
+    cost_for_vote = models.FloatField()
+
     contribution = models.IntegerField(
         doc='The players contribution in the public good game in Taler',
         verbose_name='Ihr Betrag',
@@ -492,15 +496,37 @@ class Player(BasePlayer):
                                     "Ich wollte ausprobieren was passiert",
                                     "Ich habe in keiner Runde eine Stimme abgegeben"])
 
+
+
     # only in exclude
     q4 = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Was denken Sie, warum haben andere Teilnehmer dafür gestimmt, Gruppenmitglieder auszuschließen?",
         choices=["Rein zufällig",
                  "Sie wollten Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
                  "Sie wollten andere von der Last des Gruppenspiels befreien",
-                 "Sie wollten andere von der Last des Gruppenspiels befreien",
                  "Sie wollten ausprobieren was passiert"])
 
+    ### dislike
+
+    # dislike
+    q3dislike = models.StringField(widget=widgets.RadioSelect(),
+                            verbose_name="In jeder Runde hatten Sie die Möglichkeit, Gruppenmitglieder zu rügen. Welche Überlegungen haben Sie dabei angestellt? (Bitte wählen Sie die Option, die am besten passt.)",
+                            choices=["Ich habe rein zufällig meine Stimme vergeben",
+                                     "Ich wollte Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
+                                     "Ich wollte andere von der Last des Gruppenspiels befreien",
+                                     "Ich wollte ausprobieren was passiert",
+                                     "Ich habe in keiner Runde eine Stimme abgegeben"])
+
+    # dislike
+    q4dislike = models.StringField(widget=widgets.RadioSelect(),
+                            verbose_name="Was denken Sie, warum haben andere Teilnehmer dafür gestimmt, Gruppenmitglieder zu rügen?",
+                            choices=["Rein zufällig",
+                                     "Sie wollten Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
+                                     "Sie wollten andere von der Last des Gruppenspiels befreien",
+                                     "Sie wollten ausprobieren was passiert"])
+
+
+    ### alll treatments
     q5 = models.IntegerField(verbose_name="Bitte geben Sie ihr Alter an", min=0, max=99)
     q7 = models.StringField(verbose_name="Bitte geben Sie ihr Studienfach an")
     q8 = models.IntegerField(min=0,verbose_name="Wie oft haben Sie bereits an einer ökonomischen Laborstudie teilgenommen (auch außerhalb dieses Labors)?")
@@ -550,15 +576,41 @@ class Player(BasePlayer):
                                    verbose_name="Für den Ausschluss von wie vielen Gruppenmitgliedern können Sie maximal stimmen?",
                                    choices=[0, 1, 2, 3, 4, 5])
 
+
     #exclude
     control5 = models.StringField(widget=widgets.RadioSelectHorizontal(),
         verbose_name="Wie viele Taler kostet es Sie, wenn Sie ein Gruppenmitglied ausschließen?",
-        choices=["0 Taler  ", "0,5 Taler  ", "1 Taler  ", "1,5 Taler  ", "2 Taler  "])
+        choices=["0 Taler  ", "0,2 Taler  ", "0,5 Taler  ", "1 Taler  ", "2 Taler  "])
+
+
 
     #exclude
     control6 = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Sie erhalten zwei Stimmen. Dürfen Sie an dem Gruppenspiel teilnehmen?",
         choices=["ja", "nein"])
+
+    ### dislike
+    # you could also just change verbose names for many questions. But I do it like that in case single questions change
+    # dislike. And for example for control6 it does not work because it is not the same answer
+
+
+    # dislike
+    control4dislike = models.IntegerField(widget=widgets.RadioSelectHorizontal(),
+                                   verbose_name="Für das Rügen von wie vielen Mitgliedern können Sie maximal stimmen?",
+                                   choices=[0, 1, 2, 3, 4, 5])
+
+
+    # dislike
+    control5dislike = models.StringField(widget=widgets.RadioSelectHorizontal(),
+                                         verbose_name="Wie viele Taler kostet es Sie, wenn Sie ein Gruppenmitglied rügen?",
+                                         choices=["0 Taler  ", "0,2 Taler  ", "0,5 Taler  ", "1 Taler  ", "2 Taler  "])
+
+    # dislike
+    control6dislike = models.StringField(widget=widgets.RadioSelect(),
+                                  verbose_name="Sie erhalten zwei Stimmen. Werden Sie gerügt?",
+                                  choices=["ja", "nein"])
+
+
 
     # nosanction + dislike + punishment
     control7control = models.StringField(widget=widgets.RadioSelect(),

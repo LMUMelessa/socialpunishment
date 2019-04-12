@@ -3,6 +3,13 @@ from . import models
 from ._builtin import Page, WaitPage
 from .models import Constants
 import random
+from otree_redwood.models import Event
+import codecs
+import csv
+import time
+import datetime
+from django.http import HttpResponse
+
 
 
 class Instructions(Page):
@@ -31,7 +38,7 @@ class ControlQuestions(Page):
 
 
 class WaitAfterControlQuestions(WaitPage):
-    pass
+    wait_for_all_groups = True
 
 
 class Contribution(Page):
@@ -356,7 +363,7 @@ def downloadguess(request):
 
 page_sequence = [
     Instructions,
-    #ControlQuestions,
+    ControlQuestions,
     WaitAfterControlQuestions,
     InfosBeforeRound,
     Contribution,

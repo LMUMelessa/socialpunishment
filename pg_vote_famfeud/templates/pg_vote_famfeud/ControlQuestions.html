@@ -173,12 +173,21 @@
                         </div>
 
                         <div id="page3" style="display: none">
+
+                           <div id="error_control5dislike"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control5dislike %}
+
+                            <div id="error_control6dislike"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control6dislike %}
+
+                            <div id="error_control4dislike"  class="feedback"  style="display: none;"></div>
+                            {% formfield player.control4dislike %}
+
                         </div>
 
                         <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
                         <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
-                        <!-- is not displayed in that treatment   -->
-                        <button id='buttonPage3' class="pageButton" type='button' style=" display:none; color: white">Seite3</button>
+                        <button id='buttonPage3' class="pageButton" type='button' style="color: white">Seite3</button>
 
                 {% elif player.treatment == 'punish' %}
 
@@ -379,9 +388,6 @@
 
 
 
-
-
-
     var checkbutton = document.getElementById('checkbutton');
     checkbutton.addEventListener('click', evaluate_answers);
     var click_counter = 0;
@@ -389,8 +395,9 @@
     //this is super ugly but I have to do it individually because in the loop always something broke
     function evaluate_answers() {
 
-
-
+        // note cost_for_vote is rendered as "0,5" instead of "0.5" I think because of the django lang=GER
+        // so use it as a string
+        var cost_for_vote = "{{ cost_for_vote }}";
         var treatment = "{{ player.treatment }}";
         var allCorrect = true;
 
@@ -565,11 +572,10 @@
                    err_message.style.color = corr_color;
                }}
 
-
-        // control5
-        if (treatment=="exclude"){
-                controlme = document.getElementById("id_control5_1");
-                err_message = document.getElementById("error_control5");
+        // control4dislike
+        if (treatment=="dislike"){
+                controlme = document.getElementById("id_control4dislike_4");
+                err_message = document.getElementById("error_control4dislike");
 
                if (!(controlme.checked)){
 
@@ -588,6 +594,67 @@
                    err_message.style.borderColor = corr_bc;
                    err_message.style.color = corr_color;
                }}
+
+
+
+
+        // control5
+        if (treatment=="exclude"){
+
+            //the answer differs depending on the cost_for_vote
+            if (cost_for_vote=="0,2"){
+                controlme = document.getElementById("id_control5_1");
+            }else if (cost_for_vote=="0,5"){
+                controlme = document.getElementById("id_control5_2");
+            }
+               err_message = document.getElementById("error_control5");
+               if (!(controlme.checked)){
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
+
+
+
+        // control5dislike
+        if (treatment=="dislike"){
+
+            //the answer differs depending on the cost_for_vote
+            if (cost_for_vote=="0,2"){
+                controlme = document.getElementById("id_control5dislike_1");
+            }else if (cost_for_vote=="0,5"){
+                controlme = document.getElementById("id_control5dislike_2");
+            }
+               err_message = document.getElementById("error_control5dislike");
+               if (!(controlme.checked)){
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
+
+
+
+
         // control6
         if (treatment=="exclude"){
                 controlme = document.getElementById("id_control6_0");
@@ -610,6 +677,32 @@
                    err_message.style.borderColor = corr_bc;
                    err_message.style.color = corr_color;
                }}
+
+
+            // control6dislike
+            // Note correct answer here is NO whereas in control6 (exclude) it is YES
+             if (treatment=="dislike"){
+                controlme = document.getElementById("id_control6dislike_1");
+                err_message = document.getElementById("error_control6dislike");
+
+               if (!(controlme.checked)){
+
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }}
+
 
 
                if (treatment=="exclude"){
@@ -684,8 +777,6 @@
                    err_message.style.color = corr_color;
                }}
 
-
-
         if (allCorrect == true) {
 
             click_counter += 1;
@@ -696,9 +787,6 @@
             document.getElementById("tellhim").style.display = "Block";
             click_counter += 1;
             }
-
-
-
     }
 
 

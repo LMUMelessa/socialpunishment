@@ -91,26 +91,22 @@
             {% elif player.treatment == "dislike" %}
 
                 <div id="page1" style="display: block;">
-
                     {% formfield player.q1 %}
                     {% formfield player.q2 %}
-                    {% formfield player.q5 %}
-
-
+                    {% formfield player.q3dislike %}
                 </div>
 
 
                 <div id="page2" style="display: none;">
-
+                    {% formfield player.q4dislike %}
                     {% formfield player.q7 %}
-                    {% formfield player.q8 %}
-                    {% formfield player.q9 %}
-
+                    {% formfield player.q5 %}
                 </div>
 
 
                 <div id="page3" style="display: none;">
-
+                    {% formfield player.q8 %}
+                    {% formfield player.q9 %}
                       {# customized inputfield, s.t it is not only a one line input #}
                     <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
                     <textarea id="id_q10" name="q10"></textarea>

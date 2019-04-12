@@ -50,7 +50,7 @@ class ControlQuestions(Page):
         elif self.player.treatment=='nosanction':
             return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
         elif self.player.treatment=='dislike':
-            return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
+            return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control4dislike','control5dislike', 'control6dislike','control7control', 'control8']
         elif self.player.treatment=='punish':
             return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
 
@@ -61,6 +61,13 @@ class ControlQuestions(Page):
             return True
         else:
             return False
+
+    def vars_for_template(self):
+        return {'cost_for_vote':self.session.config['cost_for_vote']}
+
+
+class WaitAfterControlQuestions(WaitPage):
+    wait_for_all_groups = True
 
 
 class Contribution(Page):
@@ -374,8 +381,13 @@ class FamilyFeudResults(Page):
 class Questionnaire(Page):
     form_model = 'player'
     def get_form_fields(self):
-        if self.player.treatment == 'exclude':
+
+        treatment = self.player.treatment
+        if treatment == 'exclude':
             return ['q1', 'q2', 'q3', 'q4', 'q5', 'q7','q8','q9','q10']
+        elif treatment == 'dislike':
+            return ['q1', 'q2','q3dislike','q4dislike', 'q5', 'q7', 'q8', 'q9', 'q10']
+
         else:
             return ['q1','q2','q5','q7','q8','q9','q10']
     def is_displayed(self):
@@ -392,6 +404,7 @@ class CalculatePayoffAfterQuestionnaireWaitPage(WaitPage):
         return self.round_number == Constants.num_rounds
 
     def after_all_players_arrive(self):
+        cost_for_vote = self.session.config['cost_for_vote']
 
         for player in self.group.get_players():
             # Select a round from the playing rounds (e.g. cut off the practice round and the bonusFF round)
@@ -403,7 +416,7 @@ class CalculatePayoffAfterQuestionnaireWaitPage(WaitPage):
                 if player.treatment == 'punish':
                     if player.in_round(payround).sanctioned:
                         punish_costs = Constants.punishment_value
-                player.payoff = player.in_round(payround).round_payoff - (player.in_round(payround).ivoted * Constants.cost_for_vote) - punish_costs
+                player.payoff = player.in_round(payround).round_payoff - (player.in_round(payround).ivoted * cost_for_vote) - punish_costs
             else:
                 payround = 2
                 player.payround = payround
@@ -411,7 +424,7 @@ class CalculatePayoffAfterQuestionnaireWaitPage(WaitPage):
                 if player.treatment == 'punish':
                     if player.in_round(payround).sanctioned:
                         punish_costs = Constants.punishment_value
-                player.payoff = player.in_round(payround).round_payoff - (player.in_round(payround).ivoted * Constants.cost_for_vote) - punish_costs
+                player.payoff = player.in_round(payround).round_payoff - (player.in_round(payround).ivoted * cost_for_vote) - punish_costs
 
             # If player plays the bonus FF round then subtract the computer number from the players payoff
             # Note: the computer number is in Euro, but oTree expects points because it later converts Points to Euro in the Admin-Mask
@@ -441,7 +454,7 @@ class ShowPayoffDetails(Page):
         if self.player.treatment == 'punish':
             if self.player.in_round(self.player.payround).sanctioned:
                 punish_costs = Constants.punishment_value
-        taler = self.player.in_round(self.player.payround).round_payoff - (self.player.in_round(self.player.payround).ivoted * Constants.cost_for_vote) - punish_costs
+        taler = self.player.in_round(self.player.payround).round_payoff - (self.player.in_round(self.player.payround).ivoted * self.session.config['cost_for_vote']) - punish_costs
         part_fee = self.session.config['participation_fee']
 
         # If the player did play the bonus round of FF then the random_ff_valuation will be subtracted
@@ -503,6 +516,7 @@ def downloadguess(request):
 page_sequence = [
     Instructions,
     ControlQuestions, #After this page there will be the FamilyFeud page and this has a group waitpage before
+    WaitAfterControlQuestions,
     InfosBeforeRound,
     Contribution,
     FirstWaitPage,

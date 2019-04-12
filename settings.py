@@ -168,34 +168,50 @@ SESSION_CONFIGS = [
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'valuation':'on', #on;off
-        'treatment': 'nosanction' # only;nosanction;exclude;dislike;punish
+        'treatment': 'nosanction',# only;nosanction;exclude;dislike;punish
     },
 
     {
-        'name': 'exclude',
-        'display_name': 'PGG-exclude-GG (exclude)',
+        'name': 'excludec05',
+        'display_name': 'PGG-exclude-GG_c05 (exclude)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'valuation': 'on',  # on;off
-        'treatment': 'exclude'  # only;nosanction;exclude;dislike;punish
+        'treatment': 'exclude',  # only;nosanction;exclude;dislike;punish
+        'cost_for_vote': 0.5 #either 0.5 or 0.2 these two possibilities are hardcoded in Control Questions
     },
 
+
     {
-        'name': 'dislike',
-        'display_name': 'PGG-dislike-GG (dislike)',
+        'name': 'excludec02',
+        'display_name': 'PGG-exclude-GG_c02 (exclude)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'valuation': 'on',  # on;off
-        'treatment': 'dislike' # only;nosanction;exclude;dislike;punish
+        'treatment': 'exclude',  # only;nosanction;exclude;dislike;punish
+        'cost_for_vote': 0.2 #either 0.5 or 0.2 these two possibilities are hardcoded in Control Questions
+    },
+
+
+
+    {
+        'name': 'dislikec05',
+        'display_name': 'PGG-dislike-GG_c05 (dislike)',
+        'num_demo_participants': 5,
+        'app_sequence': ['pg_vote_famfeud'],
+        'valuation': 'on',  # on;off
+        'treatment': 'dislike', # only;nosanction;exclude;dislike;punish
+        'cost_for_vote': 0.5 #either 0.5 or 0.2 these two possibilities are hardcoded in Control Questions
     },
 
 {
-        'name': 'punish',
-        'display_name': 'PGG-punish-GG (punish)',
+        'name': 'punishc05',
+        'display_name': 'PGG-punish-GG_c05 (punish)',
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'valuation': 'on',  # on;off
-        'treatment': 'punish' # only;nosanction;exclude;dislike;punish
+        'treatment': 'punish', # only;nosanction;exclude;dislike;punish
+        'cost_for_vote': 0.5 #either 0.5 or 0.2 these two possibilities are hardcoded in Control Questions
     },
 
 {

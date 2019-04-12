@@ -44,7 +44,7 @@ class Constants(BaseConstants):
 
     questions_per_round = 2  # 2 in the real experiment
     extra_questions = 1  # 1 in the real experiment
-    secs_per_question = 2  # 30 in the real experiment
+    secs_per_question = 30  # 30 in the real experiment
     wait_between_question = 4  # 4 in the real experiment
 
     with codecs.open('data.csv', 'r', 'utf-8') as f:
@@ -79,7 +79,7 @@ class Subsession(BaseSubsession):
         for player in self.get_players():
             #TODO Note: setting treatment is actually not needed but I do it s. t. in the dataset they have an indicator about this being the extra app only treatment
             player.treatment = self.session.config['treatment']
-           # player.participant.label = str(self.get_players().index(player)) #outcomment when done via participant_label.txt file
+           # player.participant.label = str(self.get_players().index(player)) # use this is if you don't use a participant label file
 
         self.group_randomly()
         # Assign the labels
