@@ -220,7 +220,8 @@ SESSION_CONFIGS = [
         'num_demo_participants': 5,
         'app_sequence': ['pg_vote_famfeud'],
         'valuation':'on',
-        'treatment': 'FF' # only;nosanction;exclude;dislike;punish
+        'treatment': 'FF',# only;nosanction;exclude;dislike;punish
+        'cost_for_vote': "" #leave empty but key is needed
     },
 
 ]
