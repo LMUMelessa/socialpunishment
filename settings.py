@@ -221,7 +221,7 @@ SESSION_CONFIGS = [
         'app_sequence': ['pg_vote_famfeud'],
         'valuation':'on',
         'treatment': 'FF',# only;nosanction;exclude;dislike;punish
-        'cost_for_vote': "" #leave empty but key is needed
+        'cost_for_vote': 0.0 #leave empty but key is needed
     },
 
 ]
