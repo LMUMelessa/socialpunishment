@@ -1,0 +1,66 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+
+      <div id="header">
+            <div id="header-left"></div>
+            <div id="header-right"></b> </div>
+        </div>
+
+    <div id="main">
+
+        <br>
+        Der Computer hat die Runde gezogen, welche für Sie ausbezahlt wird. <br>
+        Es wird Runde {{ payround }} ausbezahlt. <br>
+
+        In dieser Runde war ihr Verdienst {{ payoff_in_payround_taler }} Taler. <br>
+
+        Dies entspricht {{ euro }} €.<br>
+
+        Ihre Prämie für pünktliches Erscheinen ist {{ part_fee }}.<br>
+
+        {% if diff == 0 %}
+            Insgesamt erhalten Sie den Betrag von {{all}} € für die Teilnahme am Experiment.
+        {% else %}
+            Davon werden {{diff}} € abgezogen, da Sie die Bonusrunde des Gruppenspiels gespielt haben.<br>
+            Insgesamt erhalten Sie {{all}} € für die Teilnahme am Experiment.<br>
+        {% endif %}
+
+        Bitte füllen Sie nun Ihre Quittung aus und klicken Sie danach auf weiter.
+
+           </div>
+        </div>
+    <br>
+
+    {% next_button %}
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <style type="text/css">
+
+
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:100%; border-color: lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+
+
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+    </style>
+
+{% endblock %}

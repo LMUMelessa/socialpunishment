@@ -1,0 +1,67 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+
+      <div id="header">
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+{#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
+        </div>
+
+    <div id="main">
+
+     <br>
+
+
+        <div id="info" >
+            <div id="info-text">
+
+                Der Computer hat die Zahl <b>{{ player.random_ff_valuation }}</b> gezogen. <br>
+
+                {% if  player.plays_bonusFF == False %}
+                    Die Zahl des Computers ist höher als Ihre <b>{{ player.ff_valuation }}</b>.<br>
+                    Es wird nichts von Ihrer Prämie für pünktliches Erscheinen abgezogen und Sie werden am Ende des Experiments den Screenshot betrachten.<br>
+
+                {% else %}
+                    Ihre <b>{{ player.ff_valuation }}</b> ist höher als die Zahl des Computers.<br>
+                    <b>{{ player.random_ff_valuation }}</b> Euro werden von Ihrer Prämie für pünkliches Erscheinen abgezogen und Sie werden das Gruppenspiel am Ende des Experiments noch einmal spielen.<br>
+
+                {% endif %}
+
+           </div>
+        </div>
+    </div>
+
+
+
+    <br>
+{% endblock %}
+
+
+{% block scripts %}
+
+    <style type="text/css">
+
+
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:100%; border-color: lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+
+
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+    </style>
+
+{% endblock %}

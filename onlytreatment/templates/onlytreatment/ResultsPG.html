@@ -1,0 +1,121 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+    <div id="mcpixel"></div>
+
+      <div id="softTO" class="otree-timer alert alert-warning">
+    <p>Bitte klicken Sie weiter.</p>
+    </div>
+
+     <div id="header">
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+            <div id="header-right">Dies ist <b>Runde {{round_number }}</b> </div>
+        </div>
+
+
+
+
+
+    <div id="main">
+
+        <div id="info">
+
+            <div id="info-text">
+
+                Die Gesamtbeiträge zum Gruppenkonto belaufen sich auf {{ group.total_cont }} Taler. <br>
+                Damit ist Ihr Verdienst vom Gruppenkonto {{ group.indiv_share }} Taler. <br>
+                Ihr Verdienst von Ihrem privaten Konto ist {{ left_on_account }} Taler. <br>
+                Ihr Gesamtverdienst ist {{ player.round_payoff }} Taler. <br>
+                <br><br><br>
+                In der untenstehenden Tabelle können Sie sehen, wie viel jedes Gruppenmitglied beigetragen hat. <br>
+            </div>
+
+        </div>
+
+
+        <div id="tables">
+            Einzahlungen:<br>
+
+             <table class="table table-bordered table-sm" style="width:60%">
+                <tr style="background-color: black; color: white">
+                    <th>Teilnehmer</th>
+                    <th>Betrag</th>
+                </tr>
+                <tr>
+                    {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer A</td>{% endif %}
+                    {% if player.playerlabel == 'Player A' %}<td style="background-color: lightgrey"><b>{{ PlayerA }}</b></td> {% else %}<td>{{ PlayerA }}</td>{% endif %}
+                </tr>
+                <tr>
+                    {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer B</td>{% endif %}
+                    {% if player.playerlabel == 'Player B' %}<td style="background-color: lightgrey"><b>{{ PlayerB }}</b></td> {% else %}<td>{{ PlayerB }}</td>{% endif %}
+                </tr>
+                <tr>
+                    {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer C</td>{% endif %}
+                    {% if player.playerlabel == 'Player C' %}<td style="background-color: lightgrey"><b>{{ PlayerC }}</b></td> {% else %}<td>{{ PlayerC }}</td>{% endif %}
+                </tr>
+                <tr>
+                    {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer D</td>{% endif %}
+                    {% if player.playerlabel == 'Player D' %}<td style="background-color: lightgrey"><b>{{ PlayerD }}</b></td> {% else %}<td>{{ PlayerD }}</td>{% endif %}
+                </tr>
+                <tr>
+                    {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>Sie</b></td>{% else %}<td>Teilnehmer E</td>{% endif %}
+                    {% if player.playerlabel == 'Player E' %}<td style="background-color: lightgrey"><b>{{ PlayerE }}</b></td> {% else %}<td>{{ PlayerE }}</td>{% endif %}
+                </tr>
+            </table>
+
+        </div>
+
+
+    </div>
+    <br>
+    {% next_button %}
+{% endblock %}
+
+
+{% block scripts %}
+    <style type="text/css">
+
+
+        #mcpixel{
+            position: absolute;top: 0px;
+            left:0px; background-color: rgb(255,255,254);
+             height: 100%; width: 140px}
+
+
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:200px; border-bottom: solid 1px lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+    </style>
+
+
+    <script>
+
+    setTimeout(
+    function () {
+        document.getElementById("softTO").style.display = "block"
+    },
+    //soft timeout seconds * 1000
+    20*1000
+);
+
+    </script>
+
+
+{% endblock %}

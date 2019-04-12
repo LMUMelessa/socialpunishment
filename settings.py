@@ -14,7 +14,8 @@ if environ.get('OTREE_PRODUCTION') not in {None, '', '0'}:
 else:
     DEBUG = True
 
-DEBUG = False
+#if you didnt set environment variable then set debug = False or True here
+DEBUG = True
 
 ADMIN_USERNAME = 'admin'
 
@@ -137,14 +138,29 @@ SESSION_CONFIG_DEFAULTS = {
 
 SESSION_CONFIGS = [
 
-    {
-        'name': 'only',
-        'display_name': 'Only PGG (only)',
+
+
+
+
+    #only Treatment App
+{
+        'name': 'pggonly',
+        'display_name': 'Only PGG (only, Note:separate App)',
         'num_demo_participants': 5,
-        'app_sequence': ['pg_vote_famfeud'],
-        'treatment': 'only',  # only;nosanction;exclude;dislike;punish
-        'valuation':'off' #always off because in this treatment there is no FF
+        'app_sequence': ['onlytreatment'],
+        'valuation':'on', #on;off
+        'treatment': 'onlytreatment' #don't change'
     },
+
+    ## depreciated
+    # {
+    #     'name': 'only',
+    #     'display_name': 'Only PGG (only)',
+    #     'num_demo_participants': 5,
+    #     'app_sequence': ['pg_vote_famfeud'],
+    #     'treatment': 'only',  # only;nosanction;exclude;dislike;punish
+    #     'valuation':'off' #always off because in this treatment there is no FF
+    # },
 
 {
         'name': 'nosanction',

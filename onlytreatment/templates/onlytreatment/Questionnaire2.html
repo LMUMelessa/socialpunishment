@@ -1,0 +1,76 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+    <div id="mcpixel"></div>
+
+    <div id="main">
+        <br>
+        <b>Bitte beantworten Sie die Fragen.</b>
+
+        <div id="info" >
+            <div id="info-text">
+                {% formfield player.q5 %}
+                {% formfield player.q7 %}
+                {% formfield player.q8 %}
+                {% formfield player.q9 %}
+
+                  {# customized inputfield, s.t it is not only a one line input #}
+                  <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
+                  <textarea id="id_q10" name="q10"></textarea>
+
+                <br>
+           </div>
+        </div>
+    </div>
+
+
+
+    <br>
+    {% next_button %}
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script>
+     //this prevents that pressing enter will automatically submit the page and abort the game for a player
+    $(document).on("keypress", 'form', function (e) {
+    var code = e.keyCode || e.which;
+    console.log(code);
+    if (code == 13) {
+        console.log('Inside');
+        e.preventDefault();
+        return false;
+    }
+});
+    </script>
+
+
+
+
+    <style type="text/css">
+
+        #mcpixel{
+            position: absolute;top: 0px;
+            left:0px; background-color: rgb(255,254,255);
+             height: 100%; width: 140px}
+
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:100%; border-color: lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+        #id_q10{height:200px; width:400px}
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+    </style>
+
+{% endblock %}

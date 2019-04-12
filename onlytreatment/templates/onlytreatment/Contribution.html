@@ -1,0 +1,87 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+
+    <div id="softTO" class="otree-timer alert alert-warning">
+    <p>Die Zeit ist um! Sie müssen sich jetzt entscheiden.</p>
+    </div>
+
+
+     <div id="header">
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+            <div id="header-right">Dies ist <b>Runde {{ round_number }}</b> </div>
+        </div>
+
+
+
+
+    <div id="main">
+        <div id="info">
+            <div id="info-text">
+
+
+                Dies ist die Verteilungsentscheidung in der Runde {{round_number}}. <br>
+                Sie haben {{ Constants.endowment }} Taler. Wie viele Taler möchten Sie auf das Gruppenkonto einzahlen? <br>
+                Sie können jede Zahl zwischen 0 und 10 wählen.
+
+                <br>
+                <br>
+
+                {% formfield player.contribution %}
+            </div>
+        </div>
+
+        <div id="tables"></div>
+
+    </div>
+    <br>
+
+    {% next_button %}
+
+{% endblock %}
+
+
+{% block scripts %}
+    <style type="text/css">
+
+
+        #softTO {display: none}
+
+
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:200px; border-bottom: solid 1px lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+
+
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+    </style>
+
+
+    <script>
+
+    setTimeout(
+    function () {
+        document.getElementById("softTO").style.display = "block"
+    },
+    //soft timeout seconds * 1000
+    60*1000
+);
+
+    </script>
+
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+
+     <div id="header">
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+            <div id="header-right">Dies ist <b>Runde {{round_number}}</b> </div>
+        </div>
+
+    <div id="softTO" class="otree-timer alert alert-warning">
+    <p>Bitte klicken Sie weiter.</p>
+    </div>
+
+    <div id="main">
+        <br>
+        <h6>Ergebnisse des Gruppenspiels</h6>
+        <div id="tables">
+
+
+          <table class="table table-sm" style="width:45%; font-size:12px; border: solid; border-color: gray ">
+          {% for pl_list in alist %}
+
+
+              {% if pl_list.2.1.your_group == "True" %}
+
+
+                    <tr style="background-color: lightgrey">
+                        <th>Gruppe {{ pl_list.0 }} (Ihre Gruppe)</th>
+                        <th>Punkte: {{ pl_list.1 }}</th>
+                    </tr>
+              {% else %}
+
+                    <tr>
+                        <th>Gruppe {{ pl_list.0 }}</th>
+                        <th>Punkte: {{ pl_list.1 }}</th>
+                    </tr>
+              {% endif %}
+
+              <br>
+          {% endfor %}
+          </table>
+
+
+        </div>
+    </div>
+    <br>
+    {% next_button %}
+{% endblock %}
+
+
+{% block scripts %}
+    <style type="text/css">
+
+
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:200px; border-bottom: solid 1px lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+
+
+
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+
+
+    </style>
+
+    <script>
+
+    setTimeout(
+    function () {
+        document.getElementById("softTO").style.display = "block"
+    },
+    //soft timeout seconds * 1000
+    30*1000
+);
+
+    </script>
+
+{% endblock %}

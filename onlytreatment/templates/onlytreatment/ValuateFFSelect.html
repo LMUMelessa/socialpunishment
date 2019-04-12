@@ -1,0 +1,154 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+     <div id="softTO" class="otree-timer alert alert-warning">
+    <p>Die Zeit ist um! Sie müssen sich jetzt entscheiden.</p>
+    </div>
+
+
+      <div id="header">
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+{#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
+        </div>
+
+    <div id="main">
+
+     <br>
+
+
+        <div id="info" >
+            <div id="info-text">
+
+
+                Das war die Übungsrunde des Gruppenspiels. Nach Abschluss aller Runden des Experiments wird es eine Wartephase von {{ time }} Sekunden geben. Anstatt zu warten,  können Sie während dieser Zeit auch das Gruppenspiel spielen.<br>
+                Wie viele Euro würden Sie maximal zahlen, um während der Wartephase das Gruppenspiel zu spielen?<br><br>
+
+                Der Computer zieht eine Zufallszahl zwischen 0,0 und 6,0.<br>
+                Wenn Ihre maximale Zahlungsbereitschaft unter der Zufallszahl liegt, schauen Sie während der Wartephase einen Screenshot an. <br>
+                Wenn Ihre maximale Zahlungsbereitschaft über der Zufallszahl liegt, können Sie während der Wartephase das Gruppenspiel spielen und es wird ein Eurobetrag in Höhe der Zufallszahl von Ihrer Prämie für pünktliches Erscheinen abgezogen.<br>
+
+                Ihre beste Strategie ist es, einfach ihre maximale Zahlungsbereitschaft auf der Skala ehrlich anzugeben.<br><br>
+
+
+        {% formfield player.ff_valuation %}
+
+        <div id="Input">Ihr Wert: </div>
+
+
+           </div>
+        </div>
+    </div>
+
+
+
+    <br><br>
+
+    <button id="next" class="otree-btn-next btn btn-primary" disabled="true">Weiter</button>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <style type="text/css">
+
+        #softTO {display: none}
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:100%; border-color: lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+
+
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+
+
+
+{#     all of the following  is to hide the slider #}
+      .myclass::-webkit-slider-thumb {
+        box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+        border: 1px solid #000000;
+        height: 36px !important;
+        width: 20px !important;
+        border-radius: 3px !important;
+        background: #ffffff !important;
+        cursor: pointer !important !important;
+        -webkit-appearance: none !important;
+        margin-top: -14px !important;
+    }
+
+    input[type=range] {
+        -webkit-appearance: none;
+        margin: 18px 0;
+        width: 100%;
+    }
+
+    input[type=range]:focus {
+        outline: none;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 8.4px;
+        cursor: pointer;
+        animate: 0.2s;
+        box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+        background: #3071a9;
+        border-radius: 1.3px;
+        border: 0.2px solid #010101;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+        border: 0px;
+        height: 0px;
+        width: 0px;
+        border-radius: 0px;
+        -webkit-appearance: none;
+    }
+
+
+
+    </style>
+
+
+    <script>
+
+    //this is for hiding the slider initially
+     $(document).ready(function () {
+        $('input[type=range]').on('input change', function () {
+            $('input[type=range]').addClass('myclass');
+        });
+
+    });
+
+    // show the input of the slider
+     function showinput() {
+         document.getElementById("Input").textContent = "Ihr Wert: " +  (document.getElementById("id_ff_valuation").value).toString();
+         document.getElementById("next").disabled = false;
+     }
+    document.getElementById("id_ff_valuation").addEventListener("input", showinput);
+
+    setTimeout(
+    function () {
+        document.getElementById("softTO").style.display = "block"
+    },
+    //soft timeout seconds * 1000
+    60*1000
+);
+
+    </script>
+
+
+{% endblock %}

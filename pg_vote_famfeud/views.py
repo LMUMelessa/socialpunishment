@@ -19,7 +19,6 @@ class Instructions(Page):
             return self.player.round_number == 1
 
 
-
 # monitors information before a round depending on the current state of the experiment and treatment
 # distinct from Instructions to allow for differnt types of timeouts
 # don't show in only treatment in round 1 because there is no FF test
@@ -95,6 +94,7 @@ class FirstWaitPage(WaitPage):
             return True
 
 # wait_for_all_groups= True in FirstWaitPage results in error because you reference group there
+# TODO: why do I not have an is displayed here?
 class SecondWaitPage(WaitPage):
     wait_for_all_groups = True
 
@@ -314,7 +314,7 @@ class WaitAfterValuateFFSelect(WaitPage):
 
 class ValuateFFResult(Page):
 
-    timeout_seconds = 10
+    timeout_seconds = 30
     timer_text = "Sie werden weitergeleitet in "
 
     def is_displayed(self):
@@ -394,7 +394,7 @@ class CalculatePayoffAfterQuestionnaireWaitPage(WaitPage):
     def after_all_players_arrive(self):
 
         for player in self.group.get_players():
-            # Select a round from the 10 playing rounds (e.g. cut off the practice round and the bonusFF round)
+            # Select a round from the playing rounds (e.g. cut off the practice round and the bonusFF round)
             if Constants.num_rounds > 3:
                 ## Note: Payround is the oTree round not the experiment round!
                 payround = random.choice(range(2, Constants.num_rounds, 1))
@@ -469,7 +469,6 @@ class ShowPayoffDetails(Page):
 
 
 class EndPage(Page):
-
     def is_displayed(self):
         if self.player.treatment == "FF":
             return False
@@ -499,6 +498,7 @@ def downloadguess(request):
                 writer.writerow([datadic['participant.code'], datadic['session.code'],datadic['subsession.round_number'],
                                  datadic['guess'], datadic['correct'], datadic['groupId'], datadic['questionText'], datadic['questionNumber']])
     return response
+
 
 page_sequence = [
     Instructions,

@@ -1,0 +1,201 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+
+
+
+    <div id="main">
+
+
+       <b>Bitte beantworten Sie alle Fragen. Sie müssen alle Fragen richtig beantworten.</b><br>
+
+        <div id="info" >
+            <div id="info-text">
+                <div id="error_control1" class="otree-timer alert alert-warning" style="display: none;"></div>
+                {% formfield player.control1 %}
+                <br>
+                <div id="error_control2" class="otree-timer alert alert-warning" style="display: none;"></div>
+                {% formfield player.control2 %}
+                <br>
+                <div id="error_control3a" class="otree-timer alert alert-warning" style="display: none;"></div>
+                {% formfield player.control3a %}
+                <br>
+                <div id="error_control3b" class="otree-timer alert alert-warning" style="display: none;"></div>
+                {% formfield player.control3b %}
+                <br>
+                <div id="error_control3c" class="otree-timer alert alert-warning" style="display: none;"></div>
+                {% formfield player.control3c %}
+
+           </div>
+        </div>
+    </div>
+    <br>
+    <div id="tellhim" style="color: red; display: none">Bitte überprüfen Sie Ihre Antworten</div>
+
+    <!-- the button that the player sees, does not submit page-->
+    <button id='checkbutton' type='button' style="color: white">Abschicken</button>
+
+    <!-- hidden next button, is clicked when the player has everything correctly -->
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button" id="next" style="visibility: hidden" ></button>
+
+    <!-- count players tries to submit the form, when he has not all answers correctly -->
+   <input type="hidden" name="control_tries" id="hidden_counter"/>
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <style type="text/css">
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:100%; border-color: lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+        #checkbutton{    color: #fff;
+                         background-color: #007bff;
+                         border-color: #007bff;
+        display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;  }
+    </style>
+
+
+    <script>
+    var checkbutton = document.getElementById('checkbutton');
+    checkbutton.addEventListener('click', evaluate_answers);
+    var click_counter = 0;
+    //this is super ugly but I have to do it individually because in the loop always something broke
+    function evaluate_answers() {
+        var treatment = "{{ player.treatment }}";
+        var allCorrect = true;
+        var wrong_text = "Bei der folgenden Frage ist die Antwort nicht korrekt.";
+        var wrong_bg = "LightCoral";
+        var wrong_bc = "red";
+        var wrong_color = "white";
+        var corr_text = "Die folgende Antwort ist richtig.";
+        var corr_bg = "lightgreen";
+        var corr_bc = "green";
+        var corr_color = "black"
+               //control1
+               var controlme = document.getElementById("id_control1");
+               var err_message = document.getElementById("error_control1");
+               if (controlme.value != 7){
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+                 //control2
+                controlme = document.getElementById("id_control2");
+                err_message = document.getElementById("error_control2");
+               if (controlme.value != 8){
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+                 //control3a
+                controlme = document.getElementById("id_control3a_1");
+                err_message = document.getElementById("error_control3a");
+               if (!(controlme.checked)){
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+                //control3b
+                controlme = document.getElementById("id_control3b_0");
+                err_message = document.getElementById("error_control3b");
+               if (!(controlme.checked)){
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+                 //control3c
+                controlme = document.getElementById("id_control3c_0");
+                err_message = document.getElementById("error_control3c");
+               if (!(controlme.checked)){
+                   err_message.style.backgroundColor = wrong_bg;
+                   err_message.style.borderColor = wrong_bc;
+                   err_message.style.color = wrong_color;
+                   err_message.textContent = wrong_text;
+                   err_message.style.display = "Block";
+                   allCorrect = false;
+               }else{
+                   err_message.textContent = corr_text;
+                   err_message.style.display = "Block";
+                   err_message.style.backgroundColor = corr_bg;
+                   err_message.style.borderColor = corr_bc;
+                   err_message.style.color = corr_color;
+               }
+                  if (allCorrect == true) {
+
+            click_counter += 1;
+            document.getElementById('hidden_counter').value = click_counter;
+            document.getElementById('next').click();
+
+        }else{
+            document.getElementById("tellhim").style.display = "Block";
+            click_counter += 1;
+            }
+
+
+    }
+    </script>
+
+{% endblock %}

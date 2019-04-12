@@ -1,0 +1,109 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+    <div id="mcpixel"></div>
+
+      <div id="header">
+            <div id="header-left">Sie sind <b>{{ player.germanplayerlabel }}</b></div>
+{#            <div id="header-right">Current round is <b>Round {{ player.round_number }}</b> </div>#}
+        </div>
+
+    <div id="main">
+        <div id="info" >
+            <div id="info-text">
+
+            <br><br>
+
+                {% if player.round_number == 1 %}
+
+                   Die erste Runde von Teil 1 des Experiments startet auf der nächsten Seite. Bitte drücken Sie weiter.
+
+                {% elif player.round_number < Constants.transition_round %}
+
+                    Ende der Runde. Die Gruppen werden neu zusammengesetzt. Die nächste Runde startet auf der nächsten Seite.<br>
+                    Bitte drücken Sie weiter
+
+                {% elif player.round_number == Constants.transition_round %}
+                    Der erste Teil des Experiments ist beendet. Bitte füllen Sie die Fragen zum ersten Teil auf der nächsten Seite aus.<br>
+                    Anschließend gelangen Sie auf eine Warteseite und die weiteren Instruktionen werden vorgelesen.
+
+
+                {% elif player.round_number == Constants.first_ff_round %}
+                    Die Proberunde ist beendet. <br>
+                    Die erste Runde des zweiten Teils des Experiments startet auf der nächsten Seite.
+
+
+                {% elif player.round_number < Constants.num_rounds %}
+                    Ende der Runde. Die Gruppen werden neu zusammengesetzt. Die nächste Runde startet auf der nächsten Seite.<br>
+                    Bitte drücken Sie weiter.
+
+
+                {% elif player.round_number == Constants.num_rounds %}
+
+                    {% if valuation == "off" %}
+
+                        Die letzte Runde des Experiments ist beendet. Sie werden nun zum abschließenden Fragebogen gelangen.
+
+                    {# if there is valuation, give player respective information #}
+                    {% else %}
+                        {% if player.plays %}
+                            Die letzte Runde ist beendet. Vor der ersten Runde des zweiten Teils haben Sie Ihre Zahlungsbereitschaft für eine weitere Runde des Gruppenspiels angegeben.<br>
+                            Da die Computerzahl kleiner war als Ihre Zahlungsbereitschaft, werden Sie nun diese Bonusrunde des Gruppenspiels spielen, bevor Sie zum abschließenden Fragebogen gelangen.
+                        {% else %}
+                            Die letzte Runde des Experiments ist beendet. Vor der ersten Runde des Experiments haben Sie Ihre Zahlungsbereitschaft für eine weitere Runde des Gruppenspiels angegeben.<br>
+                            Da die Computerzahl größer war als Ihre Zahlungsbereitschaft, werden Sie nun einen Screenshot betrachten, bevor Sie zum abschließenden Fragebogen gelangen.
+
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+
+
+
+           </div>
+        </div>
+
+
+        <div id="tables"></div>
+
+
+
+    </div>
+    <br>
+    {% next_button %}
+{% endblock %}
+
+
+{% block scripts %}
+
+    <style type="text/css">
+
+
+         #mcpixel{
+            position: absolute;top: 0px;
+            left:0px; background-color: rgb(254,255,255);
+             height: 100%; width: 140px}
+
+
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:200px; border-color: lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+        #tables{margin-left: 15px; padding-top: 15px}
+
+
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+    </style>
+
+{% endblock %}

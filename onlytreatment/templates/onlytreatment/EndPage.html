@@ -1,0 +1,57 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+
+      <div id="header">
+            <div id="header-left"></div>
+            <div id="header-right">Letzte Seite</b> </div>
+        </div>
+
+    <div id="main">
+
+        <br>
+        Das Experiment ist beendet.<br>
+
+        Ihre Computernummer lautet {{ number }}. <br>
+        Bitte bleiben Sie sitzen, bis diese Zahl aufgerufen wird oder bis Sie weitere Anweisungen erhalten.<br>
+        Danke für Ihre Teilnahme.
+
+        {{ code }}
+
+           </div>
+        </div>
+
+
+
+    <br>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <style type="text/css">
+
+
+        #header { border-bottom: solid 1px lightgrey;  padding-top: 3px; padding-bottom:4px }
+        #header-left {display: inline-block; font-size: 12px; margin-right: 70% }
+        #header-right {display: inline-block; font-size: 12px; }
+
+
+        #main{border-color: #f6f6f6; padding-left: 0px;height: 100%; width: 100%}
+        #info{ height:100%; border-color: lightgrey;margin-top: 20px}
+        #info-text{margin-left: 15px}
+
+
+        .otree-body{margin-top: 0px}
+        .otree-body{padding-top: 0px}
+        .page-header {padding-top: 0px;padding-bottom: 0px}
+        .otree-title{font-size: 20px}
+    </style>
+
+{% endblock %}

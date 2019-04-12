@@ -24,8 +24,8 @@ class Constants(BaseConstants):
     timeoutsecs = 60
     cost_for_vote = 0.5 #don't change this! It is hardcoded as 0.5(Taler) in the ControlQuestions
     punishment_value = 2
-    ### Familyfeud
 
+    ### Familyfeud
     ### The overall time for one FF round is questions_per_round * secs_per_questions
     ### The players will receive new questions until: overall time is up  OR all questions_per_round + extra_questions are answered
 
@@ -137,7 +137,7 @@ class Group(RedwoodGroup):
 
         # increment the current question number
         # TODO: You need save() for all database operations ingame, otherwise the changes have no effect on the database
-        # TODO: see the oTree Redwood doc group.save() note changed spelling from Gruppe zu gruppe weil es sonst einen fehler gab
+        # TODO: see the oTree Redwood doc group.save()
         self.current_quest_num += 1
         self.save()
 
@@ -151,7 +151,6 @@ class Group(RedwoodGroup):
         #self.save()
 
         # at the beginning of every new question round, no solution has been found
-        # TODO, do i need all the saves or is 1 enough?
         self.s1_answered = False
         self.save()
         self.s2_answered = False
@@ -397,7 +396,6 @@ class Group(RedwoodGroup):
 
 class Player(BasePlayer):
 
-
     ### Public Good Variables
 
     germanplayerlabel = models.StringField(doc="See player label.")
@@ -407,9 +405,7 @@ class Player(BasePlayer):
         choices=['Player A', 'Player B', 'Player C', 'Player D', 'Player E'])
 
     treatment = models.CharField(
-        doc='Defines the treatment of the session. The treatment is the same for all players in one session.'
-            'In "exclude", player can vote exclude players. In "control", no voting exists',
-        choices=['voting', 'novoting'])
+        doc='Defines the treatment of the session. The treatment is the same for all players in one session')
 
     contribution = models.IntegerField(
         doc='The players contribution in the public good game in Taler',
@@ -417,28 +413,15 @@ class Player(BasePlayer):
         min=0,
         max=Constants.endowment)
 
-
     myvotes = models.IntegerField(
         doc='The number of votes the player got after the public good game.')
 
     ivoted = models.IntegerField(doc='The number of votes the player distributed to other players. This could be in {0,4} depending on the implementation.',
                                  initial=0)
 
-    plays = models.BooleanField(
-        doc='Determines if the player is allowed to play the guessing game in a particular round.',
-        default = True
-    )
-
     #set in set_socialgame()
     sanctioned = models.BooleanField(doc='Determines if the player was sanctioned after the vote. Sanctioning means Exclusion, Rüge or monitary punishment.',
                                      default=False)
-
-    # does the player play the bonus FF round after all rounds of the experiment according to the evaluation mechanism
-    # depends on the valuationFF results
-    plays_bonusFF = models.BooleanField(initial=True,
-                                        doc="This determines if the player plays the bonus guessing game round at the end of the experiment. \
-                                             This is true if the players willingness to pay (ff_valuation) is higher than the computer (number random_ff_valuation)")
-
 
     round_payoff = models.IntegerField(initial=0, doc="The amount of Taler of the player in a particular round.")
 
@@ -501,7 +484,7 @@ class Player(BasePlayer):
                                                                                                              "Nein, die meisten anderen denken man sollte weniger beitragen",
                                                                                                              ])
 
-    #only in exclude
+    # only in exclude
     q3 = models.StringField(widget=widgets.RadioSelect(),verbose_name="In jeder Runde hatten Sie die Möglichkeit, Gruppenmitglieder vom Gruppenspiel auszuschließen. Welche Überlegungen haben Sie dabei angestellt? (Bitte wählen Sie die Option, die am besten passt.)",
                             choices=["Ich habe rein zufällig meine Stimme vergeben",
                                     "Ich wollte Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
@@ -509,7 +492,7 @@ class Player(BasePlayer):
                                     "Ich wollte ausprobieren was passiert",
                                     "Ich habe in keiner Runde eine Stimme abgegeben"])
 
-    #only in exclude
+    # only in exclude
     q4 = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Was denken Sie, warum haben andere Teilnehmer dafür gestimmt, Gruppenmitglieder auszuschließen?",
         choices=["Rein zufällig",
@@ -528,7 +511,6 @@ class Player(BasePlayer):
 
     ######################################################################################################################
     ### Control Variables
-
 
     ##how often did the participant try to submit the control questions when some answers were still wrong
     # if the participant was correct on the first try, than this will be 1
@@ -602,7 +584,19 @@ class Player(BasePlayer):
 
 
     ######################################################################################################################
+    ###Family Feud
 
+
+    plays = models.BooleanField(
+        doc='Determines if the player is allowed to play the guessing game in a particular round.',
+        default=True
+    )
+
+    # does the player play the bonus FF round after all rounds of the experiment according to the evaluation mechanism
+    # depends on the valuationFF results
+    plays_bonusFF = models.BooleanField(initial=True,
+                                        doc="This determines if the player plays the bonus guessing game round at the end of the experiment. \
+                                                This is true if the players willingness to pay (ff_valuation) is higher than the computer (number random_ff_valuation)")
 
     # Number of correctly answered questions
     ff_points = models.IntegerField(initial=0, doc="The number of correct answers which the player found overall in the guessing game in one round.")
