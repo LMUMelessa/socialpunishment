@@ -9,5 +9,5 @@ idna>=2.5
 zope.interface==4.2.0
 six==1.10.0
 pytz==2017.3
-#psycopg2-binary
+psycopg2-binary
 #pypiwin32
