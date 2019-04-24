@@ -65,7 +65,7 @@ AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY')
 REAL_WORLD_CURRENCY_CODE = 'EUR'
 USE_POINTS = True
 POINTS_DECIMAL_PLACES = 2
-
+REAL_WORLD_CURRENCY_DECIMAL_PLACES = 1
 
 
 # e.g. en, de, fr, it, ja, zh-hans
@@ -139,9 +139,6 @@ SESSION_CONFIG_DEFAULTS = {
 SESSION_CONFIGS = [
 
 
-
-
-
     #only Treatment App
 {
         'name': 'pggonly',
@@ -169,6 +166,7 @@ SESSION_CONFIGS = [
         'app_sequence': ['pg_vote_famfeud'],
         'valuation':'on', #on;off
         'treatment': 'nosanction',# only;nosanction;exclude;dislike;punish
+        'cost_for_vote': 0.0 #leave empty but key is needed
     },
 
     {

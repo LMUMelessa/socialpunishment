@@ -313,18 +313,18 @@ class ShowPayoffDetails(Page):
         #TODO: This means it is sufficient to shut off valuation, nothing has to be changed in regard to display logic here or in the template
         if random_ff_valuation < ff_valuation:
             return{'payoff_in_payround_taler':taler ,
-                    'euro': (round(c(taler).to_real_world_currency(self.session),2)),
+                    'euro': (round(c(taler).to_real_world_currency(self.session),1)),
                     'part_fee':part_fee,
                     'diff': self.player.in_round(Constants.transition_round).random_ff_valuation, # Will be subtracted if he played bonus FF, this has happend in player.payoff already
-                    'all': round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],2), # Note you have to calc this because self.payoff does not regard the participation fee
+                    'all': round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],1), # Note you have to calc this because self.payoff does not regard the participation fee
                    'payround': self.player.payround,
                    'number': self.player.participant.label}
         else:
             return {'payoff_in_payround_taler': taler,
-                    'euro':(round(c(taler).to_real_world_currency(self.session),2)),
+                    'euro':(round(c(taler).to_real_world_currency(self.session),1)),
                     'part_fee': part_fee,
                     'diff': 0,
-                    'all':round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],2),
+                    'all':round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],1),
                     'payround':self.player.payround,
                     'number': self.player.participant.label}
 

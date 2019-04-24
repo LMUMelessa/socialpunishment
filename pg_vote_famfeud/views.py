@@ -52,7 +52,7 @@ class ControlQuestions(Page):
         elif self.player.treatment=='dislike':
             return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control4dislike','control5dislike', 'control6dislike','control7control', 'control8']
         elif self.player.treatment=='punish':
-            return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control7control', 'control8']
+            return ['control_tries','control1', 'control2' , 'control3a','control3b','control3c','control4punish','control5punish','control6punish','control7control', 'control8']
 
     def is_displayed(self):
         if self.player.treatment=="FF":
@@ -144,7 +144,7 @@ class Vote(Page):
             return 'Bitte treffen Sie zuerst eine Entscheidung.'
 
     def vars_for_template(self):
-        data = {'round_number': self.player.round_number-1}
+        data = {'round_number': self.player.round_number-1, 'cost_for_vote':self.session.config['cost_for_vote']}
         for player in self.group.get_players():
             # Remove whitespace from label so that it can be displayed in the template
             data[(player.playerlabel).replace(' ', '')] = player.contribution
@@ -153,7 +153,7 @@ class Vote(Page):
     def is_displayed(self):
         if self.round_number == 1 or self.round_number == Constants.num_rounds:
             return False
-        if self.player.treatment == "FF" or self.player.treatment == "nosanction" or self.player.treatment == "only":
+        if self.player.treatment == 'FF' or self.player.treatment == 'nosanction' or self.player.treatment == 'only':
             return False
         else:
             return True
@@ -173,10 +173,11 @@ class VoteWaitPage(WaitPage):
     def is_displayed(self):
         if self.round_number == 1 or self.round_number == Constants.num_rounds:
             return False
-        if self.player.treatment == "FF" or self.player.treatment == "nosanction" or self.player.treatment == "only":
+        if self.player.treatment == 'FF' or self.player.treatment == 'nosanction' or self.player.treatment == 'only':
             return False
         else:
             return True
+
 
 
 #wait_for_all_groups = True in VoteWaitPage would result in error because after_all_player_arrive is then only called once
@@ -186,7 +187,7 @@ class VoteWaitPage2(WaitPage):
     def is_displayed(self):
         if self.round_number == 1 or self.round_number == Constants.num_rounds:
             return False
-        if self.player.treatment == "FF" or self.player.treatment == "nosanction" or self.player.treatment == "only":
+        if self.player.treatment == 'FF' or self.player.treatment == 'nosanction' or self.player.treatment == 'only':
             return False
         else:
             return True
@@ -201,14 +202,14 @@ class VoteResults(Page):
 
            if player.treatment == 'exclude':
                if player.plays == True:
-                    data[(player.playerlabel).replace(' ', '') + '_plays'] = "Ja"
+                    data[(player.playerlabel).replace(' ', '') + '_plays'] = 'Ja'
                elif player.plays == False:
-                   data[(player.playerlabel).replace(' ', '') + '_plays'] = "Nein"
+                   data[(player.playerlabel).replace(' ', '') + '_plays'] = 'Nein'
            else: #in other treatments all play GG, show the sanctioning
                if player.sanctioned == True:
-                   data[(player.playerlabel).replace(' ', '') + '_sanctioned'] = "Ja"
+                   data[(player.playerlabel).replace(' ', '') + '_sanctioned'] = 'Ja'
                else:
-                   data[(player.playerlabel).replace(' ', '') + '_sanctioned'] = "Nein"
+                   data[(player.playerlabel).replace(' ', '') + '_sanctioned'] = 'Nein'
 
        return data
 
@@ -228,7 +229,7 @@ class BeforePrepareFFWaitPage(WaitPage):
     wait_for_all_groups = True
 
     def is_displayed(self):
-        if self.player.treatment=="only":
+        if self.player.treatment=='only':
             return False
         # if valuation is off and you are in the last round (questionnaire round) then you must not show
         elif self.round_number == Constants.num_rounds and self.session.config['valuation']=='off':
@@ -240,10 +241,10 @@ class BeforePrepareFFWaitPage(WaitPage):
 class PrepareFF(Page):
 
     timeout_seconds = 5
-    timer_text = "Das Gruppenspiel startet in "
+    timer_text = 'Das Gruppenspiel startet in '
 
     def is_displayed(self):
-        if self.player.treatment=="only":
+        if self.player.treatment=='only':
             return False
         # if valuation is off and you are in the last round (questionnaire round) then you must not show
         elif self.round_number == Constants.num_rounds and self.session.config['valuation']=='off':
@@ -253,7 +254,7 @@ class PrepareFF(Page):
 
 class FamilyFeud(Page):
     def is_displayed(self):
-        if self.player.treatment=="only":
+        if self.player.treatment=='only':
             return False
         # if valuation is off and you are in the last round (questionnaire round) then you must not show
         elif self.round_number == Constants.num_rounds and self.session.config['valuation']=='off':
@@ -265,7 +266,7 @@ class FamilyFeud(Page):
 class AfterFamilyFeudWaitPage(WaitPage):
     wait_for_all_groups = True
     def is_displayed(self):
-        if self.player.treatment == "only":
+        if self.player.treatment == 'only':
             return False
         else: return True
 
@@ -283,9 +284,9 @@ class ValuateFFSelect(Page):
         return {'time':Constants.questions_per_round * Constants.secs_per_question}
 
     def is_displayed(self):
-        if self.player.treatment == "FF" or self.player.treatment == "only":
+        if self.player.treatment == 'FF' or self.player.treatment == 'only':
             return False
-        if self.session.config["valuation"] == "off":
+        if self.session.config['valuation'] == 'off':
             return False
         if self.round_number == 1:
             return True
@@ -307,9 +308,9 @@ class ValuateFFSelect(Page):
 class WaitAfterValuateFFSelect(WaitPage):
 
     def is_displayed(self):
-        if self.player.treatment=="FF" or self.player.treatment == "only":
+        if self.player.treatment=='FF' or self.player.treatment == 'only':
             return False
-        if self.session.config["valuation"] == "off":
+        if self.session.config['valuation'] == 'off':
             return False
         if self.round_number == 1:
             return True
@@ -322,12 +323,12 @@ class WaitAfterValuateFFSelect(WaitPage):
 class ValuateFFResult(Page):
 
     timeout_seconds = 30
-    timer_text = "Sie werden weitergeleitet in "
+    timer_text = 'Sie werden weitergeleitet in '
 
     def is_displayed(self):
-        if self.player.treatment=="FF" or self.player.treatment=="only":
+        if self.player.treatment=='FF' or self.player.treatment=='only':
             return False
-        if self.session.config["valuation"] == "off":
+        if self.session.config['valuation'] == 'off':
             return False
         if self.round_number == 1:
             return True
@@ -338,12 +339,12 @@ class ValuateFFResult(Page):
 class FamilyFeudResults(Page):
 
     #timeout_seconds = 30
-    #timer_text = "Verbleibende Zeit auf dieser Seite "
+    #timer_text = 'Verbleibende Zeit auf dieser Seite '
 
     # Don't display in the valuation round (last round) and practice round (first round)
     # Don't show to players which did not play the game
     def is_displayed(self):
-        if self.player.plays == False or self.player.treatment=="only":
+        if self.player.plays == False or self.player.treatment=='only':
             return False
         if self.player.round_number == Constants.num_rounds or self.player.round_number == 1:
             return False
@@ -383,15 +384,17 @@ class Questionnaire(Page):
     def get_form_fields(self):
 
         treatment = self.player.treatment
+        # this is for convenience, you could also in every treatment send every possible variable and do the conditions only in the template
         if treatment == 'exclude':
             return ['q1', 'q2', 'q3', 'q4', 'q5', 'q7','q8','q9','q10']
         elif treatment == 'dislike':
             return ['q1', 'q2','q3dislike','q4dislike', 'q5', 'q7', 'q8', 'q9', 'q10']
-
+        elif treatment=='punish':
+            return ['q1','q2','q3punish', 'q4punish','q5','q7','q8','q9','q10']
         else:
             return ['q1','q2','q5','q7','q8','q9','q10']
     def is_displayed(self):
-        if self.player.treatment == "FF":
+        if self.player.treatment == 'FF':
             return False
         else:    
             return Constants.num_rounds == self.round_number
@@ -430,7 +433,7 @@ class CalculatePayoffAfterQuestionnaireWaitPage(WaitPage):
             # Note: the computer number is in Euro, but oTree expects points because it later converts Points to Euro in the Admin-Mask
             # Therefore, the computer number has to be converted to Points by 1/c/p
             # Note: the in_round(1) because this variable is set in round 1 only
-            if self.session.config["valuation"]=="on":
+            if self.session.config['valuation']=='on':
                 if player.in_round(1).plays_bonusFF:
                     player.payoff = player.payoff - (1 /float(self.session.config['real_world_currency_per_point']) * float(player.in_round(1).random_ff_valuation))
 
@@ -441,7 +444,7 @@ class CalculatePayoffAfterQuestionnaireWaitPage(WaitPage):
 class ShowPayoffDetails(Page):
 
     #timeout_seconds = Constants.timeoutsecs
-    #timer_text = "Verbleibende Zeit auf dieser Seite "
+    #timer_text = 'Verbleibende Zeit auf dieser Seite '
 
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
@@ -465,25 +468,25 @@ class ShowPayoffDetails(Page):
         #TODO: This means it is sufficient to shut off valuation, nothing has to be changed in regard to display logic here or in the template
         if random_ff_valuation < ff_valuation:
             return{'payoff_in_payround_taler':taler ,
-                    'euro': (round(c(taler).to_real_world_currency(self.session),2)),
+                    'euro': (round(c(taler).to_real_world_currency(self.session),1)),
                     'part_fee':part_fee,
                     'diff': self.player.in_round(1).random_ff_valuation, # Will be subtracted if he played bonus FF, this has happend in player.payoff already
-                    'all': round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],2), # Note you have to calc this because self.payoff does not regard the participation fee
+                    'all': round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],1), # Note you have to calc this because self.payoff does not regard the participation fee
                    'payround': self.player.payround-1,
                    'number': self.player.participant.label}
         else:
             return {'payoff_in_payround_taler': taler,
-                    'euro':(round(c(taler).to_real_world_currency(self.session),2)),
+                    'euro':(round(c(taler).to_real_world_currency(self.session),1)),
                     'part_fee': part_fee,
                     'diff': 0,
-                    'all':round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],2),
+                    'all':round(part_fee + float(self.player.payoff) * self.session.config['real_world_currency_per_point'],1),
                     'payround':self.player.payround-1,
                     'number': self.player.participant.label}
 
 
 class EndPage(Page):
     def is_displayed(self):
-        if self.player.treatment == "FF":
+        if self.player.treatment == 'FF':
             return False
         if self.player.round_number == Constants.num_rounds:
             return True
@@ -499,10 +502,10 @@ def downloadguess(request):
     date = str(datetime.datetime.fromtimestamp(time.time()).strftime('%d-%m-%Y_at%H:%M'))
     response = HttpResponse(content_type='text/csv')
     # decide the file name
-    response['Content-Disposition'] = 'attachment; filename="{}_guessdata.csv"'.format(date)
+    response['Content-Disposition'] = "attachment; filename='{}_guessdata.csv'".format(date)
     writer = csv.writer(response, csv.excel)
     response.write(u'\ufeff'.encode('utf8'))
-    writer.writerow(["participantID", "sessionID", "round_number", "guess", "correct", "groupId", "questionText", "question_number"])
+    writer.writerow(['participantID', 'sessionID', 'round_number', 'guess', 'correct', 'groupId', 'questionText', 'question_number'])
     # 'Event' is the database table! E. g. database access here
     for event in Event.objects.all():
         if event.value.__class__ == dict:

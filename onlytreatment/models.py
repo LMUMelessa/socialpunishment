@@ -18,11 +18,12 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'onlytreatment'
     players_per_group = 5
+
     # Public good rounds
     pgg_rounds = 1   #10 in the real experiment. Set 1 for testing
     # Guessing game (family feud) rounds
     # !!Note: even if valuation is off set ff_rounds to 1 + rounds + 1. If valuation is off, the last round is the questionnaire2 round
-    ff_rounds = 3 #12 in the real experiment. Set 3 for testing.
+    ff_rounds = 3 #12 in the real experiment (if you want 10). Set 3 for testing.
 
 
     # this is the round number of the round where the BeliefQuestions/WaitPhase/Practice Round of Family feud takes place
@@ -103,8 +104,6 @@ class Subsession(BaseSubsession):
             questions_per_round = Constants.questions_per_round
             extra_questions = Constants.extra_questions
 
-            #TODO: Theoretically, iterating in the outer loop here from transition_round to num rounds instead of
-            #TODO: itering from 1 to num_rounds should solve the loading error problem
             for round_num in range(Constants.transition_round, Constants.num_rounds + 1):
                 for question_num in range(1, questions_per_round + extra_questions + 1):
 
@@ -405,8 +404,8 @@ class Player(BasePlayer):
                                                                                                              ])
     ####################################################################################################################
     ###  Questionnaire2
-    q5 = models.IntegerField(verbose_name="Bitte geben Sie ihr Alter an", min=0, max=99)
-    q7 = models.StringField(verbose_name="Bitte geben Sie ihr Studienfach an")
+    q5 = models.IntegerField(verbose_name="Bitte geben Sie Ihr Alter an", min=0, max=99)
+    q7 = models.StringField(verbose_name="Bitte geben Sie Ihr Studienfach an")
     q8 = models.IntegerField(min=0,
                              verbose_name="Wie oft haben Sie bereits an einer ökonomischen Laborstudie teilgenommen (auch außerhalb dieses Labors)?")
     q9 = models.StringField(

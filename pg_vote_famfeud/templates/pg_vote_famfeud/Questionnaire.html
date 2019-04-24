@@ -17,177 +17,75 @@
             <div id="info-text">
 
 
+            <!-- this treatment is depreciated in this app -->
             {% if player.treatment == "only" %}
 
-                <div id="page1" style="display: block;">
+                {% formfield player.q1 %}
+                {% formfield player.q2 %}
+                {% formfield player.q5 %}
+                {% formfield player.q7 %}
+                {% formfield player.q8 %}
+                {% formfield player.q9 %}
+                {# customized inputfield, s.t it is not only a one line input #}
+                <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
+                <textarea id="id_q10" name="q10"></textarea>
 
-                    {% formfield player.q1 %}
-                    {% formfield player.q2 %}
-                    {% formfield player.q5 %}
-
-
-                </div>
-
-
-                <div id="page2" style="display: none;">
-
-                    {% formfield player.q7 %}
-                    {% formfield player.q8 %}
-                    {% formfield player.q9 %}
-
-                </div>
-
-
-                <div id="page3" style="display: none;">
-
-                      {# customized inputfield, s.t it is not only a one line input #}
-                    <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
-                    <textarea id="id_q10" name="q10"></textarea>
-
-                </div>
-
-
-
-                <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
-                <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
-                <button id='buttonPage3' class="pageButton" type='button' style="color: white">Seite3</button>
 
             {% elif player.treatment == "nosanction" %}
 
-                <div id="page1" style="display: block;">
-
-                    {% formfield player.q1 %}
-                    {% formfield player.q2 %}
-                    {% formfield player.q5 %}
-
-
-                </div>
-
-
-                <div id="page2" style="display: none;">
-
-                    {% formfield player.q7 %}
-                    {% formfield player.q8 %}
-                    {% formfield player.q9 %}
-
-                </div>
-
-
-                <div id="page3" style="display: none;">
-
-                      {# customized inputfield, s.t it is not only a one line input #}
-                    <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
-                    <textarea id="id_q10" name="q10"></textarea>
-
-                </div>
-
-
-
-                <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
-                <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
-                <button id='buttonPage3' class="pageButton" type='button' style="color: white">Seite3</button>
+                {% formfield player.q1 %}
+                {% formfield player.q2 %}
+                {% formfield player.q5 %}
+                {% formfield player.q7 %}
+                {% formfield player.q8 %}
+                {% formfield player.q9 %}
+                {# customized inputfield, s.t it is not only a one line input #}
+                <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
+                <textarea id="id_q10" name="q10"></textarea>
 
 
             {% elif player.treatment == "dislike" %}
 
-                <div id="page1" style="display: block;">
-                    {% formfield player.q1 %}
-                    {% formfield player.q2 %}
-                    {% formfield player.q3dislike %}
-                </div>
-
-
-                <div id="page2" style="display: none;">
-                    {% formfield player.q4dislike %}
-                    {% formfield player.q7 %}
-                    {% formfield player.q5 %}
-                </div>
-
-
-                <div id="page3" style="display: none;">
-                    {% formfield player.q8 %}
-                    {% formfield player.q9 %}
-                      {# customized inputfield, s.t it is not only a one line input #}
-                    <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
-                    <textarea id="id_q10" name="q10"></textarea>
-
-                </div>
-
-
-
-                <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
-                <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
-                <button id='buttonPage3' class="pageButton" type='button' style="color: white">Seite3</button>
-
+                {% formfield player.q1 %}
+                {% formfield player.q2 %}
+                {% formfield player.q3dislike %}
+                {% formfield player.q4dislike %}
+                {% formfield player.q7 %}
+                {% formfield player.q5 %}
+                {% formfield player.q8 %}
+                {% formfield player.q9 %}
+                {# customized inputfield, s.t it is not only a one line input #}
+                <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
+                <textarea id="id_q10" name="q10"></textarea>
 
 
             {% elif player.treatment == "punish" %}
 
-                <div id="page1" style="display: block;">
-
-                    {% formfield player.q1 %}
-                    {% formfield player.q2 %}
-                    {% formfield player.q5 %}
-
-
-                </div>
-
-
-                <div id="page2" style="display: none;">
-
-                    {% formfield player.q7 %}
-                    {% formfield player.q8 %}
-                    {% formfield player.q9 %}
-
-                </div>
-
-
-                <div id="page3" style="display: none;">
-
-                      {# customized inputfield, s.t it is not only a one line input #}
-                    <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
-                    <textarea id="id_q10" name="q10"></textarea>
-
-                </div>
-
-
-
-                <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
-                <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
-                <button id='buttonPage3' class="pageButton" type='button' style="color: white">Seite3</button>
+                {% formfield player.q1 %}
+                {% formfield player.q2 %}
+                {% formfield player.q3punish %}
+                {% formfield player.q4punish %}
+                {% formfield player.q7 %}
+                {% formfield player.q5 %}
+                {% formfield player.q8 %}
+                {% formfield player.q9 %}
+                {# customized inputfield, s.t it is not only a one line input #}
+                <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
+                <textarea id="id_q10" name="q10"></textarea>
 
             {% elif player.treatment == "exclude"%}
 
-
-                <div id="page1" style="display: block;">
-
-                    {% formfield player.q1 %}
-                    {% formfield player.q2 %}
-                    {% formfield player.q3 %}
-
-                </div>
-
-
-                <div id="page2" style="display: none;">
-
-                    {% formfield player.q4 %}
-                    {% formfield player.q5 %}
-                    {% formfield player.q7 %}
-
-
-                </div>
-
-                <div id="page3" style="display: none;">
-                    {% formfield player.q8 %}
-                    {% formfield player.q9 %}
-                   {# customized inputfield, s.t it is not only a one line input #}
-                    <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
-                    <textarea id="id_q10" name="q10"></textarea>
-                </div>
-
-                <button id='buttonPage1' type='button' class="pageButton" style="color: white; background-color:lightskyblue">Seite1</button>
-                <button id='buttonPage2' class="pageButton" type='button' style="color: white">Seite2</button>
-                <button id='buttonPage3' class="pageButton" type='button' style="color: white">Seite3</button>
+                {% formfield player.q1 %}
+                {% formfield player.q2 %}
+                {% formfield player.q3 %}
+                {% formfield player.q4 %}
+                {% formfield player.q5 %}
+                {% formfield player.q7 %}
+                {% formfield player.q8 %}
+                {% formfield player.q9 %}
+                {# customized inputfield, s.t it is not only a one line input #}
+                <label class="col-form-label" for="id_q10">Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!</label><br>
+                <textarea id="id_q10" name="q10"></textarea>
 
             {% endif %}
 
@@ -206,102 +104,6 @@
 {% block scripts %}
 
     <script>
-
-
-      var button1 = document.getElementById('buttonPage1');
-    button1.addEventListener('click', function() { navigate(1); });
-    var button2 = document.getElementById('buttonPage2');
-    button2.addEventListener('click', function() { navigate(2); });
-    var button3 = document.getElementById('buttonPage3');
-    button3.addEventListener('click', function() { navigate(3); });
-
-
-    button1.addEventListener('mouseover', function() { showlink(1); });
-    button2.addEventListener('mouseover', function() { showlink(2); });
-    button3.addEventListener('mouseover', function() { showlink(3); });
-     button1.addEventListener('mouseout', function() { showlinkout(1); });
-    button2.addEventListener('mouseout', function() { showlinkout(2); });
-    button3.addEventListener('mouseout', function() { showlinkout(3); });
-
-
-    var curr_page = 1;
-
-
-
-
-    function navigate(butnum){
-
-        if (butnum==1){
-            document.getElementById("page1").style.display = "block";
-            document.getElementById("page2").style.display = "none";
-            document.getElementById("page3").style.display = "none";
-
-            document.getElementById("buttonPage1").style.backgroundColor = "lightskyblue";
-            document.getElementById("buttonPage2").style.backgroundColor = "#007bff";
-            document.getElementById("buttonPage3").style.backgroundColor = "#007bff";
-
-            curr_page = 1;
-
-        }else if(butnum==2){
-            document.getElementById("page1").style.display = "none";
-            document.getElementById("page2").style.display = "block";
-            document.getElementById("page3").style.display = "none";
-
-            document.getElementById("buttonPage1").style.backgroundColor = "#007bff";
-            document.getElementById("buttonPage2").style.backgroundColor = "lightskyblue";
-            document.getElementById("buttonPage3").style.backgroundColor = "#007bff";
-
-            curr_page = 2;
-
-        }else if(butnum==3){
-            document.getElementById("page1").style.display = "none";
-            document.getElementById("page2").style.display = "none";
-            document.getElementById("page3").style.display = "block";
-
-            document.getElementById("buttonPage1").style.backgroundColor = "#007bff";
-            document.getElementById("buttonPage2").style.backgroundColor = "#007bff";
-            document.getElementById("buttonPage3").style.backgroundColor = "lightskyblue";
-
-            curr_page = 3;
-        }
-    }
-
-    function showlink(butnum){
-        if (butnum==1){
-            document.getElementById("buttonPage1").style.backgroundColor = "#003bff";
-        }else if(butnum==2){
-            document.getElementById("buttonPage2").style.backgroundColor = "#003bff";
-        }else if(butnum==3){
-            document.getElementById("buttonPage3").style.backgroundColor = "#003bff";
-        }
-    }
-
-     function showlinkout(butnum) {
-         if (butnum == 1) {
-             if (curr_page != 1) {
-                 document.getElementById("buttonPage1").style.backgroundColor = "#007bff";
-             } else {
-                 document.getElementById("buttonPage1").style.backgroundColor = "lightskyblue";
-             }
-         } else if (butnum == 2) {
-             if (curr_page != 2) {
-                 document.getElementById("buttonPage2").style.backgroundColor = "#007bff";
-             } else {
-                 document.getElementById("buttonPage2").style.backgroundColor = "lightskyblue";
-             }
-         } else if (butnum == 3) {
-             if (curr_page != 3) {
-                 document.getElementById("buttonPage3").style.backgroundColor = "#007bff";
-             } else {
-                 document.getElementById("buttonPage3").style.backgroundColor = "lightskyblue";
-             }
-         }
-
-    }
-
-
-
-
 
 
      //this prevents that pressing enter will automatically submit the page and abort the game for a player

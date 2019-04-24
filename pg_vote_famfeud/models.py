@@ -491,7 +491,7 @@ class Player(BasePlayer):
     # only in exclude
     q3 = models.StringField(widget=widgets.RadioSelect(),verbose_name="In jeder Runde hatten Sie die Möglichkeit, Gruppenmitglieder vom Gruppenspiel auszuschließen. Welche Überlegungen haben Sie dabei angestellt? (Bitte wählen Sie die Option, die am besten passt.)",
                             choices=["Ich habe rein zufällig meine Stimme vergeben",
-                                    "Ich wollte Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
+                                    "Ich wollte Gruppenmitglieder für ihr Verhalten in der vorherigen Stufe bestrafen",
                                     "Ich wollte andere von der Last des Gruppenspiels befreien",
                                     "Ich wollte ausprobieren was passiert",
                                     "Ich habe in keiner Runde eine Stimme abgegeben"])
@@ -502,7 +502,7 @@ class Player(BasePlayer):
     q4 = models.StringField(widget=widgets.RadioSelect(),
         verbose_name="Was denken Sie, warum haben andere Teilnehmer dafür gestimmt, Gruppenmitglieder auszuschließen?",
         choices=["Rein zufällig",
-                 "Sie wollten Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
+                 "Sie wollten Gruppenmitglieder für ihr Verhalten in der vorherigen Stufe bestrafen",
                  "Sie wollten andere von der Last des Gruppenspiels befreien",
                  "Sie wollten ausprobieren was passiert"])
 
@@ -512,8 +512,7 @@ class Player(BasePlayer):
     q3dislike = models.StringField(widget=widgets.RadioSelect(),
                             verbose_name="In jeder Runde hatten Sie die Möglichkeit, Gruppenmitglieder zu rügen. Welche Überlegungen haben Sie dabei angestellt? (Bitte wählen Sie die Option, die am besten passt.)",
                             choices=["Ich habe rein zufällig meine Stimme vergeben",
-                                     "Ich wollte Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
-                                     "Ich wollte andere von der Last des Gruppenspiels befreien",
+                                     "Ich wollte Gruppenmitglieder für ihr Verhalten in der vorherigen Stufe bestrafen",
                                      "Ich wollte ausprobieren was passiert",
                                      "Ich habe in keiner Runde eine Stimme abgegeben"])
 
@@ -521,14 +520,34 @@ class Player(BasePlayer):
     q4dislike = models.StringField(widget=widgets.RadioSelect(),
                             verbose_name="Was denken Sie, warum haben andere Teilnehmer dafür gestimmt, Gruppenmitglieder zu rügen?",
                             choices=["Rein zufällig",
-                                     "Sie wollten Gruppenmitglieder für Ihr Verhalten in der vorherigen Stufe bestrafen",
-                                     "Sie wollten andere von der Last des Gruppenspiels befreien",
+                                     "Sie wollten Gruppenmitglieder für ihr Verhalten in der vorherigen Stufe bestrafen",
                                      "Sie wollten ausprobieren was passiert"])
+
+
+    #### punish
+
+
+    # punish
+    q3punish = models.StringField(widget=widgets.RadioSelect(),
+                                   verbose_name="In jeder Runde hatten Sie die Möglichkeit für einen Punktabzug für andere Spieler zu stimmen. Welche Überlegungen haben Sie dabei angestellt? (Bitte wählen Sie die Option, die am besten passt.)",
+                                   choices=["Ich habe rein zufällig meine Stimme vergeben",
+                                            "Ich wollte Gruppenmitglieder für ihr Verhalten in der vorherigen Stufe bestrafen",
+                                            "Ich wollte ausprobieren was passiert",
+                                            "Ich habe in keiner Runde eine Stimme abgegeben"])
+
+    # punish
+    q4punish = models.StringField(widget=widgets.RadioSelect(),
+                                   verbose_name="Was denken Sie, warum haben andere Teilnehmer dafür gestimmt?",
+                                   choices=["Rein zufällig",
+                                            "Sie wollten Gruppenmitglieder für ihr Verhalten in der vorherigen Stufe bestrafen",
+                                            "Sie wollten ausprobieren was passiert"])
+
+
 
 
     ### alll treatments
     q5 = models.IntegerField(verbose_name="Bitte geben Sie ihr Alter an", min=0, max=99)
-    q7 = models.StringField(verbose_name="Bitte geben Sie ihr Studienfach an")
+    q7 = models.StringField(verbose_name="Bitte geben Sie Ihr Studienfach an")
     q8 = models.IntegerField(min=0,verbose_name="Wie oft haben Sie bereits an einer ökonomischen Laborstudie teilgenommen (auch außerhalb dieses Labors)?")
     q9 = models.StringField(verbose_name="Wie viele Teilnehmerinnen oder Teilnehmer in diesem Raum haben Sie schon vor dem Experiment gekannt?")
     q10 = models.StringField(verbose_name="Möchten Sie uns noch etwas mitteilen? Hier ist die Gelegenheit dazu!", blank=True)
@@ -609,6 +628,27 @@ class Player(BasePlayer):
     control6dislike = models.StringField(widget=widgets.RadioSelect(),
                                   verbose_name="Sie erhalten zwei Stimmen. Werden Sie gerügt?",
                                   choices=["ja", "nein"])
+
+
+    #### punish
+
+
+
+    # punish
+    control4punish = models.IntegerField(widget=widgets.RadioSelectHorizontal(),
+                                          verbose_name="Für den Abzug von Talern von wie vielen Mitgliedern können Sie maximal stimmen?",
+                                          choices=[0, 1, 2, 3, 4, 5])
+
+    # punish
+    control5punish = models.StringField(widget=widgets.RadioSelectHorizontal(),
+                                         verbose_name="Wie viele Taler kostet es Sie, wenn Sie für den Talerabzug eines Mitglieds stimmen?",
+                                         choices=["0 Taler  ", "0,2 Taler  ", "0,5 Taler  ", "1 Taler  ", "2 Taler  "])
+
+    # punish
+    control6punish = models.StringField(widget=widgets.RadioSelect(),
+                                         verbose_name="Sie erhalten zwei Stimmen. Erhalten Sie einen Abzug von Talern?",
+                                         choices=["ja", "nein"])
+
 
 
 
