@@ -436,7 +436,7 @@ class Player(BasePlayer):
 
     # the willingness to pay for the bonus family feud round
     ff_valuation = models.DecimalField(
-        verbose_name="Bitte klicken Sie auf die Skala, um ihre Zahlungsbereitschaft auszuwählen.",
+        verbose_name="Bitte klicken Sie auf die Skala, um Ihre Zahlungsbereitschaft auszuwählen.",
         widget=widgets.Slider(show_value=False),
         min=0, max=6,
         decimal_places=1,
